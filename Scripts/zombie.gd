@@ -4,20 +4,17 @@ extends CharacterBody2D
 @export var max_speed: float       = 50.0
 @export var attack_range: float    = 32.0
 @export var attack_damage: int     = 1
-@export var attack_cooldown: float = 1.0
+@export var attack_cooldown: float = 0.5
 @export var max_health: int        = 5
 @export var gravity: float         = 900.0
 
-# Player reference
-var player: CharacterBody2D = null
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 # Internal state
 var speed: float = 0.0
 var health: int   = 0
 var is_dead: bool = false
-var can_attack: bool = true
-var attack_timer: Timer = null
+var attack_timer: Timer
 
 func _ready() -> void:
 	randomize()
@@ -25,34 +22,49 @@ func _ready() -> void:
 	health = max_health
 	print("Zombie speed=", speed, "health=", health)
 
-	var players = get_tree().get_nodes_in_group("Player")
-	if players.size() > 0:
-		player = players[0] as CharacterBody2D
-	else:
-		push_error("No Player found in Player group!")
-
-	anim.connect("animation_finished", Callable(self, "_on_animation_finished"))
-
+	# Setup a repeating timer for attack cooldown
 	attack_timer = Timer.new()
 	attack_timer.wait_time = attack_cooldown
-	attack_timer.one_shot = true
+	attack_timer.one_shot  = false
 	add_child(attack_timer)
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
 func _physics_process(delta: float) -> void:
-	if is_dead or player == null:
+	if is_dead:
 		return
 
-	var to_player: Vector2 = player.global_position - global_position
-	var dist: float = to_player.length()
+	# Look for the player
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		# No player: ensure timer is stopped
+		if attack_timer.is_stopped() == false:
+			attack_timer.stop()
+		return
+	var player = players[0] as CharacterBody2D
+
+	var to_player = player.global_position - global_position
+	var dist = to_player.length()
 
 	if dist > attack_range:
+		# Chase the player
 		velocity.x = sign(to_player.x) * speed
+		# If we were attacking, stop the timer
+		if attack_timer.is_stopped() == false:
+			attack_timer.stop()
+		# Play move animation
+		if anim.animation != "move":
+			anim.play("move")
+		anim.flip_h = velocity.x > 0
 	else:
+		# In range: stop moving and start the repeating attack timer (if not already running)
 		velocity.x = 0
-		if can_attack:
-			_attack_player()
-
+		if attack_timer.is_stopped():
+			attack_timer.start()
+		# Play attack animation
+		if anim.animation != "attack":
+			anim.play("attack")
+		anim.flip_h = to_player.x > 0
+	# Simple gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -60,31 +72,12 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Face player when attacking, else face movement direction
-	if dist <= attack_range:
-		anim.flip_h = to_player.x > 0
-	else:
-		anim.flip_h = velocity.x > 0
-
-	if abs(velocity.x) > 0:
-		anim.play("move")
-	elif dist <= attack_range:
-		anim.play("attack")
-		if player and player.has_method("take_damage"):
-			player.take_damage(1)
-	else:
-		anim.play("default")
-
-func _attack_player() -> void:
-	can_attack = false
-	anim.play("attack")
-	if player and player.has_method("take_damage"):
-		player.take_damage(attack_damage)
-		print("Zombie attacked player for", attack_damage)
-	attack_timer.start()
-
 func _on_attack_timeout() -> void:
-	can_attack = true
+	# This runs every `attack_cooldown` seconds when the timer is active
+	for p in get_tree().get_nodes_in_group("Player"):
+		if p.has_method("take_damage"):
+			p.take_damage(attack_damage)
+			print("Zombie attacked player for", attack_damage)
 
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
@@ -94,7 +87,9 @@ func take_damage(amount: int = 1) -> void:
 	if health <= 0:
 		is_dead = true
 		anim.play("death")
+		# when the death animation finishes, free this node
+		anim.connect("animation_finished", Callable(self, "_on_death_finished"))
 
-func _on_animation_finished(anim_name: String) -> void:
+func _on_death_finished(anim_name: String) -> void:
 	if anim_name == "death":
 		queue_free()

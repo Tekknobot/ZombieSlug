@@ -1,8 +1,6 @@
-res://Scenes/Main.tscn
-res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/soldier.tscn
 res://Scripts/zombie.gd
+res://Scenes/Main.tscn
+res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/bullet.tscn
-res://Scripts/bullet.gd
 res://Scripts/soldier.gd
-res://Scripts/zombie_spawner.gd

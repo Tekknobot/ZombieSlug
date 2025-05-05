@@ -45,6 +45,7 @@ func _physics_process(delta: float) -> void:
 	if dir != 0 and can_move:
 		facing_right = dir > 0
 		anim.flip_h = facing_right
+
 		var abs_off: float = abs(muzzle_point.position.x)
 		if facing_right:
 			muzzle_point.position.x = abs_off
@@ -77,11 +78,13 @@ func _on_attack() -> void:
 	is_attacking = true
 	anim.play("attack")
 	fire_bullet()
+
 	# Allow air control: if on ground, wait briefly; if in air, wait until landing
 	if is_on_floor():
 		await get_tree().create_timer(0.1).timeout
 	else:
 		await _await_landing()
+
 	is_attacking = false
 
 func _await_landing() -> void:
@@ -91,10 +94,12 @@ func _await_landing() -> void:
 func fire_bullet() -> void:
 	var bullet = BulletScene.instantiate()
 	bullet.global_position = muzzle_point.global_position
+
 	if facing_right:
 		bullet.direction = Vector2.RIGHT
 	else:
 		bullet.direction = Vector2.LEFT
+
 	get_tree().get_current_scene().add_child(bullet)
 	print("⚠️ Fired bullet at", bullet.global_position)
 
@@ -102,6 +107,10 @@ func fire_bullet() -> void:
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
+
+	# flash the sprite to show damage
+	flash()
+
 	health -= amount
 	print("Player took", amount, "damage; remaining health", health)
 	if health <= 0:
@@ -112,3 +121,12 @@ func die() -> void:
 	anim.play("death")
 	await anim.animation_finished
 	queue_free()
+
+# --- FLASH HELPER ---
+func flash() -> void:
+	# immediately tint the sprite red
+	anim.modulate = Color(1, 0, 0, 1)
+	# wait a short moment
+	await get_tree().create_timer(0.1).timeout
+	# restore the original color
+	anim.modulate = Color(1, 1, 1, 1)
