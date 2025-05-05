@@ -1,9 +1,11 @@
-TextureRect
+RichTextLabel
 CanvasLayer
+Control
+ProgressBar
+TextureRect
 TextureButton
 Button
 GridContainer
-Control
 CollisionShape2D
 Area2D
 Node2D

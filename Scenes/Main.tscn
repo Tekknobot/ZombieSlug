@@ -1,13 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=11 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
 [ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="5_rbj0p"]
+[ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="6_vq0dw"]
+[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kr8lm"]
 size = Vector2(32, 28)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjtfb"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
+bg_color = Color(1, 1, 0, 1)
 
 [node name="Level" type="Node2D"]
 
@@ -752,18 +760,56 @@ zombie_scene = ExtResource("3_rbltb")
 spawn_interval = 1.0
 spawn_distance = 500.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-scale = Vector2(5, 5)
-transform = Transform2D(5, 0, 0, 5, 0, 0)
+[node name="Left" type="CanvasLayer" parent="."]
+scale = Vector2(4, 4)
+transform = Transform2D(4, 0, 0, 4, 0, 0)
 
-[node name="Control" type="Control" parent="CanvasLayer"]
+[node name="TopLeft" type="Control" parent="Left"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Buttons" type="TextureRect" parent="CanvasLayer/Control"]
+[node name="Portrait" type="TextureRect" parent="Left/TopLeft"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("6_vq0dw")
+
+[node name="Buttons" type="TextureRect" parent="Left/TopLeft"]
+visible = false
+layout_mode = 0
+offset_left = 223.25
+offset_top = 0.25
+offset_right = 319.25
+offset_bottom = 64.25
 texture = ExtResource("5_rbj0p")
+
+[node name="Health" type="ProgressBar" parent="Left/TopLeft"]
+layout_mode = 0
+offset_left = 65.25
+offset_top = 53.0
+offset_right = 222.25
+offset_bottom = 58.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
+value = 100.0
+show_percentage = false
+
+[node name="XP" type="ProgressBar" parent="Left/TopLeft"]
+layout_mode = 0
+offset_left = 65.25
+offset_top = 59.25
+offset_right = 222.25
+offset_bottom = 64.25
+theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
+value = 100.0
+show_percentage = false
+
+[node name="Name" type="RichTextLabel" parent="Left/TopLeft"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 40.25
+offset_right = 222.0
+offset_bottom = 53.25
+theme_override_fonts/normal_font = ExtResource("7_juo3a")
+text = "PLAYER 1"
