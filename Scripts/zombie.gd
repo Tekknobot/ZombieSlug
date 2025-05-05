@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var max_speed: float       = 50.0
 @export var attack_range: float    = 32.0
 @export var attack_damage: int     = 1
-@export var attack_cooldown: float = 0.5
+@export var attack_cooldown: float = 0.1
 @export var max_health: int        = 5
 @export var gravity: float         = 900.0
 
@@ -77,19 +77,18 @@ func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p.has_method("take_damage"):
 			p.take_damage(attack_damage)
-			print("Zombie attacked player for", attack_damage)
+			print("Zombie attacked player for ", attack_damage)
 
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
+
 	health -= amount
 	print("Zombie took", amount, "damage; remaining=", health)
+
 	if health <= 0:
 		is_dead = true
-		anim.play("death")
-		# when the death animation finishes, free this node
-		anim.connect("animation_finished", Callable(self, "_on_death_finished"))
-
-func _on_death_finished(anim_name: String) -> void:
-	if anim_name == "death":
+		anim.animation = "death"
+		# wait one second, then free
+		await get_tree().create_timer(0.5).timeout
 		queue_free()
