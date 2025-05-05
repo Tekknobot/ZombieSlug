@@ -9,6 +9,9 @@ extends CharacterBody2D
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point                    # Position2D for spawn-offset
 
+@export var grenade_cooldown: float = 1.0   # seconds between throws
+var grenade_cooldown_timer: Timer
+
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
@@ -37,6 +40,11 @@ func _ready() -> void:
 	merc_cooldown_timer.one_shot  = true
 	add_child(merc_cooldown_timer)
 
+	grenade_cooldown_timer = Timer.new()
+	grenade_cooldown_timer.wait_time = grenade_cooldown
+	grenade_cooldown_timer.one_shot  = true
+	add_child(grenade_cooldown_timer)
+
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
@@ -57,8 +65,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		_on_attack()
 
-	if Input.is_action_just_pressed("grenade"):
+	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
 		_throw_grenade()
+		grenade_cooldown_timer.start()
 		
 	var can_move := not is_attacking or not is_on_floor()
 	var dir: float = 0.0
