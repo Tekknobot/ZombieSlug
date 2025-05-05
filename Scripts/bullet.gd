@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var speed: float = 200.0
-@export var knockback_force: float = 1.0  # tweak as needed
+@export var knockback_force: float = 2.0  # tweak as needed
 @export var rotation_speed: float = 180.0  # degrees per second
 var direction: Vector2 = Vector2.RIGHT
 

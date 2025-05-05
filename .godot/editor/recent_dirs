@@ -1,5 +1,11 @@
-res://Scenes/Sprites/zombie/death
 res://Scripts
+res://Scenes/Sprites/rambo
+res://Scenes/Sprites/rambo/attack
+res://Scenes/Sprites/zombie/death
+res://Scenes/Sprites/rambo/idle
+res://Scenes/Sprites/dog
+res://Scenes/Sprites/dog/attack
+res://Scenes/Sprites/dog/default
 res://Scenes/Sprites/zombie/move
 res://Scenes/Sprites/zombie/idle
 res://Scenes/Sprites/zombie/attack

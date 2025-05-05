@@ -1,10 +1,10 @@
 extends CharacterBody2D
 
 @export var min_speed: float       = 25.0
-@export var max_speed: float       = 50.0
+@export var max_speed: float       = 75.0
 @export var attack_range: float    = 32.0
 @export var attack_damage: int     = 1
-@export var attack_cooldown: float = 0.1
+@export var attack_cooldown: float = 0.2
 @export var max_health: int        = 5
 @export var gravity: float         = 900.0
 

@@ -186,7 +186,7 @@ animations = [{
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_bbe55")
 speed = 100.0
-jump_velocity = -250.0
+jump_velocity = -275.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yp3ch")

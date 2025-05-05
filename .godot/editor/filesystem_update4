@@ -4,3 +4,7 @@ res://Scenes/Main.tscn
 res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/bullet.tscn
 res://Scripts/soldier.gd
+res://Scenes/Sprites/dog.tscn
+res://Scripts/dog.gd
+res://Scenes/Sprites/merc.tscn
+res://Scripts/bullet.gd

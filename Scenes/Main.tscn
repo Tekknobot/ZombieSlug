@@ -13,7 +13,7 @@ size = Vector2(32, 28)
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(5, 5)
 
-[node name="Soldier" parent="." groups=["Player"] instance=ExtResource("1_ac7of")]
+[node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, -2)
 
 [node name="Floor" type="Node2D" parent="."]
