@@ -3,7 +3,7 @@ extends Area2D
 @export var initial_speed:  float = 300.0
 @export var initial_upward: float = -400.0
 @export var gravity_force:  float = 900.0
-@export var fuse_time:      float = 1.5
+@export var fuse_time:      float = 2
 @export var damage:         int   = 3    # how much the grenade itself deals on impact
 
 @onready var sprite: Sprite2D = $Sprite2D

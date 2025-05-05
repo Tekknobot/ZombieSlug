@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=7 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
+[ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="5_rbj0p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kr8lm"]
 size = Vector2(32, 28)
@@ -11,6 +12,7 @@ size = Vector2(32, 28)
 [node name="Level" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -79)
 zoom = Vector2(5, 5)
 
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
@@ -749,3 +751,19 @@ script = ExtResource("4_js2x2")
 zombie_scene = ExtResource("3_rbltb")
 spawn_interval = 1.0
 spawn_distance = 500.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+scale = Vector2(5, 5)
+transform = Transform2D(5, 0, 0, 5, 0, 0)
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Buttons" type="TextureRect" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("5_rbj0p")

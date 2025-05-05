@@ -9,7 +9,7 @@ extends CharacterBody2D
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point                    # Position2D for spawn-offset
 
-@export var grenade_cooldown: float = 1.0   # seconds between throws
+@export var grenade_cooldown: float = 0.5   # seconds between throws
 var grenade_cooldown_timer: Timer
 
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")

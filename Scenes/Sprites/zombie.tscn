@@ -185,6 +185,7 @@ animations = [{
 
 [node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 script = ExtResource("1_75npq")
+max_speed = 65.0
 max_health = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

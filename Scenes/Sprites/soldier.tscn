@@ -190,8 +190,9 @@ jump_velocity = -275.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yp3ch")
-animation = &"death"
 autoplay = "default"
+frame = 10
+frame_progress = 0.96418
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
