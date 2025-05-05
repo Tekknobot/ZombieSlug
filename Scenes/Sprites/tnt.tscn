@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dnwq7efv3qgby"]
+
+[ext_resource type="Script" path="res://Scripts/tnt.gd" id="1_r88a4"]
+[ext_resource type="Texture2D" uid="uid://c5100qvyadyjq" path="res://Projectiles/tnt/tnt1.png" id="2_oual3"]
+[ext_resource type="Texture2D" uid="uid://cn6gewl7drect" path="res://Projectiles/tnt/tnt2.png" id="3_ldhio"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_113ie"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_oual3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ldhio")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2tum8"]
+radius = 5.0
+
+[node name="TNT" type="Area2D"]
+script = ExtResource("1_r88a4")
+initial_speed = 75.0
+initial_upward = -200.0
+gravity_force = 275.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_113ie")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2tum8")

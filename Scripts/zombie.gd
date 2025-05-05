@@ -22,7 +22,6 @@ func _ready() -> void:
 	health = max_health
 	print("Zombie speed=", speed, "health=", health)
 
-	# Setup a repeating timer for attack cooldown
 	attack_timer = Timer.new()
 	attack_timer.wait_time = attack_cooldown
 	attack_timer.one_shot  = false
@@ -33,11 +32,9 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
-	# Look for the player
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
-		# No player: ensure timer is stopped
-		if attack_timer.is_stopped() == false:
+		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		return
 	var player = players[0] as CharacterBody2D
@@ -46,25 +43,20 @@ func _physics_process(delta: float) -> void:
 	var dist = to_player.length()
 
 	if dist > attack_range:
-		# Chase the player
 		velocity.x = sign(to_player.x) * speed
-		# If we were attacking, stop the timer
-		if attack_timer.is_stopped() == false:
+		if not attack_timer.is_stopped():
 			attack_timer.stop()
-		# Play move animation
 		if anim.animation != "move":
 			anim.play("move")
 		anim.flip_h = velocity.x > 0
 	else:
-		# In range: stop moving and start the repeating attack timer (if not already running)
 		velocity.x = 0
 		if attack_timer.is_stopped():
 			attack_timer.start()
-		# Play attack animation
 		if anim.animation != "attack":
 			anim.play("attack")
 		anim.flip_h = to_player.x > 0
-	# Simple gravity
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -73,7 +65,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _on_attack_timeout() -> void:
-	# This runs every `attack_cooldown` seconds when the timer is active
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p.has_method("take_damage"):
 			p.take_damage(attack_damage)
@@ -83,12 +74,21 @@ func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
 
+	# flash before applying damage
+	flash()
+
 	health -= amount
 	print("Zombie took", amount, "damage; remaining=", health)
 
 	if health <= 0:
 		is_dead = true
-		anim.animation = "death"
-		# wait one second, then free
+		anim.play("death")
 		await get_tree().create_timer(0.5).timeout
 		queue_free()
+
+# Briefly tint the sprite red, then restore
+func flash() -> void:
+	var orig = anim.modulate
+	anim.modulate = Color(1, 0, 0, 1)
+	await get_tree().create_timer(0.1).timeout
+	anim.modulate = orig

@@ -45,17 +45,6 @@ func _on_zombie_hit(zombie: Node) -> void:
 		zb.global_position += direction.normalized() * knockback_force
 		print("Knocked back", zb.name, "by", knockback_force)
 
-	# Flash red
-	if zombie.has_node("AnimatedSprite2D"):
-		var spr := zombie.get_node("AnimatedSprite2D") as AnimatedSprite2D
-		var original_color: Color = spr.modulate
-		spr.modulate = Color(1, 0, 0)
-		# wait briefly then restore only if sprite still valid
-		await get_tree().create_timer(0.1).timeout
-		if is_instance_valid(spr):
-			spr.modulate = original_color
-			print("Restored color for", zombie.name)
-
 	# Destroy bullet
 	queue_free()
 	print("Bullet freed after hit")

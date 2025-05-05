@@ -12,6 +12,7 @@ extends CharacterBody2D
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
+const GrenadeScene = preload("res://Scenes/Sprites/tnt.tscn")
 
 var facing_right: bool = false
 var is_attacking:  bool = false
@@ -56,6 +57,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		_on_attack()
 
+	if Input.is_action_just_pressed("grenade"):
+		_throw_grenade()
+		
 	var can_move := not is_attacking or not is_on_floor()
 	var dir: float = 0.0
 	if can_move:
@@ -174,3 +178,16 @@ func flash() -> void:
 	anim.modulate = Color(1, 0, 0, 1)
 	await get_tree().create_timer(0.1).timeout
 	anim.modulate = Color(1, 1, 1, 1)
+
+func _throw_grenade() -> void:
+	var g = GrenadeScene.instantiate()
+	# spawn at the muzzle or player hand
+	g.global_position = global_position
+	g.global_position.y -= 16
+	# set initial velocity based on facing direction
+	if facing_right:
+		g.velocity.x = g.initial_speed
+	else:
+		g.velocity.x = -g.initial_speed
+	g.velocity.y = g.initial_upward
+	get_tree().get_current_scene().add_child(g)
