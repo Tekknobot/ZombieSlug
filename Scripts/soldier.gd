@@ -3,6 +3,7 @@ extends CharacterBody2D
 @export var speed         := 200.0
 @export var jump_velocity := -350.0
 @export var gravity       := 900.0
+@export var max_health    := 10
 
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point      # Position2D child for bullet spawn
@@ -11,8 +12,17 @@ const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 
 var facing_right: bool = false
 var is_attacking:  bool = false
+var health:        int  = 0
+var is_dead:       bool = false
+
+func _ready() -> void:
+	health = max_health
+	print("Player health set to", health)
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
+
 	# Always apply gravity first
 	velocity.y += gravity * delta
 
@@ -67,15 +77,14 @@ func _on_attack() -> void:
 	is_attacking = true
 	anim.play("attack")
 	fire_bullet()
-	# Allow air control: if on ground, wait 1s; if in air, wait until landing
+	# Allow air control: if on ground, wait briefly; if in air, wait until landing
 	if is_on_floor():
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.1).timeout
 	else:
 		await _await_landing()
 	is_attacking = false
 
 func _await_landing() -> void:
-	# Await until the player lands (SceneTree physics_frame signal)
 	while not is_on_floor():
 		await get_tree().physics_frame
 
@@ -88,3 +97,18 @@ func fire_bullet() -> void:
 		bullet.direction = Vector2.LEFT
 	get_tree().get_current_scene().add_child(bullet)
 	print("⚠️ Fired bullet at", bullet.global_position)
+
+# Called externally to reduce player health
+func take_damage(amount: int = 1) -> void:
+	if is_dead:
+		return
+	health -= amount
+	print("Player took", amount, "damage; remaining health", health)
+	if health <= 0:
+		die()
+
+func die() -> void:
+	is_dead = true
+	anim.play("death")
+	await anim.animation_finished
+	queue_free()

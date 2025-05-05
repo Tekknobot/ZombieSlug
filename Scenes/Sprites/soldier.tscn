@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=43 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
@@ -20,12 +20,20 @@
 [ext_resource type="Texture2D" uid="uid://jdvyxy1xjeyh" path="res://Scenes/Sprites/soldier/attack/soldier_atk9.png" id="10_cod7e"]
 [ext_resource type="Texture2D" uid="uid://dqfq5nhs4rg1i" path="res://Scenes/Sprites/soldier/idle/soldier_idle9.png" id="10_q4epr"]
 [ext_resource type="Texture2D" uid="uid://c82lw17p6je6w" path="res://Scenes/Sprites/soldier/idle/soldier_idle10.png" id="11_ai2un"]
+[ext_resource type="Texture2D" uid="uid://d33mn8hqylym0" path="res://Scenes/Sprites/zombie/death/zombdeath1.png" id="11_mpgax"]
 [ext_resource type="Texture2D" uid="uid://dxm8oo2gv434g" path="res://Scenes/Sprites/soldier/idle/soldier_idle11.png" id="12_br2mp"]
+[ext_resource type="Texture2D" uid="uid://bdjmjwslvoh1p" path="res://Scenes/Sprites/zombie/death/zombdeath2.png" id="12_ftwp1"]
 [ext_resource type="Texture2D" uid="uid://64pg6teukwm" path="res://Scenes/Sprites/soldier/idle/soldier_idle12.png" id="13_gx3ua"]
+[ext_resource type="Texture2D" uid="uid://bj1hb4d75skp8" path="res://Scenes/Sprites/zombie/death/zombdeath3.png" id="13_qytxo"]
 [ext_resource type="Texture2D" uid="uid://frde37306d26" path="res://Scenes/Sprites/soldier/idle/soldier_idle13.png" id="14_dihor"]
+[ext_resource type="Texture2D" uid="uid://bhb55le4l04xe" path="res://Scenes/Sprites/zombie/death/zombdeath4.png" id="14_m6run"]
+[ext_resource type="Texture2D" uid="uid://d15nggjgsp263" path="res://Scenes/Sprites/zombie/death/zombdeath5.png" id="15_bnbpc"]
 [ext_resource type="Texture2D" uid="uid://c8tl276v7fb83" path="res://Scenes/Sprites/soldier/idle/soldier_idle14.png" id="15_m2gyg"]
+[ext_resource type="Texture2D" uid="uid://dhlxvl535sjvt" path="res://Scenes/Sprites/zombie/death/zombdeath6.png" id="16_f6vbt"]
 [ext_resource type="Texture2D" uid="uid://dfimq7w2tywh2" path="res://Scenes/Sprites/soldier/idle/soldier_idle15.png" id="16_lowhi"]
+[ext_resource type="Texture2D" uid="uid://chc0m8hbl7pyu" path="res://Scenes/Sprites/zombie/death/zombdeath7.png" id="17_1snm0"]
 [ext_resource type="Texture2D" uid="uid://6kerll4cwv8g" path="res://Scenes/Sprites/soldier/idle/soldier_idle16.png" id="17_qe1b1"]
+[ext_resource type="Texture2D" uid="uid://ce8iblqfusimq" path="res://Scenes/Sprites/zombie/death/zombdeath8.png" id="18_hikad"]
 [ext_resource type="Texture2D" uid="uid://ct5l0jk6oyck2" path="res://Scenes/Sprites/soldier/soldier1.png" id="27_swmf8"]
 [ext_resource type="Texture2D" uid="uid://xc3dx484ounu" path="res://Scenes/Sprites/soldier/soldier2.png" id="28_vujw3"]
 [ext_resource type="Texture2D" uid="uid://cvagl04827eq6" path="res://Scenes/Sprites/soldier/soldier3.png" id="29_olo85"]
@@ -66,6 +74,35 @@ animations = [{
 "loop": true,
 "name": &"attack",
 "speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_mpgax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ftwp1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_qytxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_m6run")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_bnbpc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_f6vbt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_1snm0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_hikad")
+}],
+"loop": false,
+"name": &"death",
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -153,9 +190,8 @@ jump_velocity = -250.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yp3ch")
-animation = &"attack"
-frame = 1
-frame_progress = 0.101891
+animation = &"death"
+autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
