@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var speed         := 200.0
 @export var jump_velocity := -350.0
 @export var gravity       := 900.0
-@export var max_health    := 10
+@export var max_health    := 5
 
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point                    # Position2D for spawn-offset

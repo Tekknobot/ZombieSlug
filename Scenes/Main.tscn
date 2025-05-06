@@ -789,13 +789,33 @@ theme_override_fonts/normal_font = ExtResource("7_juo3a")
 text = "PLAYER 1"
 
 [node name="Kills" type="RichTextLabel" parent="HUD/TopLeft"]
+modulate = Color(1, 0, 0, 1)
 layout_mode = 0
-offset_left = 65.0
-offset_top = 37.75
-offset_right = 222.0
-offset_bottom = 50.75
+offset_left = 65.25
+offset_top = 52.0
+offset_right = 222.25
+offset_bottom = 65.0
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "KILLS: 0"
+
+[node name="HP" type="RichTextLabel" parent="HUD/TopLeft"]
+modulate = Color(0, 1, 0, 1)
+layout_mode = 0
+offset_left = 64.75
+offset_top = 45.0
+offset_right = 221.75
+offset_bottom = 58.0
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "HP: 0 of 0"
+
+[node name="Level" type="RichTextLabel" parent="HUD/TopLeft"]
+layout_mode = 0
+offset_left = 64.75
+offset_top = 38.25
+offset_right = 221.75
+offset_bottom = 51.25
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "LEVEL: 0"
 
 [node name="Health" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
@@ -816,8 +836,9 @@ offset_top = 36.75
 offset_right = 174.0
 offset_bottom = 41.75
 theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
+max_value = 10.0
 step = 1.0
-value = 100.0
+value = 10.0
 show_percentage = false
 
 [node name="Buttons" type="TextureRect" parent="HUD/TopLeft"]
