@@ -35,7 +35,8 @@ radius = 5.0
 
 [node name="Bullet" type="Area2D"]
 script = ExtResource("1_achay")
-knockback_force = 16.0
+knockback_force = 0.0
+rotation_speed = 360.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_113ie")

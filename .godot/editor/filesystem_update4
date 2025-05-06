@@ -14,3 +14,5 @@ res://Scenes/Effects/Explosion.tscn
 res://Scripts/explosion.gd
 res://Scripts/playerstats.gd
 res://Scripts/hud.gd
+res://Scenes/Sprites/zombie_boss.tscn
+res://Scripts/zombie_spawner.gd
