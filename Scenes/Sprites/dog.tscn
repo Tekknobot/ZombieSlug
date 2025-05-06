@@ -32,7 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://b6xc2lxc2xcbp" path="res://Scenes/Sprites/dog/dog4.png" id="30_1tgbs"]
 [ext_resource type="Texture2D" uid="uid://drwojs0xkl8pl" path="res://Scenes/Sprites/dog/dog5.png" id="31_pttdw"]
 [ext_resource type="Texture2D" uid="uid://gwjqv0y3yqov" path="res://Scenes/Sprites/dog/dog6.png" id="32_sdj6k"]
-[ext_resource type="AudioStream" uid="uid://b7n22ud1fbmt5" path="res://Audio/SFX/slash.wav" id="33_enmyf"]
+[ext_resource type="AudioStream" uid="uid://b11umg6nnmd3t" path="res://Audio/SFX/dog-bark-179915.mp3" id="33_b6usw"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -168,4 +168,4 @@ shape = SubResource("CircleShape2D_n5t24")
 position = Vector2(-18, -20)
 
 [node name="AttackSfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("33_enmyf")
+stream = ExtResource("33_b6usw")

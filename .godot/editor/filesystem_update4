@@ -11,3 +11,4 @@ res://Scripts/merc.gd
 res://Scripts/dog.gd
 res://Scripts/soldier.gd
 res://Scripts/zombie.gd
+res://Scenes/Sprites/zombie_xl.tscn

@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
 [ext_resource type="Script" path="res://Scripts/hud.gd" id="5_id8m6"]
 [ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="5_rbj0p"]
-[ext_resource type="PackedScene" uid="uid://5dojusd738pm" path="res://Scenes/Sprites/zombie_big.tscn" id="6_blc1p"]
+[ext_resource type="PackedScene" uid="uid://8iwtfpagau7h" path="res://Scenes/Sprites/zombie_xl.tscn" id="6_l3jnr"]
 [ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="6_vq0dw"]
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_vaiej"]
@@ -767,7 +767,7 @@ shape = SubResource("RectangleShape2D_kr8lm")
 [node name="ZombieSpawner" type="Node2D" parent="."]
 script = ExtResource("4_js2x2")
 zombie_scene = ExtResource("3_rbltb")
-boss_scene = ExtResource("6_blc1p")
+boss_scene = ExtResource("6_l3jnr")
 spawn_interval = 1.0
 spawn_distance = 500.0
 
@@ -864,5 +864,5 @@ texture = ExtResource("5_rbj0p")
 stream = ExtResource("13_uw5wu")
 autoplay = true
 
-[node name="Zombie" parent="." instance=ExtResource("6_blc1p")]
-position = Vector2(-384, -71)
+[node name="ZombieXL" parent="." instance=ExtResource("6_l3jnr")]
+position = Vector2(-212, 0)
