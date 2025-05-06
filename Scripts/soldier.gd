@@ -27,6 +27,12 @@ var dog_cooldown_timer: Timer
 var merc_cooldown_timer: Timer
 
 func _ready() -> void:
+	# initialize global stats to match this soldier
+	Playerstats.max_health = max_health
+	Playerstats.health     = max_health
+	Playerstats.xp         = 0
+	Playerstats.kills      = 0
+
 	health = max_health
 	print("Soldier health set to", health)
 
@@ -171,11 +177,15 @@ func fire_bullet() -> void:
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
+
 	flash()
-	health -= amount
-	print("Soldier took", amount, "damage; remaining health", health)
-	if health <= 0:
+	# apply damage via the PlayerStats singleton
+	Playerstats.damage(amount)
+	print("Soldier took", amount, "damage; remaining health", Playerstats.health)
+
+	if Playerstats.health <= 0:
 		die()
+
 
 func die() -> void:
 	is_dead = true

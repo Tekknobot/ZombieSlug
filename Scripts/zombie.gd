@@ -1,24 +1,26 @@
+# Zombie.gd
 extends CharacterBody2D
 
-@export var min_speed: float       = 25.0
-@export var max_speed: float       = 75.0
-@export var attack_range: float    = 32.0
-@export var attack_damage: int     = 1
-@export var attack_cooldown: float = 0.2
-@export var max_health: int        = 5
-@export var gravity: float         = 900.0
+@export var xp_award: int         = 5
+@export var min_speed: float      = 25.0
+@export var max_speed: float      = 75.0
+@export var attack_range: float   = 32.0
+@export var attack_damage: int    = 1
+@export var attack_cooldown: float= 0.2
+@export var max_health: int       = 5
+@export var gravity: float        = 900.0
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 # Internal state
-var speed: float = 0.0
-var health: int   = 0
-var is_dead: bool = false
+var speed: float   = 0.0
+var health: int    = 0
+var is_dead: bool  = false
 var attack_timer: Timer
 
 func _ready() -> void:
 	randomize()
-	speed = randi_range(int(min_speed), int(max_speed))
+	speed  = randi_range(int(min_speed), int(max_speed))
 	health = max_health
 	print("Zombie speed=", speed, "health=", health)
 
@@ -37,8 +39,8 @@ func _physics_process(delta: float) -> void:
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		return
-	var player = players[0] as CharacterBody2D
 
+	var player = players[0] as CharacterBody2D
 	var to_player = player.global_position - global_position
 	var dist = to_player.length()
 
@@ -74,14 +76,18 @@ func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
 
-	# flash before applying damage
-	flash()
+	flash()  # your red‐flash helper
 
 	health -= amount
 	print("Zombie took", amount, "damage; remaining=", health)
 
 	if health <= 0:
 		is_dead = true
+
+		# 1) award kill + XP
+		Playerstats.add_kill(xp_award)
+
+		# 2) death animation + delay + free
 		anim.play("death")
 		await get_tree().create_timer(0.5).timeout
 		queue_free()

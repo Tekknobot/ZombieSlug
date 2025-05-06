@@ -12,3 +12,5 @@ res://Scenes/Sprites/tnt.tscn
 res://Scripts/tnt.gd
 res://Scenes/Effects/Explosion.tscn
 res://Scripts/explosion.gd
+res://Scripts/playerstats.gd
+res://Scripts/hud.gd
