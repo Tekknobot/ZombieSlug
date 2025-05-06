@@ -32,6 +32,7 @@ var merc_cooldown_timer: Timer
 @onready var dog_sfx      := $DogSfx       as AudioStreamPlayer2D
 @onready var merc_sfx     := $MercSfx      as AudioStreamPlayer2D
 @onready var jump_sfx     := $JumpSfx      as AudioStreamPlayer2D
+@onready var hurt_sfx     := $HurtSfx      as AudioStreamPlayer2D
 
 func _ready() -> void:
 	# initialize firing rate
@@ -205,6 +206,8 @@ func fire_bullet() -> void:
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
+
+	hurt_sfx.play()
 
 	flash()
 	# apply damage via the PlayerStats singleton

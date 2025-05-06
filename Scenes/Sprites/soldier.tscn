@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=47 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
@@ -43,6 +43,7 @@
 [ext_resource type="AudioStream" uid="uid://b11umg6nnmd3t" path="res://Audio/SFX/dog-bark-179915.mp3" id="41_04mpd"]
 [ext_resource type="AudioStream" uid="uid://cueor08orhc0k" path="res://Audio/SFX/shouting-yeah-7043.mp3" id="42_mgngc"]
 [ext_resource type="AudioStream" uid="uid://soum2ofbsnx0" path="res://Audio/SFX/jumps-65494.wav" id="43_ac7py"]
+[ext_resource type="AudioStream" uid="uid://dpslt5sraa3ko" path="res://Audio/Zombie/zombie_massacre_vocal_impact_pain_hurt_01.wav" id="44_m2gep"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -213,3 +214,6 @@ volume_db = 6.0
 
 [node name="JumpSfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("43_ac7py")
+
+[node name="HurtSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("44_m2gep")

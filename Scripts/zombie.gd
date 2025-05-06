@@ -59,6 +59,7 @@ func _physics_process(delta: float) -> void:
 		if attack_timer.is_stopped():
 			attack_timer.start()
 		if anim.animation != "attack":
+			death_sfx.play()
 			anim.play("attack")
 		anim.flip_h = to_player.x > 0
 

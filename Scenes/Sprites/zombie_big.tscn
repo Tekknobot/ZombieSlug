@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://5dojusd738pm"]
+[gd_scene load_steps=45 format=3 uid="uid://5dojusd738pm"]
 
 [ext_resource type="Script" path="res://Scripts/zombie.gd" id="1_gucco"]
 [ext_resource type="Texture2D" uid="uid://cwttiy82qxf31" path="res://Scenes/Sprites/zombie/attack/zomb_atk1.png" id="2_x746p"]
@@ -40,6 +40,8 @@
 [ext_resource type="Texture2D" uid="uid://qsa3qudet1kv" path="res://Scenes/Sprites/zombie/move/zomb4.png" id="38_xaff3"]
 [ext_resource type="Texture2D" uid="uid://css7ac8annlfv" path="res://Scenes/Sprites/zombie/move/zomb5.png" id="39_dpsd7"]
 [ext_resource type="Texture2D" uid="uid://b35xkorashy3" path="res://Scenes/Sprites/zombie/move/zomb6.png" id="40_5fi80"]
+[ext_resource type="AudioStream" uid="uid://b8orw1u5dj45q" path="res://Audio/SFX/hitHurt.wav" id="41_7j6dd"]
+[ext_resource type="AudioStream" uid="uid://dg6i58j3chf0p" path="res://Audio/Zombie/zombie_massacre_vocal_attack_short_02.wav" id="42_vwwtp"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -184,7 +186,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5t24"]
 radius = 25.02
 
-[node name="ZombieBig" type="CharacterBody2D" groups=["Zombie"]]
+[node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 position = Vector2(0, -71)
 script = ExtResource("1_gucco")
 xp_award = 10
@@ -205,3 +207,9 @@ shape = SubResource("CircleShape2D_n5t24")
 
 [node name="Point" type="Node2D" parent="."]
 position = Vector2(-18, 24)
+
+[node name="HitSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("41_7j6dd")
+
+[node name="DeathSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("42_vwwtp")
