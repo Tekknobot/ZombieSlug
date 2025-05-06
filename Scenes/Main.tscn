@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=14 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="6_vq0dw"]
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_vaiej"]
+[ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kr8lm"]
 size = Vector2(32, 28)
@@ -20,6 +21,10 @@ bg_color = Color(0, 1, 0, 1)
 bg_color = Color(1, 1, 0, 1)
 
 [node name="Level" type="Node2D"]
+
+[node name="StarryNight" parent="." instance=ExtResource("10_eeh2b")]
+z_index = -1000
+amount = 10000
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -79)
