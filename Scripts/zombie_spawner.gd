@@ -74,7 +74,7 @@ func _on_level_changed(new_level: int) -> void:
 
 	var boss = boss_scene.instantiate()
 	boss.global_position = boss_pos
-	if not boss.is_in_group("Boss"):
-		boss.add_to_group("Boss")
+	if not boss.is_in_group("Zombie"):
+		boss.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(boss)
-	print("🦹‍♂️ Boss spawned at level ", new_level, " → ", boss_pos)
+	print("🦹‍♂️ Zombie Boss spawned at level ", new_level, " → ", boss_pos)

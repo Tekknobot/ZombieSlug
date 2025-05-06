@@ -16,3 +16,5 @@ res://Scripts/playerstats.gd
 res://Scripts/hud.gd
 res://Scenes/Sprites/zombie_boss.tscn
 res://Scripts/zombie_spawner.gd
+res://Scripts/merc.gd
+res://Scenes/Sprites/zombie_big.tscn
