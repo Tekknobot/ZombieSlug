@@ -29,6 +29,10 @@ var firerate: float
 var dog_cooldown_timer: Timer
 var merc_cooldown_timer: Timer
 
+@onready var dog_sfx      := $DogSfx       as AudioStreamPlayer2D
+@onready var merc_sfx     := $MercSfx      as AudioStreamPlayer2D
+@onready var jump_sfx     := $JumpSfx      as AudioStreamPlayer2D
+
 func _ready() -> void:
 	# initialize firing rate
 	firerate = initial_firerate
@@ -102,6 +106,9 @@ func _physics_process(delta: float) -> void:
 			muzzle_point.position.x = -abs_off
 
 	if can_move and is_on_floor() and Input.is_action_just_pressed("jump"):
+		# play jump sound
+		jump_sfx.play()
+		
 		velocity.y = jump_velocity
 
 	self.velocity = velocity
@@ -122,6 +129,9 @@ func _physics_process(delta: float) -> void:
 # --- New spawn functions ---
 
 func _spawn_dog() -> void:
+	# play dog‐summon sound
+	dog_sfx.play()
+		
 	var dog = DogScene.instantiate()
 	# offset left by the muzzle_point's local X
 	var x_off = abs(muzzle_point.position.x)
@@ -134,6 +144,9 @@ func _spawn_dog() -> void:
 	_auto_free(dog, 5.0)
 
 func _spawn_merc() -> void:
+	# play merc‐summon sound
+	merc_sfx.play()
+		
 	var merc = MercScene.instantiate()
 	# offset right by the muzzle_point's local X
 	var x_off = abs(muzzle_point.position.x)

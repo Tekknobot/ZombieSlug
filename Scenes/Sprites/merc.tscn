@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://j2fiwa6qop8g"]
+[gd_scene load_steps=43 format=3 uid="uid://j2fiwa6qop8g"]
 
 [ext_resource type="Script" path="res://Scripts/merc.gd" id="1_qdyaa"]
 [ext_resource type="Texture2D" uid="uid://dm3325xgagtql" path="res://Scenes/Sprites/rambo/attack/rambo_attack1.png" id="2_gyxpx"]
@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://cfegin6ajshld" path="res://Scenes/Sprites/rambo/rambo3.png" id="37_jatua"]
 [ext_resource type="Texture2D" uid="uid://dmq3p3kwp5ijv" path="res://Scenes/Sprites/rambo/rambo4.png" id="38_jl6s8"]
 [ext_resource type="Texture2D" uid="uid://dvxjdj64f0qc4" path="res://Scenes/Sprites/rambo/rambo5.png" id="39_nyen2"]
+[ext_resource type="AudioStream" uid="uid://b7n22ud1fbmt5" path="res://Audio/SFX/slash.wav" id="40_xqyux"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -192,3 +193,6 @@ shape = SubResource("CircleShape2D_n5t24")
 
 [node name="Point" type="Node2D" parent="."]
 position = Vector2(-18, -20)
+
+[node name="AttackSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("40_xqyux")

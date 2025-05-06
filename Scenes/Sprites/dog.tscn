@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://b7fm025bfjx2h"]
+[gd_scene load_steps=36 format=3 uid="uid://b7fm025bfjx2h"]
 
 [ext_resource type="Script" path="res://Scripts/dog.gd" id="1_tqjya"]
 [ext_resource type="Texture2D" uid="uid://boeoiearg2d4c" path="res://Scenes/Sprites/dog/attack/dog_atk1.png" id="2_4b3x8"]
@@ -32,6 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://b6xc2lxc2xcbp" path="res://Scenes/Sprites/dog/dog4.png" id="30_1tgbs"]
 [ext_resource type="Texture2D" uid="uid://drwojs0xkl8pl" path="res://Scenes/Sprites/dog/dog5.png" id="31_pttdw"]
 [ext_resource type="Texture2D" uid="uid://gwjqv0y3yqov" path="res://Scenes/Sprites/dog/dog6.png" id="32_sdj6k"]
+[ext_resource type="AudioStream" uid="uid://b7n22ud1fbmt5" path="res://Audio/SFX/slash.wav" id="33_enmyf"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -165,3 +166,6 @@ shape = SubResource("CircleShape2D_n5t24")
 
 [node name="Point" type="Node2D" parent="."]
 position = Vector2(-18, -20)
+
+[node name="AttackSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("33_enmyf")

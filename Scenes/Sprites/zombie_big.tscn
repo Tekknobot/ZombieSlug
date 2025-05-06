@@ -182,24 +182,26 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5t24"]
-radius = 11.0
+radius = 25.02
 
 [node name="ZombieBig" type="CharacterBody2D" groups=["Zombie"]]
+position = Vector2(0, -71)
 script = ExtResource("1_gucco")
 xp_award = 10
 min_speed = 50.0
+attack_range = 48.0
 attack_damage = 2
-max_health = 3
+max_health = 15
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 44)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_yp3ch")
 animation = &"death"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Zombie"]]
-position = Vector2(0, -31)
 shape = SubResource("CircleShape2D_n5t24")
 
 [node name="Point" type="Node2D" parent="."]
-position = Vector2(-18, -20)
+position = Vector2(-18, 24)

@@ -11,6 +11,8 @@ extends CharacterBody2D
 var attack_timer: Timer
 var current_target       # untyped on purpose
 
+@onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
+
 func _ready() -> void:
 	# setup attack cooldown timer
 	attack_timer = Timer.new()
@@ -71,6 +73,9 @@ func _physics_process(delta: float) -> void:
 func _on_attack_timeout() -> void:
 	# only hit if still valid and in scene
 	if current_target and is_instance_valid(current_target) and current_target.is_inside_tree():
+		# play your merc attack SFX
+		attack_sfx.play()
+		# now apply damage
 		if current_target.has_method("take_damage"):
 			current_target.take_damage(attack_damage)
 	else:

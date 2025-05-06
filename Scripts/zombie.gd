@@ -12,6 +12,9 @@ extends CharacterBody2D
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
+@onready var hit_sfx: AudioStreamPlayer2D   = $HitSfx
+@onready var death_sfx: AudioStreamPlayer2D = $DeathSfx
+
 # Internal state
 var speed: float   = 0.0
 var health: int    = 0
@@ -76,6 +79,8 @@ func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
 
+	hit_sfx.play()
+
 	flash()  # your red‐flash helper
 
 	health -= amount
@@ -86,7 +91,9 @@ func take_damage(amount: int = 1) -> void:
 
 		# 1) award kill + XP
 		Playerstats.add_kill(xp_award)
-
+		
+		death_sfx.play()
+		
 		# 2) death animation + delay + free
 		anim.play("death")
 		await get_tree().create_timer(0.5).timeout

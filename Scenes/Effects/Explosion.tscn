@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bofv1wx4so130"]
+[gd_scene load_steps=19 format=3 uid="uid://bofv1wx4so130"]
 
 [ext_resource type="Texture2D" uid="uid://bkylv8dfqnkcg" path="res://Scenes/Effects/explosion/explosion1.png" id="1_g65nu"]
 [ext_resource type="Script" path="res://Scripts/explosion.gd" id="1_jaxcd"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://btqqeif8wuqwt" path="res://Scenes/Effects/explosion/explosion12.png" id="12_axrdo"]
 [ext_resource type="Texture2D" uid="uid://ohqnd0ucje5w" path="res://Scenes/Effects/explosion/explosion13.png" id="13_6n6p4"]
 [ext_resource type="Texture2D" uid="uid://bevk2t4jsk0ry" path="res://Scenes/Effects/explosion/explosion14.png" id="14_jb0dr"]
+[ext_resource type="AudioStream" uid="uid://dogvi6q7030pk" path="res://Audio/SFX/explosion_8bit.wav" id="16_glp5f"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cwydu"]
 radius = 20.025
@@ -80,4 +81,6 @@ sprite_frames = SubResource("SpriteFrames_tx7ot")
 autoplay = "default"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_glp5f")
+volume_db = -12.0
 autoplay = true
