@@ -22,11 +22,20 @@ var is_attacking:  bool = false
 var health:        int  = 0
 var is_dead:       bool = false
 
+@export var initial_firerate  := 0.5    # seconds between shots at level 1
+var firerate: float
+
 # Separate cooldown timers
 var dog_cooldown_timer: Timer
 var merc_cooldown_timer: Timer
 
 func _ready() -> void:
+	# initialize firing rate
+	firerate = initial_firerate
+	
+	# wire up level-change so we can speed up
+	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
+			
 	# initialize global stats to match this soldier
 	Playerstats.max_health = max_health
 	Playerstats.health     = max_health
@@ -151,11 +160,17 @@ func _on_attack() -> void:
 	fire_bullet()
 
 	if is_on_floor():
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(firerate).timeout
 	else:
 		await _await_landing()
 
 	is_attacking = false
+
+func _on_level_changed(new_level: int) -> void:
+	# Example: reduce interval by 10% each level, to a floor of 0.1s
+	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
+	firerate = initial_firerate * factor
+	print("Leveled to ", new_level, " → new firerate: ", firerate)
 
 func _await_landing() -> void:
 	while not is_on_floor():
@@ -185,7 +200,6 @@ func take_damage(amount: int = 1) -> void:
 
 	if Playerstats.health <= 0:
 		die()
-
 
 func die() -> void:
 	is_dead = true
