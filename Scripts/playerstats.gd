@@ -60,3 +60,16 @@ func _level_up() -> void:
 	emit_signal("level_changed", level)
 	emit_signal("health_changed", health)
 	emit_signal("max_health_changed", max_health)
+
+func reset_stats() -> void:
+	# Reset runtime values
+	health = max_health
+	xp     = 0
+	kills  = 0
+	level  = 1
+
+	# Emit signals so UI updates
+	emit_signal("health_changed", health)
+	emit_signal("xp_changed",     xp)
+	emit_signal("kills_changed",  kills)
+	emit_signal("level_changed",  level)

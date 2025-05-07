@@ -16,3 +16,4 @@ res://Shaders/level_up_pulse.gdshader
 res://Scripts/hud.gd
 res://Scripts/zombie_spawner.gd
 res://Scripts/bullet.gd
+res://Scripts/playerstats.gd
