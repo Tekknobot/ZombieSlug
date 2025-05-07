@@ -12,3 +12,5 @@ res://Scripts/dog.gd
 res://Scripts/soldier.gd
 res://Scripts/zombie.gd
 res://Scenes/Sprites/zombie_xl.tscn
+res://Shaders/level_up_pulse.gdshader
+res://Scripts/hud.gd

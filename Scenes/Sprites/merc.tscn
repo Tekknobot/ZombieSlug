@@ -1,7 +1,8 @@
-[gd_scene load_steps=43 format=3 uid="uid://j2fiwa6qop8g"]
+[gd_scene load_steps=45 format=3 uid="uid://j2fiwa6qop8g"]
 
 [ext_resource type="Script" path="res://Scripts/merc.gd" id="1_qdyaa"]
 [ext_resource type="Texture2D" uid="uid://dm3325xgagtql" path="res://Scenes/Sprites/rambo/attack/rambo_attack1.png" id="2_gyxpx"]
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="2_ydr3t"]
 [ext_resource type="Texture2D" uid="uid://sh7aa4gchnbl" path="res://Scenes/Sprites/rambo/attack/rambo_attack2.png" id="3_68ikx"]
 [ext_resource type="Texture2D" uid="uid://cvg4q6l4w1ahn" path="res://Scenes/Sprites/rambo/attack/rambo_attack3.png" id="4_004ll"]
 [ext_resource type="Texture2D" uid="uid://c2kgk0a6x5v3p" path="res://Scenes/Sprites/rambo/attack/rambo_attack4.png" id="5_rvma4"]
@@ -40,6 +41,12 @@
 [ext_resource type="Texture2D" uid="uid://dmq3p3kwp5ijv" path="res://Scenes/Sprites/rambo/rambo4.png" id="38_jl6s8"]
 [ext_resource type="Texture2D" uid="uid://dvxjdj64f0qc4" path="res://Scenes/Sprites/rambo/rambo5.png" id="39_nyen2"]
 [ext_resource type="AudioStream" uid="uid://b7n22ud1fbmt5" path="res://Audio/SFX/slash.wav" id="40_xqyux"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4d2hf"]
+shader = ExtResource("2_ydr3t")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -184,6 +191,7 @@ animations = [{
 script = ExtResource("1_qdyaa")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_4d2hf")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
 autoplay = "default"
 

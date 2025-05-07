@@ -33,6 +33,9 @@ var merc_cooldown_timer: Timer
 @onready var merc_sfx     := $MercSfx      as AudioStreamPlayer2D
 @onready var jump_sfx     := $JumpSfx      as AudioStreamPlayer2D
 @onready var hurt_sfx     := $HurtSfx      as AudioStreamPlayer2D
+@onready var levelup_sfx     := $LevelUpSfx      as AudioStreamPlayer2D
+
+@onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
 func _ready() -> void:
 	# initialize firing rate
@@ -64,6 +67,9 @@ func _ready() -> void:
 	grenade_cooldown_timer.wait_time = grenade_cooldown
 	grenade_cooldown_timer.one_shot  = true
 	add_child(grenade_cooldown_timer)
+	
+	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
+
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -185,6 +191,8 @@ func _on_level_changed(new_level: int) -> void:
 	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	firerate = initial_firerate * factor
 	print("Leveled to ", new_level, " → new firerate: ", firerate)
+	play_level_up_effect()
+	levelup_sfx.play()
 
 func _await_landing() -> void:
 	while not is_on_floor():
@@ -240,3 +248,11 @@ func _throw_grenade() -> void:
 		g.velocity.x = -g.initial_speed
 	g.velocity.y = g.initial_upward
 	get_tree().get_current_scene().add_child(g)
+
+func play_level_up_effect():
+	# turn on your shader’s “active” uniform
+	glow_mat.set_shader_parameter("active", true)
+	# wait however long you want the glow to last
+	await get_tree().create_timer(1.0).timeout
+	# turn it off again
+	glow_mat.set_shader_parameter("active", false)

@@ -1,4 +1,7 @@
+Panel
 AudioStreamPlayer2D
+ColorRect
+CPUParticles2D
 RichTextLabel
 CanvasLayer
 Control

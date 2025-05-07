@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var xp_bar       = $TopLeft/XP         # ProgressBar
 @onready var level_label  = $TopLeft/Level      # Label
 @onready var hp_label     = $TopLeft/HP         # Label
-
+	
 func _ready() -> void:
 	var stats = Playerstats
 

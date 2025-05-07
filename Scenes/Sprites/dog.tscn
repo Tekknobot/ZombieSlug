@@ -1,7 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://b7fm025bfjx2h"]
+[gd_scene load_steps=38 format=3 uid="uid://b7fm025bfjx2h"]
 
 [ext_resource type="Script" path="res://Scripts/dog.gd" id="1_tqjya"]
 [ext_resource type="Texture2D" uid="uid://boeoiearg2d4c" path="res://Scenes/Sprites/dog/attack/dog_atk1.png" id="2_4b3x8"]
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="2_ihmt5"]
 [ext_resource type="Texture2D" uid="uid://ij518mwtmpap" path="res://Scenes/Sprites/dog/attack/dog_atk2.png" id="3_rws68"]
 [ext_resource type="Texture2D" uid="uid://cam0mtt6r2ckn" path="res://Scenes/Sprites/dog/attack/dog_atk3.png" id="4_gybmr"]
 [ext_resource type="Texture2D" uid="uid://dreutcx671g6o" path="res://Scenes/Sprites/dog/attack/dog_atk4.png" id="5_qffyx"]
@@ -33,6 +34,12 @@
 [ext_resource type="Texture2D" uid="uid://drwojs0xkl8pl" path="res://Scenes/Sprites/dog/dog5.png" id="31_pttdw"]
 [ext_resource type="Texture2D" uid="uid://gwjqv0y3yqov" path="res://Scenes/Sprites/dog/dog6.png" id="32_sdj6k"]
 [ext_resource type="AudioStream" uid="uid://b11umg6nnmd3t" path="res://Audio/SFX/dog-bark-179915.mp3" id="33_b6usw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k41ol"]
+shader = ExtResource("2_ihmt5")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_yp3ch"]
 animations = [{
@@ -156,6 +163,7 @@ animations = [{
 script = ExtResource("1_tqjya")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_k41ol")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
 animation = &"attack"
 autoplay = "default"
