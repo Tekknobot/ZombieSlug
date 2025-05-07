@@ -5,6 +5,35 @@ extends CanvasLayer
 @onready var xp_bar       = $TopLeft/XP         # ProgressBar
 @onready var level_label  = $TopLeft/Level      # Label
 @onready var hp_label     = $TopLeft/HP         # Label
+@onready var name_label     = $TopLeft/Name        # Label
+
+var level_names := [
+	"Ghoul Gunner",
+	"Cadaver Crusher",
+	"Undead Eradicator",
+	"Corpse Commander",
+	"Plague Purifier",
+	"Decay Destroyer",
+	"Rot Ranger",
+	"Necro Nemesis",
+	"Zombie Exterminator",
+	"Flesh Fiend",
+	"Corpse Cleaver",
+	"Night Stalker",
+	"Ghoul Guardian",
+	"Zombie Sentinel",
+	"Flesh Ravager",
+	"Skull Warden",
+	"Risen Reaper",
+	"Dread Remover",
+	"Virus Vanquisher",
+	"Epidemic Enforcer",
+	"Blight Banisher",
+	"Mortuary Mauler",
+	"Cadaver Conqueror",
+	"Bone Brawler",
+	"Death Dealer"
+]
 	
 func _ready() -> void:
 	var stats = Playerstats
@@ -41,3 +70,13 @@ func _on_level_changed(new_level: int) -> void:
 	# also refresh HP bar max in case max_health grew
 	health_bar.max_value = Playerstats.max_health
 	hp_label.text        = "HP: %d of %d" % [Playerstats.health, Playerstats.max_health]
+
+	# Finally, update the level-name label
+	_update_level_name(new_level)
+
+func _update_level_name(level: int) -> void:
+	var idx = level - 1
+	if idx >= 0 and idx < level_names.size():
+		name_label.text = level_names[idx]
+	else:
+		name_label.text = "Level %d" % level

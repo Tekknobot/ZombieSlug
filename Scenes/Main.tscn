@@ -1231,6 +1231,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Logotype" type="TextureRect" parent="HUD/TopLeft"]
+layout_mode = 0
 offset_left = 7.5
 offset_top = 4.5
 offset_right = 107.5
@@ -1258,11 +1259,11 @@ texture = ExtResource("6_vq0dw")
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.25
-offset_top = 23.5
+offset_top = 22.5
 offset_right = 340.25
-offset_bottom = 36.5
+offset_bottom = 35.5
 theme_override_fonts/normal_font = ExtResource("7_juo3a")
-text = "PLAYER 1"
+text = "Ghoul Gunner"
 
 [node name="Kills" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(1, 0, 0, 1)
