@@ -1,3 +1,4 @@
+AudioStreamPlayer2D
 AnimationPlayer
 HBoxContainer
 Label
@@ -8,8 +9,6 @@ CanvasLayer
 Button
 TextureRect
 Node2D
-AudioStreamPlayer2D
 CPUParticles2D
 RichTextLabel
 Control
-ProgressBar

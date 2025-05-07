@@ -14,7 +14,11 @@ config/name="Zombie Slugfest"
 run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-config/icon="res://icon.svg"
+boot_splash/image="res://Icon/pizzza-logo.png"
+boot_splash/fullsize=false
+config/icon="res://Icon/icon-256.png"
+config/windows_native_icon="res://Icon/icon.ico"
+boot_splash/minimum_display_time=1000
 
 [autoload]
 

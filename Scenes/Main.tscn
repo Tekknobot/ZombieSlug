@@ -3535,7 +3535,7 @@ position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
 [node name="Cityblock" type="TextureRect" parent="."]
-modulate = Color(0.250213, 0.250213, 0.250213, 1)
+modulate = Color(0.347817, 0.347817, 0.347817, 1)
 z_index = -1000
 material = SubResource("ShaderMaterial_veull")
 offset_left = -384.0

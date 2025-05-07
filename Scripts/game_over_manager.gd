@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var menu        := $Menu
 @onready var restart_btn := $Menu/VBoxContainer/HBoxContainer/Restart
 @onready var quit_btn    := $Menu/VBoxContainer/HBoxContainer/Quit
+@onready var GameOverSfx    := $GameOverSfx
 
 var _is_fading := false
 var _fade_time := 0.0
@@ -23,6 +24,7 @@ func _ready() -> void:
 
 	set_process(false)
 
+
 func show_game_over() -> void:
 	_fade_time = 0.0
 	_is_fading = true
@@ -37,6 +39,7 @@ func _process(delta: float) -> void:
 			_is_fading = false
 			set_process(false)
 			menu.visible      = true
+			GameOverSfx.play()      # <<-- play the music here			
 			restart_btn.grab_focus()
 			get_tree().paused = true
 
@@ -51,6 +54,7 @@ func _on_restart_pressed() -> void:
 	menu.visible     = false
 	fade.modulate.a  = 0.0
 	get_tree().paused = false
+	GameOverSfx.stop()
 	get_tree().reload_current_scene()
 
 func _on_quit_pressed() -> void:
