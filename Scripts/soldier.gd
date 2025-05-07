@@ -9,7 +9,8 @@ extends CharacterBody2D
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point                    # Position2D for spawn-offset
 
-@export var grenade_cooldown: float = 0.5   # seconds between throws
+@export var initial_grenade_cooldown := 1  # base seconds between throws
+@export var grenade_cooldown: float = 1   # seconds between throws
 var grenade_cooldown_timer: Timer
 
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
@@ -22,7 +23,7 @@ var is_attacking:  bool = false
 var health:        int  = 0
 var is_dead:       bool = false
 
-@export var initial_firerate  := 0.5    # seconds between shots at level 1
+@export var initial_firerate  := 0.6    # seconds between shots at level 1
 var firerate: float
 
 # Separate cooldown timers
@@ -190,6 +191,11 @@ func _on_level_changed(new_level: int) -> void:
 	# Example: reduce interval by 10% each level, to a floor of 0.1s
 	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	firerate = initial_firerate * factor
+	
+	# *** new grenade cooldown code ***
+	var gren_factor = clamp(1.0 - (new_level - 1) * 0.10, 0.2, 1.0)
+	grenade_cooldown_timer.wait_time = initial_grenade_cooldown * gren_factor
+		
 	print("Leveled to ", new_level, " → new firerate: ", firerate)
 	play_level_up_effect()
 	levelup_sfx.play()
@@ -229,6 +235,10 @@ func die() -> void:
 	is_dead = true
 	anim.play("death")
 	await anim.animation_finished
+	
+	# reload the current scene
+	get_tree().reload_current_scene()
+	
 	queue_free()
 
 func flash() -> void:

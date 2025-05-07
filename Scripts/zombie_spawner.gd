@@ -32,7 +32,7 @@ func spawn_zombie() -> void:
 		return
 	var player = players[0] as Node2D
 
-	# choose side without ternary
+	# pick left or right
 	var side: int
 	if (randi() & 1) == 0:
 		side = -1
@@ -44,12 +44,21 @@ func spawn_zombie() -> void:
 		global_position.y
 	)
 
-	var zombie = zombie_scene.instantiate()
+	# instance it
+	var zombie = zombie_scene.instantiate() as CharacterBody2D
 	zombie.global_position = spawn_pos
+
+	var lvl = Playerstats.level
+	if lvl > 1 and zombie.has_method("take_damage"):
+		zombie.max_health += 2 * (lvl - 1)
+		zombie.health     = zombie.max_health
+
+	# group & add
 	if not zombie.is_in_group("Zombie"):
 		zombie.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(zombie)
-	print("Spawned zombie at ", spawn_pos)
+
+	print("Spawned zombie at ", spawn_pos, " with max_health=", zombie.max_health)
 
 func _on_level_changed(new_level: int) -> void:
 	if boss_scene == null:
@@ -78,3 +87,12 @@ func _on_level_changed(new_level: int) -> void:
 		boss.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(boss)
 	print("🦹‍♂️ Zombie Boss spawned at level ", new_level, " → ", boss_pos)
+	
+	# Now buff every existing zombie’s health
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		# only buff the actual Zombie CharacterBody2D, not the CollisionShape2D children
+		if z is CharacterBody2D and z.has_method("take_damage"):
+			z.max_health += 1
+			# heal them a bit so you don’t kill off near‐dead ones immediately
+			z.health = min(z.health + 1, z.max_health)
+	print("All zombies gained +1 max health (level ", new_level, ")")

@@ -14,3 +14,5 @@ res://Scripts/zombie.gd
 res://Scenes/Sprites/zombie_xl.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Scripts/hud.gd
+res://Scripts/zombie_spawner.gd
+res://Scripts/bullet.gd
