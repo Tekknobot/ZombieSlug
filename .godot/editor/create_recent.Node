@@ -1,3 +1,6 @@
+Sprite2D
+Node2D
+CanvasLayer
 TextureRect
 AudioStreamPlayer2D
 AnimationPlayer
@@ -6,9 +9,6 @@ Label
 VBoxContainer
 Panel
 ColorRect
-CanvasLayer
 Button
-Node2D
 CPUParticles2D
 RichTextLabel
-Control
