@@ -17,3 +17,6 @@ res://Scripts/hud.gd
 res://Scripts/zombie_spawner.gd
 res://Scripts/bullet.gd
 res://Scripts/playerstats.gd
+res://Scenes/game_over_manager.tscn
+res://Scripts/game_over_manager.gd
+res://Scripts/fade.gd

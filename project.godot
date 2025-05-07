@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Playerstats="*res://Scripts/playerstats.gd"
+GameOverManager="*res://Scenes/game_over_manager.tscn"
 
 [display]
 

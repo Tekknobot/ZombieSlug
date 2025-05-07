@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3 uid="uid://duv3syk7gb20k"]
+
+[ext_resource type="Script" path="res://Scripts/game_over_manager.gd" id="1_7vwdm"]
+[ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="1_bnsp5"]
+[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_0as55"]
+
+[sub_resource type="Animation" id="Animation_k8iae"]
+resource_name = "fade_in"
+length = 0.5
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_24eap"]
+_data = {
+"fade_in": SubResource("Animation_k8iae")
+}
+
+[node name="GameOverManager" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_7vwdm")
+
+[node name="Fade" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Menu" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -20.0
+offset_right = -82.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_bnsp5")
+theme_override_font_sizes/font_size = 64
+text = "GAME OVER"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Restart" type="Button" parent="Menu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_0as55")
+theme_override_font_sizes/font_size = 32
+text = "RESTART"
+
+[node name="Quit" type="Button" parent="Menu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_0as55")
+theme_override_font_sizes/font_size = 32
+text = "QUIT"
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_24eap")
+}

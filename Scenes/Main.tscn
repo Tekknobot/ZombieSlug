@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=25 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
+[ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
@@ -3554,6 +3555,16 @@ spawn_distance = 500.0
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("5_id8m6")
+
+[node name="Fade" type="ColorRect" parent="HUD"]
+z_index = 1000
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_awqtf")
 
 [node name="TopLeft" type="Control" parent="HUD"]
 layout_mode = 3

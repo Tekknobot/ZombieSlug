@@ -236,11 +236,10 @@ func die() -> void:
 	anim.play("death")
 	await anim.animation_finished
 	
+	GameOverManager.show_game_over()
+	
 	Playerstats.reset_stats()
 	glow_mat.set_shader_parameter("active", false)
-
-	# reload the current scene
-	get_tree().reload_current_scene()
 	
 	queue_free()
 
