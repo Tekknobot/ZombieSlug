@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=22 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
@@ -11,6 +11,7 @@
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_vaiej"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="8_4q5fy"]
+[ext_resource type="Texture2D" uid="uid://714vdp5fem6p" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
@@ -1229,17 +1230,25 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="Logotype" type="TextureRect" parent="HUD/TopLeft"]
+offset_left = 7.5
+offset_top = 4.5
+offset_right = 107.5
+offset_bottom = 54.5
+texture = ExtResource("9_djqjv")
+
 [node name="Portrait" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
-offset_left = 5.0
+offset_left = 114.0
 offset_top = 4.0
-offset_right = 71.0
+offset_right = 180.0
 offset_bottom = 70.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_25318")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Portrait"]
 material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 65.0
@@ -1248,9 +1257,9 @@ texture = ExtResource("6_vq0dw")
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 74.25
+offset_left = 183.25
 offset_top = 23.5
-offset_right = 231.25
+offset_right = 340.25
 offset_bottom = 36.5
 theme_override_fonts/normal_font = ExtResource("7_juo3a")
 text = "PLAYER 1"
@@ -1258,9 +1267,9 @@ text = "PLAYER 1"
 [node name="Kills" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(1, 0, 0, 1)
 layout_mode = 0
-offset_left = 74.0
+offset_left = 183.0
 offset_top = 57.5
-offset_right = 231.0
+offset_right = 340.0
 offset_bottom = 70.5
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "KILLS: 0"
@@ -1268,27 +1277,27 @@ text = "KILLS: 0"
 [node name="HP" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(0, 1, 0, 1)
 layout_mode = 0
-offset_left = 74.0
+offset_left = 183.0
 offset_top = 50.5
-offset_right = 231.0
+offset_right = 340.0
 offset_bottom = 63.5
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "HP: 0 of 0"
 
 [node name="Level" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 74.0
+offset_left = 183.0
 offset_top = 43.75
-offset_right = 231.0
+offset_right = 340.0
 offset_bottom = 56.75
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "LEVEL: 0"
 
 [node name="Health" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 74.25
+offset_left = 183.25
 offset_top = 36.25
-offset_right = 183.25
+offset_right = 292.25
 offset_bottom = 41.25
 theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
 max_value = 10.0
@@ -1299,9 +1308,9 @@ script = ExtResource("10_j2nv3")
 
 [node name="XP" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 74.25
+offset_left = 183.25
 offset_top = 42.25
-offset_right = 183.25
+offset_right = 292.25
 offset_bottom = 47.25
 theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
 max_value = 10.0
@@ -1310,12 +1319,11 @@ value = 10.0
 show_percentage = false
 
 [node name="Buttons" type="TextureRect" parent="HUD/TopLeft"]
-visible = false
 layout_mode = 0
-offset_left = 223.25
-offset_top = 0.25
-offset_right = 319.25
-offset_bottom = 64.25
+offset_left = 307.5
+offset_top = 5.0
+offset_right = 403.5
+offset_bottom = 69.0
 texture = ExtResource("5_rbj0p")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
