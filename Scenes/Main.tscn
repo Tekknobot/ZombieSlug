@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=27 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
 [ext_resource type="Script" path="res://Scripts/hud.gd" id="5_id8m6"]
+[ext_resource type="Texture2D" uid="uid://d1yihuw1ctkfr" path="res://Assets/Backgrounds/City_block.png" id="5_lqmy6"]
 [ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="5_rbj0p"]
 [ext_resource type="PackedScene" uid="uid://8iwtfpagau7h" path="res://Scenes/Sprites/zombie_xl.tscn" id="6_l3jnr"]
 [ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="6_vq0dw"]
@@ -16,7 +17,7 @@
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
-[ext_resource type="Texture2D" uid="uid://d1yihuw1ctkfr" path="res://Scenes/Assets/Backgrounds/City_block.png" id="16_5c7vu"]
+[ext_resource type="Texture2D" uid="uid://mmmyt7n6kc71" path="res://Assets/Trees/48x48 trees.png" id="18_yw2rt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("8_4q5fy")
@@ -27,7 +28,7 @@ shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kr8lm"]
 size = Vector2(32, 28)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_veull"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ma1bf"]
 shader = ExtResource("8_4q5fy")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
@@ -52,6 +53,12 @@ bg_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
 bg_color = Color(1, 1, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kkakm"]
+shader = ExtResource("8_4q5fy")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [node name="Level" type="Node2D"]
 
@@ -3535,14 +3542,14 @@ position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
 [node name="Cityblock" type="TextureRect" parent="."]
-modulate = Color(0.347817, 0.347817, 0.347817, 1)
+modulate = Color(0.558954, 0.558954, 0.558954, 1)
 z_index = -1000
-material = SubResource("ShaderMaterial_veull")
+material = SubResource("ShaderMaterial_ma1bf")
 offset_left = -384.0
 offset_top = -127.0
 offset_right = 529.0
 offset_bottom = 39.0
-texture = ExtResource("16_5c7vu")
+texture = ExtResource("5_lqmy6")
 
 [node name="ZombieSpawner" type="Node2D" parent="."]
 script = ExtResource("4_js2x2")
@@ -3673,3 +3680,21 @@ texture = ExtResource("5_rbj0p")
 stream = ExtResource("13_uw5wu")
 autoplay = true
 parameters/looping = true
+
+[node name="Tree" type="TextureRect" parent="."]
+z_index = 1000
+material = SubResource("ShaderMaterial_kkakm")
+offset_left = -407.0
+offset_top = 15.0
+offset_right = -215.0
+offset_bottom = 63.0
+texture = ExtResource("18_yw2rt")
+
+[node name="Tree2" type="TextureRect" parent="."]
+z_index = 1000
+material = SubResource("ShaderMaterial_kkakm")
+offset_left = 147.0
+offset_top = 15.0
+offset_right = 339.0
+offset_bottom = 63.0
+texture = ExtResource("18_yw2rt")

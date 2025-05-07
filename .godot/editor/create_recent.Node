@@ -1,3 +1,4 @@
+TextureRect
 AudioStreamPlayer2D
 AnimationPlayer
 HBoxContainer
@@ -7,7 +8,6 @@ Panel
 ColorRect
 CanvasLayer
 Button
-TextureRect
 Node2D
 CPUParticles2D
 RichTextLabel
