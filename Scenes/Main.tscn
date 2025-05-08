@@ -3710,16 +3710,16 @@ offset_right = 459.0
 offset_bottom = 14.0
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(75, 10)
+custom_minimum_size = Vector2(40, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
-text = "TNT: 5 of 5"
+text = "MINE: 5"
 
 [node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(75, 10)
+custom_minimum_size = Vector2(40, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
-text = "MINE: 5 of 5"
+text = "MINE: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")

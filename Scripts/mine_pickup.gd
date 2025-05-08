@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var amount:      int   = 5     # how many grenades this gives
+@export var amount:      int   = 3     # how many grenades this gives
 @export var wiggle_angle: float = 10.0  # max degrees to each side
 @export var wiggle_time:  float = 0.8   # full oscillation period
 @export var lifetime:     float = 20.0  # seconds before auto-despawn
