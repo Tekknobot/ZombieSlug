@@ -16,7 +16,7 @@
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_vaiej"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="8_4q5fy"]
-[ext_resource type="Texture2D" uid="uid://714vdp5fem6p" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
+[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
@@ -3547,7 +3547,7 @@ shape = SubResource("RectangleShape2D_kr8lm")
 [node name="CloudsMover1" type="Node2D" parent="."]
 position = Vector2(0, -146)
 script = ExtResource("5_7nq1g")
-range_x = 8.0
+range_x = 6.0
 freq_x = 0.1
 
 [node name="Sprite2D" type="Sprite2D" parent="CloudsMover1"]
@@ -3704,7 +3704,6 @@ texture = ExtResource("5_rbj0p")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")
-autoplay = true
 parameters/looping = true
 
 [node name="Tree" type="TextureRect" parent="."]
