@@ -5,7 +5,7 @@ extends Area2D
 
 const ExplosionScene = preload("res://Scenes/Effects/Explosion.tscn")
 
-@onready var beep_sfx := $BeepSfx            as AudioStreamPlayer2D
+@onready var beep_sfx := $BeepSfx as AudioStreamPlayer2D
 
 var _exploded: bool = false
 
