@@ -52,6 +52,9 @@ var merc_cooldown_timer: Timer
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
 func _ready() -> void:
+	#Place elswhere when needed
+	Playerstats.reset_stats()
+	
 	# initialize firing rate
 	firerate = initial_firerate
 	
@@ -291,7 +294,6 @@ func die() -> void:
 	
 	GameOverManager.show_game_over()
 	
-	Playerstats.reset_stats()
 	glow_mat.set_shader_parameter("active", false)
 	
 	queue_free()

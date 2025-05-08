@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://covjit2rg2434"]
+
+[ext_resource type="Texture2D" uid="uid://ni21jmb1idt" path="res://Assets/Items/health_drop.png" id="1_7idm1"]
+[ext_resource type="Script" path="res://Scripts/health_pickup.gd" id="1_xvnfo"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_05hry"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_xvnfo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_7idm1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_05hry")
