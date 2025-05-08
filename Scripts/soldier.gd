@@ -13,10 +13,16 @@ extends CharacterBody2D
 @export var grenade_cooldown: float = 1   # seconds between throws
 var grenade_cooldown_timer: Timer
 
+@export var initial_mine_cooldown := 2.0   # base seconds between mines
+@export var mine_offset: float     = 16.0   # how far in front of player to drop
+@export var mine_cooldown: float   = 2.0    # seconds between mine drops
+var mine_cooldown_timer: Timer
+
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
 const GrenadeScene = preload("res://Scenes/Sprites/tnt.tscn")
+const MineScene    = preload("res://Scenes/Sprites/mine.tscn")
 
 var facing_right: bool = false
 var is_attacking:  bool = false
@@ -68,6 +74,11 @@ func _ready() -> void:
 	grenade_cooldown_timer.wait_time = grenade_cooldown
 	grenade_cooldown_timer.one_shot  = true
 	add_child(grenade_cooldown_timer)
+
+	mine_cooldown_timer = Timer.new()
+	mine_cooldown_timer.wait_time = mine_cooldown
+	mine_cooldown_timer.one_shot  = true
+	add_child(mine_cooldown_timer)
 	
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
 
@@ -95,6 +106,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
 		_throw_grenade()
 		grenade_cooldown_timer.start()
+ 
+	# only allow dropping a mine when the player is on the ground
+	if is_on_floor() and Input.is_action_just_pressed("mine") and mine_cooldown_timer.is_stopped():
+		_drop_mine()
+		mine_cooldown_timer.start()
 		
 	var can_move := not is_attacking or not is_on_floor()
 	var dir: float = 0.0
@@ -195,6 +211,22 @@ func _on_level_changed(new_level: int) -> void:
 	# *** new grenade cooldown code ***
 	var gren_factor = clamp(1.0 - (new_level - 1) * 0.10, 0.2, 1.0)
 	grenade_cooldown_timer.wait_time = initial_grenade_cooldown * gren_factor
+
+	# --- mine cooldown reduction ---
+	var mine_factor: float
+	if new_level > 1:
+		mine_factor = 1.0 - (new_level - 1) * 0.10
+	else:
+		mine_factor = 1.0
+	# clamp to a minimum of 20% of original
+	if mine_factor < 0.2:
+		mine_factor = 0.2
+
+	mine_cooldown = initial_mine_cooldown * mine_factor
+	mine_cooldown_timer.wait_time = mine_cooldown
+
+	print("Level ", new_level, 
+		  " → mine cooldown: ", mine_cooldown)
 		
 	print("Leveled to ", new_level, " → new firerate: ", firerate)
 	play_level_up_effect()
@@ -268,3 +300,18 @@ func play_level_up_effect():
 	await get_tree().create_timer(1.0).timeout
 	# turn it off again
 	glow_mat.set_shader_parameter("active", false)
+
+func _drop_mine() -> void:
+	# determine direction without ternary
+	var dir: int
+	if facing_right:
+		dir = 1
+	else:
+		dir = -1
+
+	# instantiate and position the mine
+	var m = MineScene.instantiate()
+	m.global_position = global_position + Vector2(dir * mine_offset, 0)
+	m.global_position.y -= 8
+	get_tree().get_current_scene().add_child(m)
+	print("💣 Dropped mine at", m.global_position)

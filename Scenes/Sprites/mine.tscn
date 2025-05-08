@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://nrsau1va6046"]
+
+[ext_resource type="Script" path="res://Scripts/mine.gd" id="1_dyjfp"]
+[ext_resource type="Texture2D" uid="uid://uj6g582icxx2" path="res://Assets/Mines/mine1.png" id="2_cdieo"]
+[ext_resource type="Texture2D" uid="uid://omsvtypdvd4q" path="res://Assets/Mines/mine2.png" id="3_dlfwv"]
+[ext_resource type="AudioStream" uid="uid://dq06om8u54xyw" path="res://Audio/SFX/beep-329314.mp3" id="4_q65yp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_113ie"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_cdieo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_dlfwv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2tum8"]
+radius = 5.0
+
+[node name="Mine" type="Area2D"]
+script = ExtResource("1_dyjfp")
+fuse_time = 30.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 9)
+sprite_frames = SubResource("SpriteFrames_113ie")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2tum8")
+
+[node name="BeepSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_q65yp")
+volume_db = -80.0
+
+[node name="FuseTimer" type="Timer" parent="."]
+
+[node name="BeepTimer" type="Timer" parent="."]

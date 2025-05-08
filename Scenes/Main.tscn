@@ -3707,19 +3707,21 @@ stream = ExtResource("13_uw5wu")
 parameters/looping = true
 
 [node name="Tree" type="TextureRect" parent="."]
+visible = false
 z_index = 1000
 material = SubResource("ShaderMaterial_kkakm")
 offset_left = -407.0
-offset_top = 15.0
+offset_top = 30.0
 offset_right = -215.0
-offset_bottom = 63.0
+offset_bottom = 78.0
 texture = ExtResource("18_yw2rt")
 
 [node name="Tree2" type="TextureRect" parent="."]
+visible = false
 z_index = 1000
 material = SubResource("ShaderMaterial_kkakm")
 offset_left = 147.0
-offset_top = 15.0
+offset_top = 30.0
 offset_right = 339.0
-offset_bottom = 63.0
+offset_bottom = 78.0
 texture = ExtResource("18_yw2rt")
