@@ -195,6 +195,7 @@ radius = 11.0
 
 [node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 script = ExtResource("1_75npq")
+max_health = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_sxfp4")
