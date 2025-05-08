@@ -27,6 +27,7 @@ script = ExtResource("1_r88a4")
 initial_speed = 125.0
 initial_upward = -200.0
 gravity_force = 275.0
+damage = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_113ie")

@@ -18,6 +18,12 @@ var grenade_cooldown_timer: Timer
 @export var mine_cooldown: float   = 2.0    # seconds between mine drops
 var mine_cooldown_timer: Timer
 
+@export var initial_grenade_damage := 3
+var grenade_damage: int
+
+@export var initial_mine_damage := 3
+var mine_damage: int
+
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
@@ -81,7 +87,9 @@ func _ready() -> void:
 	add_child(mine_cooldown_timer)
 	
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
-
+	
+	grenade_damage = initial_grenade_damage
+	mine_damage    = initial_mine_damage
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -207,22 +215,28 @@ func _on_level_changed(new_level: int) -> void:
 	# Example: reduce interval by 10% each level, to a floor of 0.1s
 	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	firerate = initial_firerate * factor
-	
-	# *** new grenade cooldown code ***
-	var gren_factor = clamp(1.0 - (new_level - 1) * 0.10, 0.2, 1.0)
-	grenade_cooldown_timer.wait_time = initial_grenade_cooldown * gren_factor
 
-	# --- mine cooldown reduction ---
-	var mine_factor: float
-	if new_level > 1:
-		mine_factor = 1.0 - (new_level - 1) * 0.10
-	else:
-		mine_factor = 1.0
-	# clamp to a minimum of 20% of original
-	if mine_factor < 0.2:
-		mine_factor = 0.2
+	# --- grenade cooldown reduction (10% per level, floor 20%) ---
+	var gren_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
+	grenade_cooldown = initial_grenade_cooldown * gren_factor
+	grenade_cooldown_timer.wait_time = grenade_cooldown
+
+	# --- mine cooldown reduction (10% per level, floor 20%) ---
+	var mine_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
+	mine_cooldown = initial_mine_cooldown * mine_factor
+	mine_cooldown_timer.wait_time = mine_cooldown
 
 	mine_cooldown = initial_mine_cooldown * mine_factor
+	mine_cooldown_timer.wait_time = mine_cooldown
+
+	# scale grenade damage (e.g. +1 per level)
+	grenade_damage = initial_grenade_damage + (new_level - 1)
+	grenade_cooldown = initial_grenade_cooldown * clamp(1.0 - (new_level -1)*0.1, 0.2, 1.0)
+	grenade_cooldown_timer.wait_time = grenade_cooldown
+
+	# scale mine damage similarly
+	mine_damage = initial_mine_damage + (new_level - 1)
+	mine_cooldown = initial_mine_cooldown * clamp(1.0 - (new_level -1)*0.1, 0.2, 1.0)
 	mine_cooldown_timer.wait_time = mine_cooldown
 
 	print("Level ", new_level, 
@@ -285,6 +299,7 @@ func _throw_grenade() -> void:
 	# spawn at the muzzle or player hand
 	g.global_position = global_position
 	g.global_position.y -= 16
+	g.damage = grenade_damage
 	# set initial velocity based on facing direction
 	if facing_right:
 		g.velocity.x = g.initial_speed
@@ -313,5 +328,6 @@ func _drop_mine() -> void:
 	var m = MineScene.instantiate()
 	m.global_position = global_position + Vector2(dir * mine_offset, 0)
 	m.global_position.y -= 8
+	m.damage = mine_damage
 	get_tree().get_current_scene().add_child(m)
 	print("💣 Dropped mine at", m.global_position)

@@ -201,6 +201,8 @@ speed = 100.0
 jump_velocity = -275.0
 initial_mine_cooldown = 1.0
 mine_cooldown = 1.0
+initial_grenade_damage = 2
+initial_mine_damage = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")
