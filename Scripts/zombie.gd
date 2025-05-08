@@ -95,6 +95,19 @@ func take_damage(amount: int = 1) -> void:
 		
 		death_sfx.play()
 		
+		# after awarding the kill...
+		if randi() % 100 < 30:
+			var drop = preload("res://Scenes/Sprites/TNTPickup.tscn").instantiate()
+			drop.global_position = global_position
+			drop.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop)
+
+		if randi() % 100 < 30:
+			var drop2 = preload("res://Scenes/Sprites/MinePickup.tscn").instantiate()
+			drop2.global_position = global_position
+			drop2.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop2)		
+		
 		# 2) death animation + delay + free
 		anim.play("death")
 		await get_tree().create_timer(0.5).timeout

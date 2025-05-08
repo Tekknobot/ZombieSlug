@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://b25ons7hgjrut"]
+
+[ext_resource type="Script" path="res://Scripts/tnt_pickup.gd" id="1_jao1i"]
+[ext_resource type="Texture2D" uid="uid://bb1clht4a0c67" path="res://Projectiles/tnt/tnt_drop.png" id="1_mx1b3"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_iiisr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_jao1i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mx1b3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_iiisr")

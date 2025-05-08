@@ -1,82 +1,72 @@
+# res://Scripts/HUD.gd
 extends CanvasLayer
 
-@onready var kills_label  = $TopLeft/Kills      # Label
-@onready var health_bar   = $TopLeft/Health     # ProgressBar
-@onready var xp_bar       = $TopLeft/XP         # ProgressBar
-@onready var level_label  = $TopLeft/Level      # Label
-@onready var hp_label     = $TopLeft/HP         # Label
-@onready var name_label     = $TopLeft/Name        # Label
+@onready var kills_label  = $TopLeft/Kills       as RichTextLabel
+@onready var health_bar   = $TopLeft/Health      as ProgressBar
+@onready var xp_bar       = $TopLeft/XP          as ProgressBar
+@onready var level_label  = $TopLeft/Level       as RichTextLabel
+@onready var hp_label     = $TopLeft/HP          as RichTextLabel
+@onready var name_label   = $TopLeft/Name        as RichTextLabel
+
+@onready var tnt_label    = $TopLeft/Bumpers/TNT    as RichTextLabel
+@onready var mines_label  = $TopLeft/Bumpers/MINES  as RichTextLabel
 
 var level_names := [
-	"Ghoul Gunner",
-	"Cadaver Crusher",
-	"Undead Eradicator",
-	"Corpse Commander",
-	"Plague Purifier",
-	"Decay Destroyer",
-	"Rot Ranger",
-	"Necro Nemesis",
-	"Zombie Exterminator",
-	"Flesh Fiend",
-	"Corpse Cleaver",
-	"Night Stalker",
-	"Ghoul Guardian",
-	"Zombie Sentinel",
-	"Flesh Ravager",
-	"Skull Warden",
-	"Risen Reaper",
-	"Dread Remover",
-	"Virus Vanquisher",
-	"Epidemic Enforcer",
-	"Blight Banisher",
-	"Mortuary Mauler",
-	"Cadaver Conqueror",
-	"Bone Brawler",
+	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Commander",
+	"Plague Purifier","Decay Destroyer","Rot Ranger","Necro Nemesis",
+	"Zombie Exterminator","Flesh Fiend","Corpse Cleaver","Night Stalker",
+	"Ghoul Guardian","Zombie Sentinel","Flesh Ravager","Skull Warden",
+	"Risen Reaper","Dread Remover","Virus Vanquisher","Epidemic Enforcer",
+	"Blight Banisher","Mortuary Mauler","Cadaver Conqueror","Bone Brawler",
 	"Death Dealer"
 ]
-	
+
 func _ready() -> void:
 	var stats = Playerstats
 
-	# Initial values
-	kills_label.text       = "Kills: %d"  % stats.kills
-	health_bar.max_value   = stats.max_health
-	health_bar.value       = stats.health
-	xp_bar.max_value       = stats.xp_to_next_level()
-	xp_bar.value           = stats.xp
-	level_label.text       = "Level: %d"  % stats.level
-	hp_label.text          = "HP: %d of %d" % [stats.health, stats.max_health]
+	# initialize
+	kills_label.text      = "Kills: %d"  % stats.kills
+	health_bar.max_value  = stats.max_health
+	health_bar.value      = stats.health
+	hp_label.text         = "HP: %d of %d" % [stats.health, stats.max_health]
+	xp_bar.max_value      = stats.xp_to_next_level()
+	xp_bar.value          = stats.xp
+	level_label.text      = "Level: %d"     % stats.level
+	name_label.text       = level_names[0]
 
-	# Connect signals
+	tnt_label.text        = "TNT: %d"    % stats.grenades
+	mines_label.text      = "MINES: %d"  % stats.mines
+
+	# connect
 	stats.connect("kills_changed",   Callable(self, "_on_kills_changed"))
 	stats.connect("health_changed",  Callable(self, "_on_health_changed"))
 	stats.connect("xp_changed",      Callable(self, "_on_xp_changed"))
 	stats.connect("level_changed",   Callable(self, "_on_level_changed"))
+	stats.connect("grenades_changed",Callable(self, "_on_grenades_changed"))
+	stats.connect("mines_changed",   Callable(self, "_on_mines_changed"))
 
-func _on_kills_changed(new_kills: int) -> void:
-	kills_label.text = "Kills: %d" % new_kills
+func _on_kills_changed(k): kills_label.text = "Kills: %d" % k
+func _on_health_changed(h): 
+	health_bar.value = h
+	hp_label.text    = "HP: %d of %d" % [h, Playerstats.max_health]
+func _on_xp_changed(x):    xp_bar.value = x
 
-func _on_health_changed(new_health: int) -> void:
-	health_bar.value = new_health
-	hp_label.text    = "HP: %d of %d" % [new_health, Playerstats.max_health]
-
-func _on_xp_changed(new_xp: int) -> void:
-	xp_bar.value = new_xp
-
-func _on_level_changed(new_level: int) -> void:
-	level_label.text     = "Level: %d" % new_level
+func _on_level_changed(lvl: int) -> void:
+	level_label.text     = "Level: %d" % lvl
 	xp_bar.max_value     = Playerstats.xp_to_next_level()
 	xp_bar.value         = Playerstats.xp
-	# also refresh HP bar max in case max_health grew
 	health_bar.max_value = Playerstats.max_health
 	hp_label.text        = "HP: %d of %d" % [Playerstats.health, Playerstats.max_health]
 
-	# Finally, update the level-name label
-	_update_level_name(new_level)
-
-func _update_level_name(level: int) -> void:
-	var idx = level - 1
+	# update the level name without a ternary
+	var idx = lvl - 1
 	if idx >= 0 and idx < level_names.size():
 		name_label.text = level_names[idx]
 	else:
-		name_label.text = "Level %d" % level
+		name_label.text = "Level %d" % lvl
+
+func _on_grenades_changed(g):
+	tnt_label.text   = "TNT: %d"   % g
+
+func _on_mines_changed(m):
+	mines_label.text = "MINES: %d" % m

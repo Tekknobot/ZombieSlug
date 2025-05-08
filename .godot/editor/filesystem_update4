@@ -11,3 +11,11 @@ res://Scenes/Sprites/mine.tscn
 res://Scripts/mine.gd
 res://Scripts/soldier.gd
 res://Scenes/Sprites/tnt.tscn
+res://Scripts/hud.gd
+res://Scripts/playerstats.gd
+res://Scenes/Sprites/TNTPickup.tscn
+res://Scripts/tnt_pickup.gd
+res://Scenes/Sprites/MinePickup.tscn
+res://Scripts/zombie.gd
+res://Scenes/Sprites/tnt_drop.tscn
+res://Scripts/mine_pickup.gd

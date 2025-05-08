@@ -3590,6 +3590,7 @@ transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("5_id8m6")
 
 [node name="Fade" type="ColorRect" parent="HUD"]
+visible = false
 z_index = 1000
 anchors_preset = 15
 anchor_right = 1.0
@@ -3696,11 +3697,29 @@ show_percentage = false
 
 [node name="Buttons" type="TextureRect" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 307.5
+offset_left = 469.0
 offset_top = 5.0
-offset_right = 403.5
+offset_right = 565.0
 offset_bottom = 69.0
 texture = ExtResource("5_rbj0p")
+
+[node name="Bumpers" type="HBoxContainer" parent="HUD/TopLeft"]
+layout_mode = 0
+offset_left = 305.0
+offset_right = 459.0
+offset_bottom = 14.0
+
+[node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
+custom_minimum_size = Vector2(75, 10)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "TNT: 5 of 5"
+
+[node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
+custom_minimum_size = Vector2(75, 10)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "MINE: 5 of 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")

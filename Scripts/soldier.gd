@@ -47,6 +47,7 @@ var merc_cooldown_timer: Timer
 @onready var jump_sfx     := $JumpSfx      as AudioStreamPlayer2D
 @onready var hurt_sfx     := $HurtSfx      as AudioStreamPlayer2D
 @onready var levelup_sfx     := $LevelUpSfx      as AudioStreamPlayer2D
+@onready var empty_sfx     := $EmptyClickSfx      as AudioStreamPlayer2D
 
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
@@ -112,13 +113,19 @@ func _physics_process(delta: float) -> void:
 		_on_attack()
 
 	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
-		_throw_grenade()
-		grenade_cooldown_timer.start()
- 
-	# only allow dropping a mine when the player is on the ground
+		# only throw if we have grenades left
+		if Playerstats.use_grenade():
+			_throw_grenade()
+			grenade_cooldown_timer.start()
+		else:
+			$EmptyClickSfx.play()   # optional “out of ammo” sound
+
 	if is_on_floor() and Input.is_action_just_pressed("mine") and mine_cooldown_timer.is_stopped():
-		_drop_mine()
-		mine_cooldown_timer.start()
+		if Playerstats.use_mine():
+			_drop_mine()
+			mine_cooldown_timer.start()
+		else:
+			$EmptyClickSfx.play()
 		
 	var can_move := not is_attacking or not is_on_floor()
 	var dir: float = 0.0
