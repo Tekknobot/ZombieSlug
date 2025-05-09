@@ -1,11 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://dcn8reck1ceqw"]
+[gd_scene load_steps=13 format=3 uid="uid://dcn8reck1ceqw"]
 
 [ext_resource type="Script" path="res://Scripts/titlescreen.gd" id="1_33e4v"]
 [ext_resource type="PackedScene" uid="uid://duxlsmdg5d6qv" path="res://Scenes/Main.tscn" id="2_runxc"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_snh2f"]
 [ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="2_tiy0f"]
-[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="2_v21cm"]
 [ext_resource type="AudioStream" uid="uid://clffh0xjco6nu" path="res://Audio/Tracks/Cuz I'm Feelin' It (Demo) [138 bpm].mp3" id="5_8lyhd"]
+[ext_resource type="Texture2D" uid="uid://bfq04mm3euoag" path="res://Scenes/Titlescreen/Logotype/Logotype1.png" id="6_urc87"]
+[ext_resource type="Texture2D" uid="uid://d2abuvtk5lxet" path="res://Scenes/Titlescreen/Logotype/Logotype2.png" id="7_eir08"]
+[ext_resource type="Texture2D" uid="uid://bv4qxfykbethl" path="res://Scenes/Titlescreen/Logotype/Logotype3.png" id="8_ql7w4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd8xh"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -18,6 +20,23 @@ length = 0.5
 _data = {
 "fade_in": SubResource("Animation_k8iae")
 }
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o7x61"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_urc87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_eir08")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ql7w4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
 
 [node name="Titlescreen" type="CanvasLayer"]
 layer = 10
@@ -96,10 +115,8 @@ libraries = {
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_8lyhd")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_left = 358.0
-offset_top = 108.0
-offset_right = 438.0
-offset_bottom = 156.0
-scale = Vector2(5, 5)
-texture = ExtResource("2_v21cm")
+[node name="Logo" type="AnimatedSprite2D" parent="."]
+position = Vector2(551, 214)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_o7x61")
+autoplay = "default"

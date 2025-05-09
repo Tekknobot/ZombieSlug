@@ -1,6 +1,7 @@
+res://Scenes/Titlescreen/Logotype
+/Users/machome/Godot/_Builds/Zombie Slug
 res://Scripts
 res://Scenes
-/Users/machome/Godot/_Builds/Zombie Slug
 res://Shaders/
 res://Scenes/Sprites
 res://Assets/Mines
@@ -19,4 +20,3 @@ res://Scenes/Sprites/dog
 res://Scenes/Sprites/dog/attack
 res://Scenes/Sprites/dog/default
 res://Scenes/Sprites/zombie/move
-res://Scenes/Sprites/zombie/idle
