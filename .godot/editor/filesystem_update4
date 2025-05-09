@@ -1,12 +1,9 @@
-res://Scenes/Sprites/FirestormPickup.tscn
+res://Scenes/Main.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Shaders/star_effect.gdshader
 res://Shaders/StarEffect.tres
-res://Scripts/LightningController.gd
-res://Scenes/Sprites/firestorm_pickup.gd
-res://Scenes/Main.tscn
 res://Scenes/game_over_manager.tscn
 res://Scenes/Titlescreen.tscn
 res://Scenes/Sprites/StarPickup.tscn
+res://Scenes/Sprites/FirestormPickup.tscn
 res://Scripts/FirestormController.gd
-res://Scripts/lightning_pickup.gd
