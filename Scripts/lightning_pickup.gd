@@ -13,6 +13,8 @@ const LightningController = preload("res://Scripts/LightningController.gd")
 
 var _time := 0.0
 
+@onready var collect_sfx := $CollectSfx as AudioStreamPlayer2D
+
 func _ready() -> void:
 	monitoring = true
 	connect("body_entered", Callable(self, "_on_body_entered"))
@@ -25,6 +27,12 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("Player"):
+		# play collect sound (detach so it survives this node’s queue_free)
+		remove_child(collect_sfx)
+		get_tree().get_current_scene().add_child(collect_sfx)
+		collect_sfx.global_position = global_position
+		collect_sfx.play()
+				
 		var ctrl = LightningController.new()
 		get_tree().get_current_scene().add_child(ctrl)
 		ctrl.start(duration, interval, strikes_per_interval, damage)
