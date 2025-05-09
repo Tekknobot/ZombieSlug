@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bb8exea2ukmc"]
+
+[ext_resource type="Shader" path="res://Shaders/star_effect.gdshader" id="1_op42p"]
+
+[resource]
+shader = ExtResource("1_op42p")
+shader_parameter/glow_strength = 1.0
+shader_parameter/glow_speed = 20.0

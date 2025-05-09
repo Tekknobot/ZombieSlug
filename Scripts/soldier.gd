@@ -51,9 +51,32 @@ var merc_cooldown_timer: Timer
 
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
-func _ready() -> void:
+@onready var hitbox          := $Hitbox as Area2D
+
+var _default_material:Material
+var _star_material:ShaderMaterial  # assign this in _ready()
+var is_invincible: bool = false
+var star_damage:    int  = 0
+
+@onready var body_shape := $CollisionShape2D
+var _shape_was_disabled: bool
+var _zombie_exceptions = []
+
+func _ready() -> void:	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
+	
+	# remember whether it was enabled
+	_shape_was_disabled = body_shape.disabled
+	
+	# remember your default anim material
+	_default_material = anim.material
+	_star_material   = preload("res://Shaders/StarEffect.tres") as ShaderMaterial
+
+	# setup hitbox (disabled until star power)
+	hitbox.monitoring = false
+	hitbox.connect("body_entered", Callable(self, "_on_hitbox_body_entered"))
+
 	
 	# initialize firing rate
 	firerate = initial_firerate
@@ -168,6 +191,52 @@ func _physics_process(delta: float) -> void:
 		else:
 			anim.play("default")
 
+func _on_hitbox_body_entered(body: Node) -> void:
+	if is_invincible and body.is_in_group("Zombie") and body.has_method("take_damage"):
+		# 1) actually damage
+		body.take_damage(star_damage)
+
+		# 2) flash red
+		if body.has_method("flash"):
+			body.flash()
+
+		# 3) shake / jitter for 0.2s at ±4px
+		if body.has_method("start_shake"):
+			body.start_shake(0.2, 4.0)
+
+
+func apply_star(duration: float, damage: int) -> void:
+	if is_invincible:
+		return
+	is_invincible = true
+	star_damage   = damage
+	anim.material = _star_material
+
+	# 1) exempt ONLY your body from colliding with zombies:
+	_zombie_exceptions.clear()
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if z is PhysicsBody2D:
+			# this only affects your body collision — not the hitbox
+			add_collision_exception_with(z)
+			_zombie_exceptions.append(z)
+
+	# 2) turn on the hitbox so it still overlaps zombies
+	hitbox.monitoring = true
+
+	# 3) wait out the duration
+	await get_tree().create_timer(duration).timeout
+
+	# 4) restore normal collisions
+	for z in _zombie_exceptions:
+		if is_instance_valid(z):
+			remove_collision_exception_with(z)
+	_zombie_exceptions.clear()
+
+	is_invincible     = false
+	star_damage       = 0
+	hitbox.monitoring = false
+	anim.material     = _default_material
+			
 # --- New spawn functions ---
 
 func _spawn_dog() -> void:
@@ -274,7 +343,7 @@ func fire_bullet() -> void:
 	print("⚠️ Fired bullet at", bullet.global_position)
 
 func take_damage(amount: int = 1) -> void:
-	if is_dead:
+	if is_dead or is_invincible:
 		return
 
 	hurt_sfx.play()

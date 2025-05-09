@@ -16,3 +16,8 @@ res://Scripts/LightningController.gd
 res://Scripts/LightningStrike.gd
 res://Scripts/lightning_pickup.gd
 res://Scripts/zombie.gd
+res://Scenes/Sprites/StarPickup.tscn
+res://Shaders/star_effect.gdshader
+res://Scripts/soldier.gd
+res://Shaders/StarEffect.tres
+res://Scenes/Sprites/star_pickup.gd

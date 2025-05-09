@@ -53,13 +53,6 @@ func fire(target_pos: Vector2, damage: int) -> void:
 			p.x += randf_range(-max_offset, max_offset)
 		_line.add_point(to_local(p))
 
-	# --- Fade the bolt out over flash_time ---
-	var steps = 8
-	for s in range(steps):
-		var alpha = lerp(1.0, 0.0, float(s + 1) / steps)
-		_line.default_color.a = alpha
-		await get_tree().create_timer(flash_time / steps).timeout
-
 	# --- Explosion & damage ---
 	var exp = ExplosionScene.instantiate()
 	exp.global_position = target_pos
@@ -68,5 +61,12 @@ func fire(target_pos: Vector2, damage: int) -> void:
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if z is CharacterBody2D and z.global_position.distance_to(target_pos) < 16:
 			z.take_damage(damage)
+			
+	# --- Fade the bolt out over flash_time ---
+	var steps = 8
+	for s in range(steps):
+		var alpha = lerp(1.0, 0.0, float(s + 1) / steps)
+		_line.default_color.a = alpha
+		await get_tree().create_timer(flash_time / steps).timeout
 
 	queue_free()

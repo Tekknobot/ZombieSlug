@@ -21,6 +21,12 @@ var health: int    = 0
 var is_dead: bool  = false
 var attack_timer: Timer
 
+# shaking state
+var _shake_active:    bool    = false
+var _shake_timer:     Timer
+var _shake_orig_pos:  Vector2
+var _shake_magnitude: float   = 4.0
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -119,6 +125,13 @@ func take_damage(amount: int = 1) -> void:
 			drop4.global_position = global_position
 			drop4.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop4)		
+
+		if randi() % 100 < 10:
+			var drop4 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
+			drop4.global_position = global_position
+			drop4.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop4)		
+			
 				
 		# 2) death animation + delay + free
 		anim.play("death")
@@ -131,3 +144,36 @@ func flash() -> void:
 	anim.modulate = Color(1, 0, 0, 1)
 	await get_tree().create_timer(0.1).timeout
 	anim.modulate = orig
+
+func start_shake(duration: float = 0.2, magnitude: float = 4.0) -> void:
+	if _shake_active:
+		return
+	_shake_active    = true
+	_shake_orig_pos  = position
+	_shake_magnitude = magnitude
+
+	# one-shot timer to end the shake
+	_shake_timer = Timer.new()
+	_shake_timer.wait_time = duration
+	_shake_timer.one_shot  = true
+	add_child(_shake_timer)
+	_shake_timer.connect("timeout", Callable(self, "_on_shake_timeout"))
+	_shake_timer.start()
+
+	# enable processing so _process() will run
+	set_process(true)
+
+func _process(delta: float) -> void:
+	if _shake_active:
+		# jitter around original spot
+		position = _shake_orig_pos + Vector2(
+			randf_range(-_shake_magnitude, _shake_magnitude),
+			randf_range(-_shake_magnitude, _shake_magnitude)
+		)
+
+func _on_shake_timeout() -> void:
+	# end shake, restore exact position
+	_shake_active = false
+	position      = _shake_orig_pos
+	set_process(false)
+	_shake_timer.queue_free()

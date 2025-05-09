@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=52 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
@@ -196,6 +196,8 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5t24"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ndhyd"]
+
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_bbe55")
 speed = 100.0
@@ -237,3 +239,9 @@ stream = ExtResource("46_g5a44")
 
 [node name="EmptyClickSfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("47_bp0as")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -20)
+shape = SubResource("CircleShape2D_ndhyd")

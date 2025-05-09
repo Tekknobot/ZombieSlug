@@ -1,3 +1,4 @@
+res://Shaders/
 res://Scripts
 /Users/machome/Godot/_Builds/Zombie Slug
 res://Scenes/Sprites
@@ -19,4 +20,3 @@ res://Scenes/Sprites/dog/attack
 res://Scenes/Sprites/dog/default
 res://Scenes/Sprites/zombie/move
 res://Scenes/Sprites/zombie/idle
-res://Scenes/Sprites/zombie/attack

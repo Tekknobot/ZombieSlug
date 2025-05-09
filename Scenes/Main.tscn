@@ -75,6 +75,12 @@ zoom = Vector2(2, 2)
 
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, 52)
+gravity = 900.0
+max_health = 5
+initial_grenade_cooldown = 1
+grenade_cooldown = 1.0
+mine_offset = 16.0
+initial_firerate = 0.6
 
 [node name="Floor1" type="Node2D" parent="."]
 modulate = Color(0.262932, 0.262932, 0.262932, 1)
