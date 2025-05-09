@@ -3,7 +3,7 @@ extends CanvasLayer
 
 @export var fade_duration: float = 0.8   # how long the fade lasts
 
-@onready var fade_rect := $Fade          as ColorRect
+@onready var fade_rect := $Fade as ColorRect
 
 var _elapsed := 0.0
 

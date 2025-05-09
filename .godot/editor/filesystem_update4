@@ -13,3 +13,4 @@ res://Scripts/freeze_pickup.gd
 res://Scripts/FreezeController.gd
 res://Scenes/Sprites/LightningPickup.tscn
 res://Scenes/Effects/FreezeCloud.tscn
+res://Scripts/fade_in.gd
