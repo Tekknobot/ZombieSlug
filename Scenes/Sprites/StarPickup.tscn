@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bf3tyug1001uu" path="res://Assets/Items/star_drop.png" id="1_cyf2x"]
 [ext_resource type="Script" path="res://Scenes/Sprites/star_pickup.gd" id="1_i26b6"]
-[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_2o1tg"]
+[ext_resource type="AudioStream" uid="uid://b00ewitnpxw0b" path="res://Audio/SFX/Retro Weapon Electric 05.wav" id="3_pg00l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
 size = Vector2(14, 14)
@@ -17,4 +17,4 @@ texture = ExtResource("1_cyf2x")
 shape = SubResource("RectangleShape2D_p0eij")
 
 [node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_2o1tg")
+stream = ExtResource("3_pg00l")

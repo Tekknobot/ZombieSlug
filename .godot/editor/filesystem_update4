@@ -21,3 +21,4 @@ res://Shaders/star_effect.gdshader
 res://Scripts/soldier.gd
 res://Shaders/StarEffect.tres
 res://Scenes/Sprites/star_pickup.gd
+res://Scripts/mine.gd

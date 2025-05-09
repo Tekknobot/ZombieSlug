@@ -192,18 +192,18 @@ func _physics_process(delta: float) -> void:
 			anim.play("default")
 
 func _on_hitbox_body_entered(body: Node) -> void:
-	if is_invincible and body.is_in_group("Zombie") and body.has_method("take_damage"):
-		# 1) actually damage
+	if not is_invincible:
+		return
+
+	# 1) if it’s a zombie, deal star_damage
+	if body.is_in_group("Zombie") and body.has_method("take_damage"):
 		body.take_damage(star_damage)
 
-		# 2) flash red
-		if body.has_method("flash"):
-			body.flash()
-
-		# 3) shake / jitter for 0.2s at ±4px
-		if body.has_method("start_shake"):
-			body.start_shake(0.2, 4.0)
-
+	# 2) if it’s a mine, trigger its explosion immediately
+	elif body.is_in_group("Mine"):
+		# your mine script defines `_explode()`
+		if body.has_method("_explode"):
+			body._explode()
 
 func apply_star(duration: float, damage: int) -> void:
 	if is_invincible:
