@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwi3vf306qhwp"]
+
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="1_u8hku"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_plr14"]
+shader = ExtResource("1_u8hku")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="Gradient" id="Gradient_66qca"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 1, 1, 1)
+
+[node name="CPUParticles2D" type="CPUParticles2D"]
+material = SubResource("ShaderMaterial_plr14")
+emitting = false
+amount = 100
+lifetime = 3.0
+one_shot = true
+preprocess = 0.5
+explosiveness = 1.0
+randomness = 1.0
+lifetime_randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 16.0
+gravity = Vector2(0, 4)
+color_ramp = SubResource("Gradient_66qca")

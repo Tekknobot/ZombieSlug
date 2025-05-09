@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c0xh5hucwqqt4"]
 
 [ext_resource type="Texture2D" uid="uid://d3cudjok1gis6" path="res://Assets/Items/firestorm_drop.png" id="1_1dyes"]
-[ext_resource type="Script" path="res://Scenes/Sprites/firestorm_pickup.gd" id="1_hehx5"]
+[ext_resource type="Script" path="res://Scripts/firestorm_pickup.gd" id="1_hehx5"]
 [ext_resource type="AudioStream" uid="uid://b00ewitnpxw0b" path="res://Audio/SFX/Retro Weapon Electric 05.wav" id="3_q27yp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]

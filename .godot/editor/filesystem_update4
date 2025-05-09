@@ -8,3 +8,8 @@ res://Scenes/Sprites/StarPickup.tscn
 res://Scenes/Sprites/FirestormPickup.tscn
 res://Scripts/FirestormController.gd
 res://Scripts/zombie.gd
+res://Scenes/Sprites/FreezePickup.tscn
+res://Scripts/freeze_pickup.gd
+res://Scripts/FreezeController.gd
+res://Scenes/Sprites/LightningPickup.tscn
+res://Scenes/Effects/FreezeCloud.tscn

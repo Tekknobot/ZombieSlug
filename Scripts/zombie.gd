@@ -138,7 +138,13 @@ func take_damage(amount: int = 1) -> void:
 			drop6.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop6)		
 			
-							
+		if randi() % 100 < 5:
+			var drop7 = preload("res://Scenes/Sprites/FreezePickup.tscn").instantiate()
+			drop7.global_position = global_position
+			drop7.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop7)		
+		
+									
 		# 2) death animation + delay + free
 		anim.play("death")
 		await get_tree().create_timer(0.5).timeout

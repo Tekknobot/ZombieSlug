@@ -99,13 +99,14 @@ theme_override_font_sizes/font_size = 32
 text = "QUIT"
 
 [node name="Label" type="Label" parent="."]
-offset_left = 260.0
+offset_left = 240.0
 offset_top = 603.0
-offset_right = 886.0
+offset_right = 866.0
 offset_bottom = 629.0
 theme_override_fonts/font = ExtResource("2_snh2f")
 theme_override_font_sizes/font_size = 32
-text = "Zombie heaven 2025 Zillatronics, DEV @pizzzamoney, Made for TOJAM 2025."
+text = "Zombie heaven 2025 Zillatronics, DEV @pizzzamoney, TOJAM 2025."
+horizontal_alignment = 1
 
 [node name="Anim" type="AnimationPlayer" parent="."]
 libraries = {
