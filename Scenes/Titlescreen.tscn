@@ -1,0 +1,105 @@
+[gd_scene load_steps=10 format=3 uid="uid://dcn8reck1ceqw"]
+
+[ext_resource type="Script" path="res://Scripts/titlescreen.gd" id="1_33e4v"]
+[ext_resource type="PackedScene" uid="uid://duxlsmdg5d6qv" path="res://Scenes/Main.tscn" id="2_runxc"]
+[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_snh2f"]
+[ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="2_tiy0f"]
+[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="2_v21cm"]
+[ext_resource type="AudioStream" uid="uid://clffh0xjco6nu" path="res://Audio/Tracks/Cuz I'm Feelin' It (Demo) [138 bpm].mp3" id="5_8lyhd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd8xh"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Animation" id="Animation_k8iae"]
+resource_name = "fade_in"
+length = 0.5
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_24eap"]
+_data = {
+"fade_in": SubResource("Animation_k8iae")
+}
+
+[node name="Titlescreen" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_33e4v")
+main_scene = ExtResource("2_runxc")
+
+[node name="Fade" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Menu" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -1.0
+offset_right = 177.0
+offset_bottom = 208.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hd8xh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
+layout_mode = 0
+offset_left = -23.0
+offset_top = 61.0
+offset_right = 405.0
+offset_bottom = 150.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tiy0f")
+theme_override_font_sizes/font_size = 64
+text = "Enter the Zombie?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Enter" type="Button" parent="Menu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_snh2f")
+theme_override_font_sizes/font_size = 32
+text = "Enter"
+
+[node name="Quit" type="Button" parent="Menu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_snh2f")
+theme_override_font_sizes/font_size = 32
+text = "QUIT"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 260.0
+offset_top = 603.0
+offset_right = 886.0
+offset_bottom = 629.0
+theme_override_fonts/font = ExtResource("2_snh2f")
+theme_override_font_sizes/font_size = 32
+text = "Zombie heaven 2025 Zillatronics, DEV @pizzzamoney, Made for TOJAM 2025."
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_24eap")
+}
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_8lyhd")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 358.0
+offset_top = 108.0
+offset_right = 438.0
+offset_bottom = 156.0
+scale = Vector2(5, 5)
+texture = ExtResource("2_v21cm")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=31 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
+[ext_resource type="Script" path="res://Scripts/fade_in.gd" id="2_5s4qg"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
@@ -65,6 +66,21 @@ shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [node name="Level" type="Node2D"]
 
+[node name="Fader" type="CanvasLayer" parent="."]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+script = ExtResource("2_5s4qg")
+fade_duration = 2.0
+
+[node name="Fade" type="ColorRect" parent="Fader"]
+z_index = 1000
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
 [node name="StarryNight" parent="." instance=ExtResource("10_eeh2b")]
 z_index = -1000
 amount = 10000
@@ -75,12 +91,6 @@ zoom = Vector2(2, 2)
 
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, 52)
-gravity = 900.0
-max_health = 5
-initial_grenade_cooldown = 1
-grenade_cooldown = 1.0
-mine_offset = 16.0
-initial_firerate = 0.6
 
 [node name="Floor1" type="Node2D" parent="."]
 modulate = Color(0.262932, 0.262932, 0.262932, 1)
@@ -3716,13 +3726,13 @@ offset_right = 459.0
 offset_bottom = 14.0
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(40, 10)
+custom_minimum_size = Vector2(50, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "MINE: 5"
 
 [node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(40, 10)
+custom_minimum_size = Vector2(50, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "MINE: 5"

@@ -22,3 +22,7 @@ res://Scripts/soldier.gd
 res://Shaders/StarEffect.tres
 res://Scenes/Sprites/star_pickup.gd
 res://Scripts/mine.gd
+res://Scenes/Titlescreen.tscn
+res://Scenes/titlescreen.gd
+res://Scripts/titlescreen.gd
+res://Scripts/fade_in.gd
