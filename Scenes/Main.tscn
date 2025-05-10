@@ -87,6 +87,8 @@ shake_magnitude = 4.0
 
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, 52)
+base_speed = 60.0
+initial_firerate = 1.0
 
 [node name="Floor1" type="Node2D" parent="."]
 modulate = Color(0.262932, 0.262932, 0.262932, 1)

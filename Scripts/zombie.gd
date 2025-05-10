@@ -80,9 +80,11 @@ func _physics_process(delta: float) -> void:
 
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
-		if p.has_method("take_damage"):
-			p.take_damage(attack_damage)
-			print("Zombie attacked player for ", attack_damage)
+		if p is CharacterBody2D and p.has_method("take_damage"):
+			var dist = global_position.distance_to(p.global_position)
+			if dist <= attack_range:
+				p.take_damage(attack_damage)
+				print("Zombie attacked player for ", attack_damage)
 
 func take_damage(amount: int = 1) -> void:
 	if is_dead:

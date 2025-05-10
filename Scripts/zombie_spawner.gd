@@ -57,7 +57,7 @@ func spawn_zombie() -> void:
 
 func _on_level_changed(new_level: int) -> void:
 	# 10% faster per level, but never below min_spawn_factor
-	var raw_factor = 1.0 - (new_level - 1) * 0.05
+	var raw_factor = 1.0 - (new_level - 1) * 0.10
 	var clamped    = clamp(raw_factor, min_spawn_factor, 1.0)
 	spawn_interval = base_spawn_interval * clamped
 

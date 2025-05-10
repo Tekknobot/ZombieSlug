@@ -1,7 +1,16 @@
 # Soldier.gd
 extends CharacterBody2D
 
-@export var speed         := 200.0
+@export var base_speed:             float = 50.0   # starting speed
+@export var speed_increase_per_lvl: float = 10.0   # how much to add each time you level
+@export var max_speed:              float = 100.0  # absolute cap
+var speed: float
+
+@export var initial_firerate  := 0.6    # seconds between shots at level 1
+var firerate: float
+var attack_ready: bool = true
+var attack_cooldown_timer: Timer
+
 @export var jump_velocity := -350.0
 @export var gravity       := 900.0
 @export var max_health    := 5
@@ -35,9 +44,6 @@ var is_attacking:  bool = false
 var health:        int  = 0
 var is_dead:       bool = false
 
-@export var initial_firerate  := 0.6    # seconds between shots at level 1
-var firerate: float
-
 # Separate cooldown timers
 var dog_cooldown_timer: Timer
 var merc_cooldown_timer: Timer
@@ -66,6 +72,8 @@ func _ready() -> void:
 	#Place elswhere when needed
 	Playerstats.reset_stats()
 	
+	speed = base_speed
+
 	# remember whether it was enabled
 	_shape_was_disabled = body_shape.disabled
 	
@@ -77,7 +85,6 @@ func _ready() -> void:
 	hitbox.monitoring = false
 	hitbox.connect("body_entered", Callable(self, "_on_hitbox_body_entered"))
 
-	
 	# initialize firing rate
 	firerate = initial_firerate
 	
@@ -92,6 +99,12 @@ func _ready() -> void:
 
 	health = max_health
 	print("Soldier health set to", health)
+
+	# set up a dedicated one-shot Timer for your fire‐rate
+	attack_cooldown_timer = Timer.new()
+	attack_cooldown_timer.one_shot = true
+	add_child(attack_cooldown_timer)
+	attack_cooldown_timer.timeout.connect(Callable(self, "_on_attack_cooldown_finished"))
 
 	dog_cooldown_timer = Timer.new()
 	dog_cooldown_timer.wait_time = 10.0
@@ -135,7 +148,8 @@ func _physics_process(delta: float) -> void:
 	# (The rest of your gravity/attack/movement code stays exactly the same…)
 	velocity.y += gravity * delta
 
-	if Input.is_action_just_pressed("attack") and not is_attacking:
+	# trigger attack if the player hits “attack” and we're off‐cooldown
+	if Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
 
 	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
@@ -191,6 +205,10 @@ func _physics_process(delta: float) -> void:
 		else:
 			anim.play("default")
 
+func _on_attack_cooldown_finished() -> void:
+	# timer has elapsed → we can fire again
+	attack_ready = true
+	
 func _on_hitbox_body_entered(body: Node) -> void:
 	if not is_invincible:
 		return
@@ -290,16 +308,13 @@ func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
 	tw.tween_callback(Callable(node, "queue_free"))
 
 func _on_attack() -> void:
-	is_attacking = true
+	attack_ready = false     # start cooldown
 	anim.play("attack")
 	fire_bullet()
 
-	if is_on_floor():
-		await get_tree().create_timer(firerate).timeout
-	else:
-		await _await_landing()
-
-	is_attacking = false
+	# schedule the next time we're allowed to shoot
+	attack_cooldown_timer.wait_time = firerate
+	attack_cooldown_timer.start()
 
 func _on_level_changed(new_level: int) -> void:
 	# Example: reduce interval by 10% each level, to a floor of 0.1s
@@ -328,6 +343,11 @@ func _on_level_changed(new_level: int) -> void:
 	mine_damage = initial_mine_damage + (new_level - 1)
 	mine_cooldown = initial_mine_cooldown * clamp(1.0 - (new_level -1)*0.1, 0.2, 1.0)
 	mine_cooldown_timer.wait_time = mine_cooldown
+
+	# bump speed but never over max_speed
+	speed = base_speed + speed_increase_per_lvl * (new_level - 1)
+	speed = clamp(speed, base_speed, max_speed)
+	print("Level ", new_level, " → player speed: ", speed)
 
 	print("Level ", new_level, 
 		  " → mine cooldown: ", mine_cooldown)

@@ -3,7 +3,7 @@ extends Node
 class_name PlayerStats
 
 @export var max_health: int = 5       # Player's maximum health
-@export var xp_base: int      = 50     # Base XP required per level
+@export var xp_base: int      = 200     # Base XP required per level
 @export var initial_grenades: int = 5   # ← start with 5 TNT
 @export var initial_mines:    int = 5   # ← start with 5 mines
 
