@@ -3738,4 +3738,5 @@ text = "MINE: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")
+autoplay = true
 parameters/looping = true

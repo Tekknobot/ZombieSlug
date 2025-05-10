@@ -45,14 +45,16 @@ func _strike_all() -> void:
 	var vr    = get_viewport().get_visible_rect()
 	var top_y = vr.position.y - laser_height
 
+	# 1) take a snapshot of valid zombies
+	var zombies := []
 	for z in get_tree().get_nodes_in_group("Zombie"):
-		if not (z.is_inside_tree() and z.has_method("take_damage")):
-			continue
+		if is_instance_valid(z) and z.has_method("take_damage"):
+			zombies.append(z)
 
-		var target_pos = z.global_position
-
+	# 2) now iterate that safe list
+	for z in zombies:
 		# pick a random start X around the zombie
-		var start_x = target_pos.x + randf_range(-start_offset_x, start_offset_x)
+		var start_x = z.global_position.x + randf_range(-start_offset_x, start_offset_x)
 		var start_pos = Vector2(start_x, top_y)
 
 		# draw the angled laser beam
@@ -60,7 +62,7 @@ func _strike_all() -> void:
 		beam.width         = laser_width
 		beam.default_color = laser_color
 		beam.add_point(beam.to_local(start_pos))
-		beam.add_point(beam.to_local(target_pos))
+		beam.add_point(beam.to_local(z.global_position))
 		get_tree().get_current_scene().add_child(beam)
 
 		# linger at full alpha, then fade out and free
@@ -71,9 +73,9 @@ func _strike_all() -> void:
 
 		# spawn explosion & deal damage
 		var exp = ExplosionScene.instantiate()
-		exp.global_position = target_pos
+		exp.global_position = z.global_position
 		get_tree().get_current_scene().add_child(exp)
 		z.take_damage(9999)
 
-		# delay before next beam
+		# wait before next beam
 		await get_tree().create_timer(laser_delay).timeout
