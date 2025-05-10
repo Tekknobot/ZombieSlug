@@ -62,6 +62,7 @@ func _strike_all() -> void:
 		beam.width         = laser_width
 		beam.default_color = laser_color
 		beam.add_point(beam.to_local(start_pos))
+		z.global_position.y -= 8
 		beam.add_point(beam.to_local(z.global_position))
 		get_tree().get_current_scene().add_child(beam)
 
