@@ -2,3 +2,11 @@ res://Scenes/Sprites/BulletPickup.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Shaders/star_effect.gdshader
 res://Shaders/StarEffect.tres
+res://Scenes/Main.tscn
+res://Scenes/game_over_manager.tscn
+res://Scenes/Titlescreen.tscn
+res://Scenes/Sprites/FreezePickup.tscn
+res://Scenes/Effects/FreezeCloud.tscn
+res://Scenes/Sprites/MinePickup.tscn
+res://Scripts/zombie.gd
+res://Scripts/BulletRainController.gd
