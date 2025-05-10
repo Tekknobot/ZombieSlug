@@ -3591,10 +3591,10 @@ texture = ExtResource("5_lqmy6")
 
 [node name="ZombieSpawner" type="Node2D" parent="."]
 script = ExtResource("4_js2x2")
-zombie_scene = ExtResource("3_rbltb")
-boss_scene = ExtResource("6_l3jnr")
-spawn_interval = 1.0
+base_spawn_interval = 1.0
 spawn_distance = 500.0
+boss_scene = ExtResource("6_l3jnr")
+zombie_scene = ExtResource("3_rbltb")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)

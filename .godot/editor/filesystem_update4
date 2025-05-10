@@ -23,3 +23,4 @@ res://Scripts/soldier.gd
 res://Scripts/camera_2d.gd
 res://Scripts/explosion.gd
 res://Scenes/Effects/Explosion.tscn
+res://Scripts/zombie_spawner.gd
