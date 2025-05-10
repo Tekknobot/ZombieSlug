@@ -4,7 +4,7 @@ extends Node
 @export var duration:      float       = 3.0    # seconds of slow-mo
 @export var slow_factor:   float       = 0.4    # global time_scale factor
 @export var sfx_stream     = preload("res://Audio/SFX/tick-tock-104746.mp3")
-@export var sfx_volume_db: float       = 6.0    # +6 dB boost
+@export var sfx_volume_db: float       = 12.0    # +6 dB boost
 
 func _ready() -> void:
 	Engine.time_scale = slow_factor
