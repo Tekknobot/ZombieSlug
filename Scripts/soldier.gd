@@ -249,6 +249,13 @@ func _spawn_dog() -> void:
 	)
 	get_tree().get_current_scene().add_child(dog)
 	print("🐶 Spawned dog at ", dog.global_position)
+
+	# make sure it never collides with any existing Mercs:
+	for m in get_tree().get_nodes_in_group("Merc"):
+		if m is PhysicsBody2D:
+			dog.add_collision_exception_with(m)
+			m.add_collision_exception_with(dog)
+				
 	# fade out over 1s after 5s, then free
 	_fade_and_free(dog, 5.0, 1.0)
 
@@ -263,6 +270,13 @@ func _spawn_merc() -> void:
 	)
 	get_tree().get_current_scene().add_child(merc)
 	print("🪖 Spawned merc at ", merc.global_position)
+
+	# make sure it never collides with any existing Dogs:
+	for d in get_tree().get_nodes_in_group("Dog"):
+		if d is PhysicsBody2D:
+			merc.add_collision_exception_with(d)
+			d.add_collision_exception_with(merc)
+				
 	# fade out over 1s after 5s, then free
 	_fade_and_free(merc, 5.0, 1.0)
 

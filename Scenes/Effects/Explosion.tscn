@@ -70,7 +70,7 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="Explosion" type="Area2D"]
+[node name="Explosion" type="Area2D" groups=["Explosion"]]
 script = ExtResource("1_jaxcd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

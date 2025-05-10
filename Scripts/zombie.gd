@@ -27,6 +27,8 @@ var _shake_timer:     Timer
 var _shake_orig_pos:  Vector2
 var _shake_magnitude: float   = 4.0
 
+signal died(pos: Vector2)
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -95,10 +97,6 @@ func take_damage(amount: int = 1) -> void:
 
 	if health <= 0:
 		is_dead = true
-
-		self.remove_from_group("Zombie")
-		$CollisionShape2D.disabled = true							
-		$Blood.emitting = true
 		
 		# 1) award kill + XP
 		Playerstats.add_kill(xp_award)
@@ -160,10 +158,40 @@ func take_damage(amount: int = 1) -> void:
 			drop9.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop9)		
 		
-		# 2) death animation + delay + free
+		# 1) award kill + XP, play effects, drop pickups, etc.
+		is_dead = true
+		_die_cleanup()
+		$Blood.emitting = true
+		Playerstats.add_kill(xp_award)
+		death_sfx.play()
+
+		# emit our new died signal, passing the world position
+		emit_signal("died", global_position)
+		
+		# 2) play death anim, wait, then free
 		anim.play("death")
 		await get_tree().create_timer(3).timeout
 		queue_free()
+
+func _die_cleanup() -> void:
+	# prevent any further damage calls
+	is_dead = true
+
+	# remove it from the "Zombie" group so spawners, storms, etc. skip it
+	remove_from_group("Zombie")
+
+	# turn off ALL collisions on the body
+	collision_layer = 0
+	collision_mask  = 0
+
+	# disable every CollisionShape2D child
+	for shape in get_children():
+		if shape is CollisionShape2D:
+			shape.disabled = true
+
+	# if you also have an Area2D hitbox, disable its monitoring
+	if has_node("Hitbox"):
+		$Hitbox.monitoring = false
 
 # Briefly tint the sprite red, then restore
 func flash() -> void:
