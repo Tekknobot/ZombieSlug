@@ -207,10 +207,6 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
-
-func _on_attack_cooldown_finished() -> void:
-	# timer has elapsed → we can fire again
-	attack_ready = true
 	
 func _on_hitbox_body_entered(body: Node) -> void:
 	if not is_invincible:
@@ -308,7 +304,6 @@ func _spawn_merc() -> void:
 	# fade out over 1s after 5s, then free
 	_fade_and_free(merc, 5.0, 1.0)
 
-
 # Fades out a CanvasItem over `fade_time` seconds after a `delay`, then frees it.
 func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
 	var tw = get_tree().create_tween()
@@ -318,13 +313,19 @@ func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
 	tw.tween_callback(Callable(node, "queue_free"))
 
 func _on_attack() -> void:
-	attack_ready = false     # start cooldown
+	# start cooldown
+	attack_ready = false
+	is_attacking = true     # <-- block override
 	anim.play("attack")
 	fire_bullet()
 
-	# schedule the next time we're allowed to shoot
+	# schedule the end of your attack state
 	attack_cooldown_timer.wait_time = firerate
 	attack_cooldown_timer.start()
+
+func _on_attack_cooldown_finished() -> void:
+	attack_ready   = true
+	is_attacking   = false  # <-- allow move/default again
 
 func _on_level_changed(new_level: int) -> void:
 	# Example: reduce interval by 10% each level, to a floor of 0.1s
