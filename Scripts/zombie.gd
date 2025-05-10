@@ -102,48 +102,54 @@ func take_damage(amount: int = 1) -> void:
 		death_sfx.play()
 		
 		# after awarding the kill...
-		if randi() % 100 < 20:
+		if randi() % 100 < 10:
 			var drop = preload("res://Scenes/Sprites/TNTPickup.tscn").instantiate()
 			drop.global_position = global_position
 			drop.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop)
 
-		if randi() % 100 < 20:
+		if randi() % 100 < 10:
 			var drop2 = preload("res://Scenes/Sprites/MinePickup.tscn").instantiate()
 			drop2.global_position = global_position
 			drop2.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop2)		
 
-		if randi() % 100 < 10:
+		if randi() % 100 < 5:
 			var drop3 = preload("res://Scenes/Sprites/HealthPickup.tscn").instantiate()
 			drop3.global_position = global_position
 			drop3.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop3)		
 		
-		if randi() % 100 < 5:
+		if randi() % 100 < 3:
 			var drop4 = preload("res://Scenes/Sprites/LightningPickup.tscn").instantiate()
 			drop4.global_position = global_position
 			drop4.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop4)		
 
-		if randi() % 100 < 5:
+		if randi() % 100 < 3:
 			var drop5 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
 			drop5.global_position = global_position
 			drop5.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop5)		
 			
-		if randi() % 100 < 5:
+		if randi() % 100 < 3:
 			var drop6 = preload("res://Scenes/Sprites/FirestormPickup.tscn").instantiate()
 			drop6.global_position = global_position
 			drop6.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop6)		
 			
-		if randi() % 100 < 5:
+		if randi() % 100 < 3:
 			var drop7 = preload("res://Scenes/Sprites/FreezePickup.tscn").instantiate()
 			drop7.global_position = global_position
 			drop7.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop7)		
-		
+
+		if randi() % 100 < 3:
+			var drop8 = preload("res://Scenes/Sprites/BulletPickup.tscn").instantiate()
+			drop8.global_position = global_position
+			drop8.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop8)		
+				
 									
 		# 2) death animation + delay + free
 		anim.play("death")

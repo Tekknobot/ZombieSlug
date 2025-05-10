@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxvf32xov7up4"]
+
+[ext_resource type="Script" path="res://Scripts/bullet_pickup.gd" id="1_e7etn"]
+[ext_resource type="Texture2D" uid="uid://vmjr7sywha7q" path="res://Assets/Items/bullet_drop.png" id="1_r3cle"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_bnpqm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_e7etn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_r3cle")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_bnpqm")

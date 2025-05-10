@@ -14,7 +14,7 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 1, 1, 1)
 [node name="CPUParticles2D" type="CPUParticles2D"]
 material = SubResource("ShaderMaterial_plr14")
 emitting = false
-amount = 100
+amount = 32
 lifetime = 3.0
 one_shot = true
 preprocess = 0.5

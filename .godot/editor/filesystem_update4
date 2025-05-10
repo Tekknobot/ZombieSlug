@@ -14,3 +14,8 @@ res://Scripts/FreezeController.gd
 res://Scenes/Sprites/LightningPickup.tscn
 res://Scenes/Effects/FreezeCloud.tscn
 res://Scripts/fade_in.gd
+res://Scenes/Sprites/BulletPickup.tscn
+res://Scripts/bullet_pickup.gd
+res://Scripts/BulletRainController.gd
+res://Scenes/Sprites/MinePickup.tscn
+res://Scripts/bullet.gd
