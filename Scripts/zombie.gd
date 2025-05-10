@@ -149,11 +149,21 @@ func take_damage(amount: int = 1) -> void:
 			drop8.global_position = global_position
 			drop8.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop8)		
-				
-									
+
+		if randi() % 100 < 3:
+			var drop9 = preload("res://Scenes/Sprites/TimeWarpPickup.tscn").instantiate()
+			drop9.global_position = global_position
+			drop9.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop9)		
+						
+		
+		$Blood.emitting = true
+		$CollisionShape2D.disabled = true							
+		self.remove_from_group("Zombie")
+		
 		# 2) death animation + delay + free
 		anim.play("death")
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(3).timeout
 		queue_free()
 
 # Briefly tint the sprite red, then restore

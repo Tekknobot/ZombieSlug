@@ -74,6 +74,8 @@ func _level_up() -> void:
 	emit_signal("max_health_changed", max_health)
 
 func reset_stats() -> void:
+	Engine.time_scale = 1
+	
 	# Reset runtime values
 	health   = max_health
 	xp       = 0

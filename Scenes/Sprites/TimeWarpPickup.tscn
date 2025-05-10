@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://i1sbv6enk10f"]
+
+[ext_resource type="Script" path="res://Scripts/time_warp_pickup.gd" id="1_2txm6"]
+[ext_resource type="Texture2D" uid="uid://hv4c2ju2yebo" path="res://Assets/Items/timewarp_drop.png" id="1_bdtdb"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_f0tx6"]
+[ext_resource type="AudioStream" uid="uid://csgq4qmovnc20" path="res://Audio/SFX/tick-tock-104746.mp3" id="3_tc1rb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_2txm6")
+duration = 3.0
+slow_factor = 0.5
+sfx_stream = ExtResource("3_tc1rb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_bdtdb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_f0tx6")
+volume_db = 12.0

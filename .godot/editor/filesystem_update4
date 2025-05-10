@@ -10,3 +10,12 @@ res://Scenes/Effects/FreezeCloud.tscn
 res://Scenes/Sprites/MinePickup.tscn
 res://Scripts/zombie.gd
 res://Scripts/BulletRainController.gd
+res://Scenes/Sprites/TimeWarpPickup.tscn
+res://Scenes/Sprites/time_warp_pickup.gd
+res://Scripts/TimeWarpController.gd
+res://Scripts/time_warp_pickup.gd
+res://Scenes/Sprites/StarPickup.tscn
+res://Scripts/game_over_manager.gd
+res://Scripts/playerstats.gd
+res://Scenes/Sprites/zombie.tscn
+res://Scenes/Sprites/zombie_xl.tscn
