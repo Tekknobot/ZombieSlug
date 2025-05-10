@@ -12,7 +12,7 @@ extends CanvasLayer
 @onready var mines_label  = $TopLeft/Bumpers/MINES  as RichTextLabel
 
 var level_names := [
-	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Commander",
+	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Conqueror",
 	"Plague Purifier","Decay Destroyer","Rot Ranger","Necro Nemesis",
 	"Zombie Exterminator","Flesh Fiend","Corpse Cleaver","Night Stalker",
 	"Ghoul Guardian","Zombie Sentinel","Flesh Ravager","Skull Warden",
