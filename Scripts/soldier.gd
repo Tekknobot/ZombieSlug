@@ -240,11 +240,8 @@ func apply_star(duration: float, damage: int) -> void:
 # --- New spawn functions ---
 
 func _spawn_dog() -> void:
-	# play dog‐summon sound
 	dog_sfx.play()
-		
 	var dog = DogScene.instantiate()
-	# offset left by the muzzle_point's local X
 	var x_off = abs(muzzle_point.position.x)
 	dog.global_position = Vector2(
 		global_position.x - x_off,
@@ -252,14 +249,13 @@ func _spawn_dog() -> void:
 	)
 	get_tree().get_current_scene().add_child(dog)
 	print("🐶 Spawned dog at ", dog.global_position)
-	_auto_free(dog, 5.0)
+	# fade out over 1s after 5s, then free
+	_fade_and_free(dog, 5.0, 1.0)
+
 
 func _spawn_merc() -> void:
-	# play merc‐summon sound
 	merc_sfx.play()
-		
 	var merc = MercScene.instantiate()
-	# offset right by the muzzle_point's local X
 	var x_off = abs(muzzle_point.position.x)
 	merc.global_position = Vector2(
 		global_position.x + x_off,
@@ -267,16 +263,17 @@ func _spawn_merc() -> void:
 	)
 	get_tree().get_current_scene().add_child(merc)
 	print("🪖 Spawned merc at ", merc.global_position)
-	_auto_free(merc, 5.0)
+	# fade out over 1s after 5s, then free
+	_fade_and_free(merc, 5.0, 1.0)
 
-# Helper to auto‐free any node after `duration` seconds
-func _auto_free(node: Node, duration: float) -> void:
-	var kill_timer = Timer.new()
-	kill_timer.wait_time = duration
-	kill_timer.one_shot  = true
-	node.add_child(kill_timer)
-	kill_timer.connect("timeout", Callable(node, "queue_free"))
-	kill_timer.start()
+
+# Fades out a CanvasItem over `fade_time` seconds after a `delay`, then frees it.
+func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
+	var tw = get_tree().create_tween()
+	# step 1: fade alpha → 0
+	tw.tween_property(node, "modulate:a", 0.0, fade_time).set_delay(delay)
+	# step 2: schedule queue_free() at exactly (delay + fade_time)
+	tw.tween_callback(Callable(node, "queue_free"))
 
 func _on_attack() -> void:
 	is_attacking = true

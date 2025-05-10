@@ -19,3 +19,4 @@ res://Scripts/game_over_manager.gd
 res://Scripts/playerstats.gd
 res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/zombie_xl.tscn
+res://Scripts/soldier.gd

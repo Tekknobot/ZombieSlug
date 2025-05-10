@@ -96,6 +96,10 @@ func take_damage(amount: int = 1) -> void:
 	if health <= 0:
 		is_dead = true
 
+		self.remove_from_group("Zombie")
+		$CollisionShape2D.disabled = true							
+		$Blood.emitting = true
+		
 		# 1) award kill + XP
 		Playerstats.add_kill(xp_award)
 		
@@ -155,11 +159,6 @@ func take_damage(amount: int = 1) -> void:
 			drop9.global_position = global_position
 			drop9.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop9)		
-						
-		
-		$Blood.emitting = true
-		$CollisionShape2D.disabled = true							
-		self.remove_from_group("Zombie")
 		
 		# 2) death animation + delay + free
 		anim.play("death")
