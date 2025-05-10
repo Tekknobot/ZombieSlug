@@ -200,7 +200,6 @@ animations = [{
 
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_bbe55")
-speed = 100.0
 jump_velocity = -275.0
 initial_mine_cooldown = 1.0
 mine_cooldown = 1.0

@@ -41,6 +41,7 @@ const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
 const GrenadeScene = preload("res://Scenes/Sprites/tnt.tscn")
 const MineScene    = preload("res://Scenes/Sprites/mine.tscn")
+const MuzzleFlashParticles = preload("res://Scenes/Sprites/muzzle_flash.tscn")
 
 var facing_right: bool = false
 var is_attacking:  bool = false
@@ -207,6 +208,10 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
+
+func _on_attack_cooldown_finished() -> void:
+	# timer has elapsed → we can fire again
+	attack_ready = true
 	
 func _on_hitbox_body_entered(body: Node) -> void:
 	if not is_invincible:
@@ -313,23 +318,17 @@ func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
 	tw.tween_callback(Callable(node, "queue_free"))
 
 func _on_attack() -> void:
-	# start cooldown
-	attack_ready = false
-	is_attacking = true     # <-- block override
+	attack_ready = false     # start cooldown
 	anim.play("attack")
 	fire_bullet()
 
-	# schedule the end of your attack state
+	# schedule the next time we're allowed to shoot
 	attack_cooldown_timer.wait_time = firerate
 	attack_cooldown_timer.start()
 
-func _on_attack_cooldown_finished() -> void:
-	attack_ready   = true
-	is_attacking   = false  # <-- allow move/default again
-
 func _on_level_changed(new_level: int) -> void:
-	# Example: reduce interval by 10% each level, to a floor of 0.1s
-	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
+	# Example: reduce interval by 40% each level, to a floor of 0.1s
+	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.40, 1.0)
 	firerate = initial_firerate * factor
 
 	# --- grenade cooldown reduction (10% per level, floor 20%) ---
@@ -372,17 +371,27 @@ func _await_landing() -> void:
 		await get_tree().physics_frame
 
 func fire_bullet() -> void:
+	# 1) spawn a particle burst at the muzzle
+	var flash = MuzzleFlashParticles.instantiate()
+	flash.global_position = muzzle_point.global_position
+	# flip the X scale manually
+	if facing_right:
+		flash.scale.x = 1.0
+	else:
+		flash.scale.x = -1.0
+	get_tree().get_current_scene().add_child(flash)
+
+	# 2) now spawn the bullet
 	var bullet = BulletScene.instantiate()
 	bullet.global_position = muzzle_point.global_position
 
-	# no ternary: use explicit if/else
+	# set the bullet’s direction without ternary
 	if facing_right:
 		bullet.direction = Vector2.RIGHT
 	else:
 		bullet.direction = Vector2.LEFT
 
 	get_tree().get_current_scene().add_child(bullet)
-	print("⚠️ Fired bullet at", bullet.global_position)
 
 func take_damage(amount: int = 1) -> void:
 	if is_dead or is_invincible:

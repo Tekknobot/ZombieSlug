@@ -3594,7 +3594,7 @@ texture = ExtResource("5_lqmy6")
 [node name="ZombieSpawner" type="Node2D" parent="."]
 script = ExtResource("4_js2x2")
 base_spawn_interval = 1.0
-min_spawn_factor = 0.3
+min_spawn_factor = 0.5
 spawn_distance = 500.0
 boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
@@ -3738,5 +3738,4 @@ text = "MINE: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")
-autoplay = true
 parameters/looping = true

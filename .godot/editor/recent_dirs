@@ -1,11 +1,13 @@
-/Users/machome/Godot/_Builds/Zombie Slug
+/Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
+/Users/machome/Godot/_Builds/Zombie Heaven
 res://Scripts
+res://Scenes/Sprites
+/Users/machome/Godot/ZombieSlug
 res://Scenes/Sprites/zombie/death
 res://Scenes/Effects
 res://Scenes/Titlescreen/Logotype
 res://Scenes
 res://Shaders/
-res://Scenes/Sprites
 res://Assets/Mines
 res://Assets/Backgrounds
 res://Icon
