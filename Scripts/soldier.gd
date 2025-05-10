@@ -6,6 +6,9 @@ extends CharacterBody2D
 @export var max_speed:              float = 100.0  # absolute cap
 var speed: float
 
+# remember what your speed was before the star power
+var _orig_speed: float = 0.0
+
 @export var initial_firerate  := 0.6    # seconds between shots at level 1
 var firerate: float
 var attack_ready: bool = true
@@ -228,13 +231,17 @@ func apply_star(duration: float, damage: int) -> void:
 		return
 	is_invincible = true
 	star_damage   = damage
+
+	# ————— BOOST SPEED —————
+	_orig_speed = speed
+	speed = _orig_speed * 1.15
+
 	anim.material = _star_material
 
 	# 1) exempt ONLY your body from colliding with zombies:
 	_zombie_exceptions.clear()
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if z is PhysicsBody2D:
-			# this only affects your body collision — not the hitbox
 			add_collision_exception_with(z)
 			_zombie_exceptions.append(z)
 
@@ -243,6 +250,9 @@ func apply_star(duration: float, damage: int) -> void:
 
 	# 3) wait out the duration
 	await get_tree().create_timer(duration).timeout
+
+	# ————— RESTORE SPEED —————
+	speed = _orig_speed
 
 	# 4) restore normal collisions
 	for z in _zombie_exceptions:
