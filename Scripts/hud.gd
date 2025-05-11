@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var xp_bar       = $TopLeft/XP          as ProgressBar
 @onready var level_label  = $TopLeft/Level       as RichTextLabel
 @onready var hp_label     = $TopLeft/HP          as RichTextLabel
+@onready var xp_label     = $TopLeft/XPStatus    as RichTextLabel
 @onready var name_label   = $TopLeft/Name        as RichTextLabel
 
 @onready var tnt_label    = $TopLeft/Bumpers/TNT    as RichTextLabel
@@ -29,6 +30,7 @@ func _ready() -> void:
 	health_bar.max_value  = stats.max_health
 	health_bar.value      = stats.health
 	hp_label.text         = "HP: %d of %d" % [stats.health, stats.max_health]
+	xp_label.text         = "XP: %d of %d" % [stats.xp, stats.xp_needed]
 	xp_bar.max_value      = stats.xp_to_next_level()
 	xp_bar.value          = stats.xp
 	level_label.text      = "Level: %d"     % stats.level
@@ -46,11 +48,15 @@ func _ready() -> void:
 	stats.connect("mines_changed",   Callable(self, "_on_mines_changed"))
 
 func _on_kills_changed(k): kills_label.text = "Kills: %d" % k
+
 func _on_health_changed(h): 
 	health_bar.value = h
 	hp_label.text    = "HP: %d of %d" % [h, Playerstats.max_health]
-func _on_xp_changed(x):    xp_bar.value = x
 
+func _on_xp_changed(x):    
+	xp_bar.value = x
+	xp_label.text    = "XP: %d of %d" % [x, Playerstats.xp_needed]
+	
 func _on_level_changed(lvl: int) -> void:
 	level_label.text     = "Level: %d" % lvl
 	xp_bar.max_value     = Playerstats.xp_to_next_level()

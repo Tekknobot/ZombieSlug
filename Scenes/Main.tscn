@@ -3559,7 +3559,7 @@ position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
 [node name="CloudsMover1" type="Node2D" parent="."]
-position = Vector2(0, -146)
+position = Vector2(0, -112)
 script = ExtResource("5_7nq1g")
 range_x = 6.0
 freq_x = 0.1
@@ -3571,7 +3571,7 @@ material = SubResource("ShaderMaterial_ma1bf")
 texture = ExtResource("5_1fclb")
 
 [node name="CloudsMover2" type="Node2D" parent="."]
-position = Vector2(0, -146)
+position = Vector2(0, -112)
 script = ExtResource("5_7nq1g")
 range_x = 2.0
 
@@ -3650,9 +3650,9 @@ texture = ExtResource("6_vq0dw")
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.25
-offset_top = 22.5
+offset_top = 5.5
 offset_right = 340.25
-offset_bottom = 35.5
+offset_bottom = 18.5
 theme_override_fonts/normal_font = ExtResource("7_juo3a")
 text = "Ghoul Gunner"
 
@@ -3679,18 +3679,28 @@ text = "HP: 0 of 0"
 [node name="Level" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.0
-offset_top = 43.75
+offset_top = 37.0
 offset_right = 340.0
-offset_bottom = 56.75
+offset_bottom = 50.0
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "LEVEL: 0"
+
+[node name="XPStatus" type="RichTextLabel" parent="HUD/TopLeft"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 0
+offset_left = 183.0
+offset_top = 43.5
+offset_right = 340.0
+offset_bottom = 56.5
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "XP: 0 of 0"
 
 [node name="Health" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.25
-offset_top = 36.25
+offset_top = 19.25
 offset_right = 292.25
-offset_bottom = 41.25
+offset_bottom = 24.25
 theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
 max_value = 10.0
 step = 1.0
@@ -3701,9 +3711,9 @@ script = ExtResource("10_j2nv3")
 [node name="XP" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.25
-offset_top = 42.25
+offset_top = 25.25
 offset_right = 292.25
-offset_bottom = 47.25
+offset_bottom = 30.25
 theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
 max_value = 10.0
 step = 1.0
@@ -3720,9 +3730,10 @@ texture = ExtResource("5_rbj0p")
 
 [node name="Bumpers" type="HBoxContainer" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 182.0
-offset_right = 336.0
-offset_bottom = 14.0
+offset_left = 183.0
+offset_top = 25.5
+offset_right = 337.0
+offset_bottom = 39.5
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 10)
