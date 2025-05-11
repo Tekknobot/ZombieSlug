@@ -1,0 +1,40 @@
+[gd_scene load_steps=9 format=3 uid="uid://c1kasuwd185cp"]
+
+[ext_resource type="Texture2D" uid="uid://ct5l0jk6oyck2" path="res://Scenes/Sprites/soldier/soldier1.png" id="1_c0rcu"]
+[ext_resource type="Texture2D" uid="uid://xc3dx484ounu" path="res://Scenes/Sprites/soldier/soldier2.png" id="2_qpxhk"]
+[ext_resource type="Texture2D" uid="uid://cvagl04827eq6" path="res://Scenes/Sprites/soldier/soldier3.png" id="3_d2itk"]
+[ext_resource type="Texture2D" uid="uid://fg06rf821n7y" path="res://Scenes/Sprites/soldier/soldier4.png" id="4_chwwj"]
+[ext_resource type="Texture2D" uid="uid://wm8nrbekb2d0" path="res://Scenes/Sprites/soldier/soldier5.png" id="5_cyxqa"]
+[ext_resource type="Texture2D" uid="uid://bwj8fwjcwdohd" path="res://Scenes/Sprites/soldier/soldier6.png" id="6_fgfj8"]
+[ext_resource type="Script" path="res://Scripts/dash_after_image.gd" id="7_v8te4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nmbwj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_c0rcu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qpxhk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_d2itk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_chwwj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_cyxqa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fgfj8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 24.0
+}]
+
+[node name="DashAfterImage" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_nmbwj")
+autoplay = "default"
+script = ExtResource("7_v8te4")

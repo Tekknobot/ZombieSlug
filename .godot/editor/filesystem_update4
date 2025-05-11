@@ -13,3 +13,6 @@ res://Scenes/Sprites/OrbitalPickup.tscn
 res://Scenes/Sprites/orbital_pickup.gd
 res://Scripts/OrbitalStrikeController.gd
 res://Scripts/zombie.gd
+res://Scripts/soldier.gd
+res://Scenes/Sprites/DashAfterImage.tscn
+res://Scripts/dash_after_image.gd

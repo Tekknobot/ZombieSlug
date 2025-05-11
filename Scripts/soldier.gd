@@ -36,6 +36,15 @@ var grenade_damage: int
 @export var initial_mine_damage := 3
 var mine_damage: int
 
+@export var dash_speed:          float        = 800.0  # how fast you dash
+@export var dash_time:           float        = 0.2    # how long the dash lasts
+@export var dash_cooldown:       float        = 0.3    # time before you can dash again
+@export var dash_afterimage_sc:  PackedScene = preload("res://Scenes/Sprites/DashAfterImage.tscn")
+
+var can_dash:     bool     = true
+var is_dashing:   bool     = false
+var dash_dir:     Vector2  = Vector2.ZERO
+
 const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
@@ -139,6 +148,26 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	# ————— AIR DASH —————
+	if is_dashing:
+		velocity = dash_dir * dash_speed
+		move_and_slide()
+		_spawn_afterimage()
+		return
+
+	# when in the air and Attack is pressed, dash instead of firing
+	if not is_on_floor() and Input.is_action_just_pressed("attack") and can_dash:
+		_start_dash()
+		return
+
+	# on ground, Attack works normally
+	if is_on_floor() and Input.is_action_just_pressed("attack") and attack_ready:
+		_on_attack()
+
+	# kick off a dash
+	if Input.is_action_just_pressed("dash") and can_dash and not is_on_floor():
+		_start_dash()
+		
 	# Dog spawn on left
 	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped():
 		_spawn_dog()
@@ -208,6 +237,36 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
+
+func _start_dash() -> void:
+	can_dash   = false
+	is_dashing = true
+
+	# strictly face dir
+	if facing_right:
+		dash_dir = Vector2.RIGHT
+	else:
+		dash_dir = Vector2.LEFT
+
+	anim.play("dash")
+
+	# end dash
+	await get_tree().create_timer(dash_time).timeout
+	is_dashing = false
+
+	# cooldown before you can dash again
+	await get_tree().create_timer(dash_cooldown).timeout
+	can_dash = true
+
+func _spawn_afterimage() -> void:
+	var ghost = dash_afterimage_sc.instantiate() as AnimatedSprite2D
+	ghost.global_position = global_position
+	ghost.global_rotation = global_rotation
+	ghost.scale           = scale
+	ghost.flip_h          = anim.flip_h  # if you flip your soldier via flip_h
+
+	get_tree().get_current_scene().add_child(ghost)
+	# no further cleanup needed — the ghost frees itself when its tween finishes
 
 func _on_attack_cooldown_finished() -> void:
 	# timer has elapsed → we can fire again

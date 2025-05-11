@@ -1,7 +1,8 @@
-/Users/machome/Godot/_Builds/Zombie Heaven
-/Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
 res://Scripts
 res://Scenes/Sprites
+res://Scenes/Sprites/soldier
+/Users/machome/Godot/_Builds/Zombie Heaven
+/Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
 /Users/machome/Godot/ZombieSlug
 res://Scenes/Sprites/zombie/death
 res://Scenes/Effects
@@ -19,6 +20,3 @@ res://Projectiles/tnt
 res://Scenes/Sprites/rambo
 res://Scenes/Sprites/rambo/attack
 res://Scenes/Sprites/rambo/idle
-res://Scenes/Sprites/dog
-res://Scenes/Sprites/dog/attack
-res://Scenes/Sprites/dog/default
