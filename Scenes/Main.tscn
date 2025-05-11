@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=32 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
@@ -52,8 +52,14 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yobxv"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjtfb"]
 bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of0bc"]
+bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
 bg_color = Color(1, 1, 0, 1)
@@ -3659,40 +3665,42 @@ text = "Ghoul Gunner"
 [node name="Kills" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(1, 0, 0, 1)
 layout_mode = 0
-offset_left = 183.0
-offset_top = 57.5
-offset_right = 340.0
-offset_bottom = 70.5
+offset_left = 182.5
+offset_top = 59.0
+offset_right = 339.5
+offset_bottom = 72.0
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "KILLS: 0"
 
 [node name="HP" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(0, 1, 0, 1)
 layout_mode = 0
-offset_left = 183.0
-offset_top = 50.5
-offset_right = 340.0
-offset_bottom = 63.5
+offset_left = 182.5
+offset_top = 53.0
+offset_right = 339.5
+offset_bottom = 66.0
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "HP: 0 of 0"
 
 [node name="Level" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.0
-offset_top = 37.0
+offset_top = 19.5
 offset_right = 340.0
-offset_bottom = 50.0
+offset_bottom = 45.5
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_font_sizes/normal_font_size = 32
 text = "LEVEL: 0"
 
 [node name="XPStatus" type="RichTextLabel" parent="HUD/TopLeft"]
 modulate = Color(1, 1, 0, 1)
 layout_mode = 0
 offset_left = 183.0
-offset_top = 43.5
+offset_top = 46.5
 offset_right = 340.0
-offset_bottom = 56.5
+offset_bottom = 59.5
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_font_sizes/normal_font_size = 0
 text = "XP: 0 of 0"
 
 [node name="Health" type="ProgressBar" parent="HUD/TopLeft"]
@@ -3701,6 +3709,7 @@ offset_left = 183.25
 offset_top = 19.25
 offset_right = 292.25
 offset_bottom = 24.25
+theme_override_styles/background = SubResource("StyleBoxFlat_yobxv")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
 max_value = 10.0
 step = 1.0
@@ -3714,6 +3723,7 @@ offset_left = 183.25
 offset_top = 25.25
 offset_right = 292.25
 offset_bottom = 30.25
+theme_override_styles/background = SubResource("StyleBoxFlat_of0bc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
 max_value = 10.0
 step = 1.0
@@ -3731,18 +3741,18 @@ texture = ExtResource("5_rbj0p")
 [node name="Bumpers" type="HBoxContainer" parent="HUD/TopLeft"]
 layout_mode = 0
 offset_left = 183.0
-offset_top = 25.5
+offset_top = 41.0
 offset_right = 337.0
-offset_bottom = 39.5
+offset_bottom = 55.0
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(50, 10)
+custom_minimum_size = Vector2(40, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "TNT: 5"
 
 [node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(50, 10)
+custom_minimum_size = Vector2(40, 10)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "MINE: 5"
