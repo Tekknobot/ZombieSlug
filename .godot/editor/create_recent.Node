@@ -1,5 +1,8 @@
-AudioStreamPlayer2D
+Node2D
+CollisionShape2D
 AnimatedSprite2D
+CharacterBody2D
+AudioStreamPlayer2D
 CPUParticles2D
 TextureRect
 Label
@@ -9,6 +12,3 @@ CenterContainer
 Control
 ColorRect
 CanvasLayer
-CollisionShape2D
-Area2D
-Line2D

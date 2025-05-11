@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dsfhsjk1dkido"]
 
 [ext_resource type="Texture2D" uid="uid://b66gqdnak8pd7" path="res://Assets/Items/orbital_drop.png" id="1_6dydm"]
-[ext_resource type="Script" path="res://Scenes/Sprites/orbital_pickup.gd" id="1_grptj"]
+[ext_resource type="Script" path="res://Scripts/orbital_pickup.gd" id="1_grptj"]
 [ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_73w8p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
@@ -9,6 +9,7 @@ size = Vector2(14, 14)
 
 [node name="Node2D" type="Area2D"]
 script = ExtResource("1_grptj")
+sfx_stream = ExtResource("3_73w8p")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_6dydm")

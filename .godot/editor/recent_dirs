@@ -1,3 +1,4 @@
+res://Scenes/Sprites/helicopter
 res://Scripts
 res://Scenes/Sprites
 res://Scenes/Sprites/soldier
@@ -19,4 +20,3 @@ res://UI
 res://Projectiles/tnt
 res://Scenes/Sprites/rambo
 res://Scenes/Sprites/rambo/attack
-res://Scenes/Sprites/rambo/idle

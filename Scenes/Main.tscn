@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=33 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
+[ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("8_4q5fy")
@@ -3761,3 +3762,7 @@ text = "MINE: 5"
 stream = ExtResource("13_uw5wu")
 autoplay = true
 parameters/looping = true
+
+[node name="HelicopterSpawner" type="Node2D" parent="."]
+position = Vector2(0, -112)
+script = ExtResource("23_vhlg4")

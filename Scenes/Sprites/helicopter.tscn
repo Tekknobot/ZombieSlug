@@ -1,0 +1,57 @@
+[gd_scene load_steps=10 format=3 uid="uid://dqe8fsh4bdvpg"]
+
+[ext_resource type="Script" path="res://Scripts/helicopter.gd" id="1_v7bg3"]
+[ext_resource type="Texture2D" uid="uid://diqi7e4dc63ej" path="res://Scenes/Sprites/helicopter/s2idle_1.png" id="2_rw0yd"]
+[ext_resource type="Texture2D" uid="uid://cffecse8so3b6" path="res://Scenes/Sprites/helicopter/s2idle_2.png" id="3_6po4q"]
+[ext_resource type="Texture2D" uid="uid://brg82dulq7eut" path="res://Scenes/Sprites/helicopter/s2idle_3.png" id="4_lwmmd"]
+[ext_resource type="Texture2D" uid="uid://biqe58lx2pjjy" path="res://Scenes/Sprites/helicopter/s2idle_4.png" id="5_yjq2j"]
+[ext_resource type="Texture2D" uid="uid://bx5ysmaauy1qu" path="res://Scenes/Sprites/helicopter/s2idle_5.png" id="6_ncm2e"]
+[ext_resource type="Texture2D" uid="uid://bjcqu81tbyi5m" path="res://Scenes/Sprites/helicopter/s2idle_6.png" id="7_2r6d6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gsfop"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rw0yd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6po4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_lwmmd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_yjq2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ncm2e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_2r6d6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s2l8y"]
+
+[node name="Helicopter" type="CharacterBody2D"]
+script = ExtResource("1_v7bg3")
+speed = 100.0
+shoot_cooldown = 0.1
+wiggle_speed = 1.0
+wiggle_angle = 5.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_gsfop")
+autoplay = "default"
+frame_progress = 0.556019
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+shape = SubResource("CircleShape2D_s2l8y")

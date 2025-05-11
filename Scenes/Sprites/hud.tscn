@@ -1,0 +1,189 @@
+[gd_scene load_steps=16 format=3 uid="uid://de1f03yb6mi14"]
+
+[ext_resource type="Script" path="res://Scripts/hud.gd" id="1_ak7db"]
+[ext_resource type="Script" path="res://Scripts/fade.gd" id="2_m80jd"]
+[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="3_jox1a"]
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="4_j2hur"]
+[ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="5_3k70m"]
+[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="6_tdmyr"]
+[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_pc5dr"]
+[ext_resource type="Script" path="res://Scripts/healthbar.gd" id="8_84d2f"]
+[ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="9_wotg8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_od7e4"]
+shader = ExtResource("4_j2hur")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25318"]
+bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yobxv"]
+bg_color = Color(0.196078, 0.196078, 0.196078, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjtfb"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of0bc"]
+bg_color = Color(0.196143, 0.196143, 0.196143, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
+bg_color = Color(1, 1, 0, 1)
+
+[node name="HUD" type="CanvasLayer"]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+script = ExtResource("1_ak7db")
+
+[node name="Fade" type="ColorRect" parent="."]
+visible = false
+z_index = 1000
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("2_m80jd")
+
+[node name="TopLeft" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Logotype" type="TextureRect" parent="TopLeft"]
+layout_mode = 0
+offset_left = 7.5
+offset_top = 4.5
+offset_right = 107.5
+offset_bottom = 54.5
+texture = ExtResource("3_jox1a")
+
+[node name="Portrait" type="Panel" parent="TopLeft"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = 114.0
+offset_top = 4.0
+offset_right = 180.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_25318")
+
+[node name="Portrait" type="TextureRect" parent="TopLeft/Portrait"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 65.0
+offset_bottom = 65.0
+texture = ExtResource("5_3k70m")
+
+[node name="Name" type="RichTextLabel" parent="TopLeft"]
+layout_mode = 0
+offset_left = 183.25
+offset_top = 5.5
+offset_right = 340.25
+offset_bottom = 18.5
+theme_override_fonts/normal_font = ExtResource("6_tdmyr")
+text = "Ghoul Gunner"
+
+[node name="Kills" type="RichTextLabel" parent="TopLeft"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 182.5
+offset_top = 59.0
+offset_right = 339.5
+offset_bottom = 72.0
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+text = "KILLS: 0"
+
+[node name="HP" type="RichTextLabel" parent="TopLeft"]
+modulate = Color(0, 1, 0, 1)
+layout_mode = 0
+offset_left = 182.5
+offset_top = 53.0
+offset_right = 339.5
+offset_bottom = 66.0
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+text = "HP: 0 of 0"
+
+[node name="Level" type="RichTextLabel" parent="TopLeft"]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 19.5
+offset_right = 340.0
+offset_bottom = 45.5
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+theme_override_font_sizes/normal_font_size = 32
+text = "LEVEL: 0"
+
+[node name="XPStatus" type="RichTextLabel" parent="TopLeft"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 0
+offset_left = 183.0
+offset_top = 46.5
+offset_right = 340.0
+offset_bottom = 59.5
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+theme_override_font_sizes/normal_font_size = 0
+text = "XP: 0 of 0"
+
+[node name="Health" type="ProgressBar" parent="TopLeft"]
+layout_mode = 0
+offset_left = 183.25
+offset_top = 19.25
+offset_right = 292.25
+offset_bottom = 24.25
+theme_override_styles/background = SubResource("StyleBoxFlat_yobxv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
+max_value = 10.0
+step = 1.0
+value = 10.0
+show_percentage = false
+script = ExtResource("8_84d2f")
+
+[node name="XP" type="ProgressBar" parent="TopLeft"]
+layout_mode = 0
+offset_left = 183.25
+offset_top = 25.25
+offset_right = 292.25
+offset_bottom = 30.25
+theme_override_styles/background = SubResource("StyleBoxFlat_of0bc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
+max_value = 10.0
+step = 1.0
+value = 10.0
+show_percentage = false
+
+[node name="Buttons" type="TextureRect" parent="TopLeft"]
+layout_mode = 0
+offset_left = 469.0
+offset_top = 5.0
+offset_right = 565.0
+offset_bottom = 69.0
+texture = ExtResource("9_wotg8")
+
+[node name="Bumpers" type="HBoxContainer" parent="TopLeft"]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 41.0
+offset_right = 337.0
+offset_bottom = 55.0
+
+[node name="TNT" type="RichTextLabel" parent="TopLeft/Bumpers"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+text = "TNT: 5"
+
+[node name="MINES" type="RichTextLabel" parent="TopLeft/Bumpers"]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_pc5dr")
+text = "MINE: 5"
