@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=53 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
@@ -47,6 +47,7 @@
 [ext_resource type="AudioStream" uid="uid://dpslt5sraa3ko" path="res://Audio/Zombie/zombie_massacre_vocal_impact_pain_hurt_01.wav" id="44_m2gep"]
 [ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="46_g5a44"]
 [ext_resource type="AudioStream" uid="uid://dsawtr8wn3bm6" path="res://Audio/SFX/empty-gun-shot-6209.mp3" id="47_bp0as"]
+[ext_resource type="AudioStream" uid="uid://gcqmtyb21gm0" path="res://Audio/SFX/dash_sfx.wav" id="48_t5a0g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jd2l6"]
 shader = ExtResource("2_mb8vu")
@@ -239,6 +240,10 @@ stream = ExtResource("46_g5a44")
 
 [node name="EmptyClickSfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("47_bp0as")
+
+[node name="DashSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("48_t5a0g")
+volume_db = 6.0
 
 [node name="Hitbox" type="Area2D" parent="."]
 

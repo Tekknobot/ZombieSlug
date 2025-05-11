@@ -1,8 +1,8 @@
+AudioStreamPlayer2D
 AnimatedSprite2D
 CPUParticles2D
 TextureRect
 Label
-AudioStreamPlayer2D
 Button
 VBoxContainer
 CenterContainer

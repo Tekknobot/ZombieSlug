@@ -67,6 +67,7 @@ var merc_cooldown_timer: Timer
 @onready var hurt_sfx     := $HurtSfx      as AudioStreamPlayer2D
 @onready var levelup_sfx     := $LevelUpSfx      as AudioStreamPlayer2D
 @onready var empty_sfx     := $EmptyClickSfx      as AudioStreamPlayer2D
+@onready var dash_sfx     := $DashSfx      as AudioStreamPlayer2D
 
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
@@ -241,6 +242,8 @@ func _physics_process(delta: float) -> void:
 func _start_dash() -> void:
 	can_dash   = false
 	is_dashing = true
+
+	dash_sfx.play()
 
 	# strictly face dir
 	if facing_right:
