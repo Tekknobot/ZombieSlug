@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=42 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://bwniodxwhoe8c" path="res://Scenes/Sprites/ladder.tscn" id="1_aa7xg"]
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
@@ -36,10 +36,37 @@ size = Vector2(88, 23)
 size = Vector2(88, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nthry"]
-size = Vector2(623, 20)
+size = Vector2(90, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bv03j"]
 size = Vector2(266.5, 22)
+
+[sub_resource type="GDScript" id="GDScript_yvgv7"]
+script/source = "extends StaticBody2D
+
+@export var one_way_margin: float = 2.0
+
+func _ready() -> void:
+	var cs = $CollisionShape2D
+	# Expect that in the editor you've drawn a RectangleShape2D
+	var rect = cs.shape as RectangleShape2D
+	if rect:
+		# grab half-width from your editor shape
+		var half_w = rect.extents.x
+		# build a matching segment so there are no side walls
+		var seg = SegmentShape2D.new()
+		seg.a = Vector2(-half_w, 0)
+		seg.b = Vector2( half_w, 0)
+		cs.shape = seg
+	else:
+		push_warning(\"Roof.gd: expected CollisionShape2D.shape to be RectangleShape2D\")
+	cs.one_way_collision = true
+	cs.one_way_collision_margin = one_way_margin
+	add_to_group(\"Roof\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4cnwb"]
+size = Vector2(267, 20)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("8_4q5fy")
@@ -140,7 +167,7 @@ position = Vector2(88, 7)
 script = ExtResource("2_n0nvp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof4"]
-position = Vector2(70.5, -67)
+position = Vector2(-196, -67)
 shape = SubResource("RectangleShape2D_nthry")
 
 [node name="Roof5" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
@@ -150,6 +177,14 @@ script = ExtResource("2_n0nvp")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof5"]
 position = Vector2(-53.75, -69)
 shape = SubResource("RectangleShape2D_bv03j")
+
+[node name="Roof6" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
+position = Vector2(444, 7)
+script = SubResource("GDScript_yvgv7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof6"]
+position = Vector2(-107.5, -67)
+shape = SubResource("RectangleShape2D_4cnwb")
 
 [node name="Fader" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
