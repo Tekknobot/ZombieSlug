@@ -154,7 +154,6 @@ func _ready() -> void:
 	add_child(_star_timer)
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
 
-
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return

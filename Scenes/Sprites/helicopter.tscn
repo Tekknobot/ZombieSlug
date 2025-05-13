@@ -1,12 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://dqe8fsh4bdvpg"]
+[gd_scene load_steps=12 format=3 uid="uid://dqe8fsh4bdvpg"]
 
 [ext_resource type="Script" path="res://Scripts/helicopter.gd" id="1_v7bg3"]
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="2_6uf0g"]
 [ext_resource type="Texture2D" uid="uid://diqi7e4dc63ej" path="res://Scenes/Sprites/helicopter/s2idle_1.png" id="2_rw0yd"]
 [ext_resource type="Texture2D" uid="uid://cffecse8so3b6" path="res://Scenes/Sprites/helicopter/s2idle_2.png" id="3_6po4q"]
 [ext_resource type="Texture2D" uid="uid://brg82dulq7eut" path="res://Scenes/Sprites/helicopter/s2idle_3.png" id="4_lwmmd"]
 [ext_resource type="Texture2D" uid="uid://biqe58lx2pjjy" path="res://Scenes/Sprites/helicopter/s2idle_4.png" id="5_yjq2j"]
 [ext_resource type="Texture2D" uid="uid://bx5ysmaauy1qu" path="res://Scenes/Sprites/helicopter/s2idle_5.png" id="6_ncm2e"]
 [ext_resource type="Texture2D" uid="uid://bjcqu81tbyi5m" path="res://Scenes/Sprites/helicopter/s2idle_6.png" id="7_2r6d6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_885un"]
+shader = ExtResource("2_6uf0g")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gsfop"]
 animations = [{
@@ -44,6 +51,7 @@ wiggle_speed = 1.0
 wiggle_angle = 5.0
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_885un")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_gsfop")
 autoplay = "default"
