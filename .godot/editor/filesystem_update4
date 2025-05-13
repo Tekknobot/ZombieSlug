@@ -19,3 +19,5 @@ res://Scripts/tnt_yellow.gd
 res://Scenes/Effects/Explosion.tscn
 res://Scenes/Sprites/StarPickup.tscn
 res://Scripts/star_pickup.gd
+res://Scripts/LightningStrike.gd
+res://Scenes/Effects/Lightning_Joint.tscn

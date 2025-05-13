@@ -1,3 +1,4 @@
+res://Scenes/Effects
 res://Scripts
 res://Projectiles/tnt_yellow
 /Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
@@ -7,7 +8,6 @@ res://Scenes/Sprites
 res://Scenes/Sprites/soldier
 /Users/machome/Godot/ZombieSlug
 res://Scenes/Sprites/zombie/death
-res://Scenes/Effects
 res://Scenes/Titlescreen/Logotype
 res://Scenes
 res://Shaders/
