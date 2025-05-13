@@ -223,12 +223,12 @@ func _physics_process(delta: float) -> void:
 		dash_input = dash_input.normalized()
 		_start_dash()
 
-	# ——— Spawns blocked on roofs ———
-	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped() and not on_roof:
+	# ——— Spawns ———
+	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped():
 		_spawn_dog()
 		dog_cooldown_timer.start()
 
-	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped() and not on_roof:
+	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped():
 		_spawn_merc()
 		merc_cooldown_timer.start()
 
@@ -387,43 +387,50 @@ func _on_star_timeout() -> void:
 
 func _spawn_dog() -> void:
 	dog_sfx.play()
-	var dog = DogScene.instantiate()
+	var dog = DogScene.instantiate() as PhysicsBody2D
+	# position in front of player
 	var x_off = abs(muzzle_point.position.x)
 	dog.global_position = Vector2(
 		global_position.x - x_off,
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(dog)
-	print("🐶 Spawned dog at ", dog.global_position)
 
-	# make sure it never collides with any existing Mercs:
+	# if we spawned on a roof, ignore collisions with all roof bodies
+	if on_roof:
+		for roof in get_tree().get_nodes_in_group("Roof"):
+			if roof is PhysicsBody2D:
+				dog.add_collision_exception_with(roof)
+
+	# rest of your existing setup…
 	for m in get_tree().get_nodes_in_group("Merc"):
 		if m is PhysicsBody2D:
 			dog.add_collision_exception_with(m)
 			m.add_collision_exception_with(dog)
-				
-	# fade out over 1s after 5s, then free
 	_fade_and_free(dog, 5.0, 1.0)
-
 
 func _spawn_merc() -> void:
 	merc_sfx.play()
-	var merc = MercScene.instantiate()
+	var merc = MercScene.instantiate() as PhysicsBody2D
+	# position in front of player
 	var x_off = abs(muzzle_point.position.x)
 	merc.global_position = Vector2(
 		global_position.x + x_off,
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(merc)
-	print("🪖 Spawned merc at ", merc.global_position)
 
-	# make sure it never collides with any existing Dogs:
+	# if we spawned on a roof, ignore collisions with all roof bodies
+	if on_roof:
+		for roof in get_tree().get_nodes_in_group("Roof"):
+			if roof is PhysicsBody2D:
+				merc.add_collision_exception_with(roof)
+
+	# rest of your existing setup…
 	for d in get_tree().get_nodes_in_group("Dog"):
 		if d is PhysicsBody2D:
 			merc.add_collision_exception_with(d)
 			d.add_collision_exception_with(merc)
-				
-	# fade out over 1s after 5s, then free
 	_fade_and_free(merc, 5.0, 1.0)
 
 # Fades out a CanvasItem over `fade_time` seconds after a `delay`, then frees it.
