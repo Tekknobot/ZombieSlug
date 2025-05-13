@@ -146,7 +146,7 @@ func take_damage(amount: int = 1) -> void:
 			drop4.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop4)		
 
-		if randi() % 100 < 10:
+		if randi() % 100 < 100:
 			var drop5 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
 			drop5.global_position = global_position
 			drop5.global_position.y -= 8

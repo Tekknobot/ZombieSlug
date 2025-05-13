@@ -7177,7 +7177,7 @@ texture = ExtResource("5_lqmy6")
 script = ExtResource("4_js2x2")
 base_spawn_interval = 1.0
 min_spawn_factor = 0.5
-spawn_distance = 500.0
+spawn_distance = 600.0
 boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
 

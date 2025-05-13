@@ -353,36 +353,44 @@ func _on_hitbox_body_entered(body: Node) -> void:
 			body._explode()
 
 func apply_star(duration: float, damage: int) -> void:
-	var time_left = 0.0
-	if not _star_timer.is_stopped():
-		time_left = _star_timer.time_left
-		_star_timer.stop()
-	_star_timer.start(time_left + duration)
-	star_damage = damage
+	if is_invincible:
+		return
+	is_invincible = true
+	star_damage   = damage
 
-	if not is_invincible:
-		is_invincible = true
-		_orig_speed = speed
-		speed = _orig_speed * 1.15
-		anim.material = _star_material
+	# ————— BOOST SPEED —————
+	_orig_speed = speed
+	speed = _orig_speed * 1.15
 
+	anim.material = _star_material
+
+	# 1) exempt ONLY your body from colliding with zombies:
+	_zombie_exceptions.clear()
 	for z in get_tree().get_nodes_in_group("Zombie"):
-		if z is PhysicsBody2D and not _zombie_exceptions.has(z):
+		if z is PhysicsBody2D:
 			add_collision_exception_with(z)
 			_zombie_exceptions.append(z)
+
+	# 2) turn on the hitbox so it still overlaps zombies
 	hitbox.monitoring = true
 
-func _on_star_timeout() -> void:
+	# 3) wait out the duration
+	await get_tree().create_timer(duration).timeout
+
+	# ————— RESTORE SPEED —————
 	speed = _orig_speed
+
+	# 4) restore normal collisions
 	for z in _zombie_exceptions:
 		if is_instance_valid(z):
 			remove_collision_exception_with(z)
 	_zombie_exceptions.clear()
-	is_invincible = false
-	star_damage = 0
+
+	is_invincible     = false
+	star_damage       = 0
 	hitbox.monitoring = false
-	anim.material = _default_material
-				
+	anim.material     = _default_material
+					
 # --- New spawn functions ---
 
 func _spawn_dog() -> void:
