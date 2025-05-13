@@ -21,3 +21,6 @@ res://Scenes/Sprites/StarPickup.tscn
 res://Scripts/star_pickup.gd
 res://Scripts/LightningStrike.gd
 res://Scenes/Effects/Lightning_Joint.tscn
+res://Scripts/ladder.gd
+res://Scenes/Sprites/ladder.tscn
+res://Scripts/roof.gd

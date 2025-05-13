@@ -86,6 +86,13 @@ var star_damage:    int  = 0
 var _shape_was_disabled: bool
 var _zombie_exceptions = []
 
+@export var climb_speed: float = 80.0
+var on_ladder: bool   = false
+var is_climbing: bool = false
+
+# how long we disable one-way before re-enabling
+const DROP_THROUGH_TIME := 0.4
+
 func _ready() -> void:	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
@@ -158,6 +165,31 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	# if they press Down + Jump while standing on a roof, drop through:
+	if is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down"):
+		_drop_through_roofs()
+		return   # skip the rest so gravity applies next frame
+
+	# ——— Ladder climbing override ———
+	if on_ladder:
+		# start or stop climbing based on Up/Down
+		if Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down"):
+			is_climbing = true
+
+		if is_climbing:
+			# lock X, move Y
+			velocity.x = 0
+			velocity.y = ( Input.get_action_strength("ui_down")
+						  - Input.get_action_strength("ui_up") ) * climb_speed
+
+			# play climb anim or idle
+			if velocity.y != 0:
+				anim.play("climb")
+			else:
+				anim.play("climb_idle")
+
+			move_and_slide()
+		
 	# ————— AIR DASH —————
 	if is_dashing:
 		velocity = dash_dir * dash_speed
@@ -247,6 +279,12 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
+
+func _drop_through_roofs() -> void:
+	$CollisionShape2D.disabled = true
+	# give us time to fall through
+	await get_tree().create_timer(DROP_THROUGH_TIME).timeout
+	$CollisionShape2D.disabled = false
 
 func _start_dash() -> void:
 	can_dash   = false

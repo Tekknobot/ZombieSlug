@@ -1,8 +1,10 @@
-[gd_scene load_steps=33 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=40 format=3 uid="uid://duxlsmdg5d6qv"]
 
+[ext_resource type="PackedScene" uid="uid://bwniodxwhoe8c" path="res://Scenes/Sprites/ladder.tscn" id="1_aa7xg"]
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
 [ext_resource type="Script" path="res://Scripts/fade_in.gd" id="2_5s4qg"]
+[ext_resource type="Script" path="res://Scripts/roof.gd" id="2_n0nvp"]
 [ext_resource type="Texture2D" uid="uid://3lfmtpx1h6g4" path="res://Tiles/tile-default.png" id="2_ukuor"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="3_xltqf"]
@@ -23,6 +25,21 @@
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5n51e"]
+size = Vector2(1, 31)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvqbu"]
+size = Vector2(88, 23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b2ff3"]
+size = Vector2(88, 23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nthry"]
+size = Vector2(623, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bv03j"]
+size = Vector2(266.5, 22)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("8_4q5fy")
@@ -66,6 +83,73 @@ bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 bg_color = Color(1, 1, 0, 1)
 
 [node name="Level" type="Node2D"]
+
+[node name="Roofs" type="Node2D" parent="."]
+
+[node name="Ladder" parent="Roofs" instance=ExtResource("1_aa7xg")]
+position = Vector2(-197, 40)
+
+[node name="Ladder2" parent="Roofs" instance=ExtResource("1_aa7xg")]
+position = Vector2(70, 40)
+
+[node name="Wall" type="StaticBody2D" parent="Roofs"]
+position = Vector2(-232, -60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Wall"]
+position = Vector2(-9.5, -16.5)
+shape = SubResource("RectangleShape2D_5n51e")
+
+[node name="Wall2" type="StaticBody2D" parent="Roofs"]
+position = Vector2(-143, -60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Wall2"]
+position = Vector2(-9.5, -16.5)
+shape = SubResource("RectangleShape2D_5n51e")
+
+[node name="Wall3" type="StaticBody2D" parent="Roofs"]
+position = Vector2(-54, -60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Wall3"]
+position = Vector2(-9.5, -16.5)
+shape = SubResource("RectangleShape2D_5n51e")
+
+[node name="Wall4" type="StaticBody2D" parent="Roofs"]
+position = Vector2(213, -60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Wall4"]
+position = Vector2(-9.5, -5.5)
+shape = SubResource("RectangleShape2D_5n51e")
+
+[node name="Roof" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
+script = ExtResource("2_n0nvp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof"]
+position = Vector2(-197, -91.5)
+shape = SubResource("RectangleShape2D_fvqbu")
+
+[node name="Roof3" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
+position = Vector2(-88, 30)
+script = ExtResource("2_n0nvp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof3"]
+position = Vector2(-197, -91.5)
+shape = SubResource("RectangleShape2D_b2ff3")
+
+[node name="Roof4" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
+position = Vector2(88, 7)
+script = ExtResource("2_n0nvp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof4"]
+position = Vector2(70.5, -67)
+shape = SubResource("RectangleShape2D_nthry")
+
+[node name="Roof5" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
+position = Vector2(124, -23)
+script = ExtResource("2_n0nvp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof5"]
+position = Vector2(-53.75, -69)
+shape = SubResource("RectangleShape2D_bv03j")
 
 [node name="Fader" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
