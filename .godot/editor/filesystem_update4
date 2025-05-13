@@ -39,3 +39,4 @@ res://Scripts/toxic_spore_cloud.gd
 res://Scenes/Effects/SporePatch.tscn
 res://Scenes/Effects/ToxicSporeController.tscn
 res://Scripts/spore_patch.gd
+res://Scenes/Effects/Rain_system.scn
