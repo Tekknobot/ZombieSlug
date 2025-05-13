@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://0r51onbxa5uk"]
+
+[ext_resource type="Script" path="res://Scripts/tnt_yellow_pickup.gd" id="1_i5bro"]
+[ext_resource type="Texture2D" uid="uid://pvikicyw801d" path="res://Projectiles/tnt_yellow/tnt_yellow_drop.png" id="2_gxsvy"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_1eq26"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_i5bro")
+homing_duration = 20.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_gxsvy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_1eq26")
+
+[node name="FloorRay" type="RayCast2D" parent="."]

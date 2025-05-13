@@ -45,18 +45,33 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
-	var players = get_tree().get_nodes_in_group("Player")
-	if players.is_empty():
-		if not attack_timer.is_stopped():
-			attack_timer.stop()
-		return
+	# 1) If any homing grenades exist, chase the nearest one instead of the player:
+	var grenades = get_tree().get_nodes_in_group("TNT_yellow")
+	var target: Node2D = null
+	if not grenades.is_empty():
+		# find closest grenade
+		var best_dist = INF
+		for g in grenades:
+			if not (g is Node2D): continue
+			var d = global_position.distance_to(g.global_position)
+			if d < best_dist:
+				best_dist = d
+				target    = g
+	else:
+		# fall back to the player
+		var players = get_tree().get_nodes_in_group("Player")
+		if players.is_empty():
+			if not attack_timer.is_stopped():
+				attack_timer.stop()
+			return
+		target = players[0] as CharacterBody2D
 
-	var player = players[0] as CharacterBody2D
-	var to_player = player.global_position - global_position
-	var dist = to_player.length()
+	# 2) move/tackle exactly as before, but using `target`:
+	var to_target = target.global_position - global_position
+	var dist = to_target.length()
 
 	if dist > attack_range:
-		velocity.x = sign(to_player.x) * speed
+		velocity.x = sign(to_target.x) * speed
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		if anim.animation != "move":
@@ -69,8 +84,9 @@ func _physics_process(delta: float) -> void:
 		if anim.animation != "attack":
 			death_sfx.play()
 			anim.play("attack")
-		anim.flip_h = to_player.x > 0
+		anim.flip_h = to_target.x > 0
 
+	# 3) gravity + slide
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
@@ -110,8 +126,8 @@ func take_damage(amount: int = 1) -> void:
 			var drop = preload("res://Scenes/Sprites/TNTPickup.tscn").instantiate()
 			drop.global_position = global_position
 			drop.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop)
-
+			get_tree().get_current_scene().add_child(drop)	
+		
 		if randi() % 100 < 10:
 			var drop2 = preload("res://Scenes/Sprites/MinePickup.tscn").instantiate()
 			drop2.global_position = global_position
@@ -166,6 +182,11 @@ func take_damage(amount: int = 1) -> void:
 			drop10.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop10)		
 		
+		if randi() % 100 < 10:
+			var drop11 = preload("res://Scenes/Sprites/TNT_YellowPickup.tscn").instantiate()
+			drop11.global_position = global_position
+			drop11.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop11)	
 		
 		# 1) award kill + XP, play effects, drop pickups, etc.
 		is_dead = true

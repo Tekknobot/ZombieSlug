@@ -1,7 +1,9 @@
+RayCast2D
+Area2D
+CharacterBody2D
 Node2D
 CollisionShape2D
 AnimatedSprite2D
-CharacterBody2D
 AudioStreamPlayer2D
 CPUParticles2D
 TextureRect
@@ -11,4 +13,3 @@ VBoxContainer
 CenterContainer
 Control
 ColorRect
-CanvasLayer

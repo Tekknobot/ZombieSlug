@@ -1,7 +1,8 @@
+res://Scripts
+res://Projectiles/tnt_yellow
 /Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
 /Users/machome/Godot/_Builds/Zombie Heaven
 res://Scenes/Sprites/helicopter
-res://Scripts
 res://Scenes/Sprites
 res://Scenes/Sprites/soldier
 /Users/machome/Godot/ZombieSlug
@@ -19,4 +20,3 @@ res://Portraits
 res://UI
 res://Projectiles/tnt
 res://Scenes/Sprites/rambo
-res://Scenes/Sprites/rambo/attack

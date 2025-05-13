@@ -41,6 +41,8 @@ var mine_damage: int
 @export var dash_cooldown:       float        = 0.3    # time before you can dash again
 @export var dash_afterimage_sc:  PackedScene = preload("res://Scenes/Sprites/DashAfterImage.tscn")
 
+var homing_mode: bool = false
+
 var can_dash:     bool     = true
 var is_dashing:   bool     = false
 var dash_dir:     Vector2  = Vector2.ZERO
@@ -49,6 +51,7 @@ const BulletScene = preload("res://Scenes/Sprites/bullet.tscn")
 const DogScene    = preload("res://Scenes/Sprites/dog.tscn")
 const MercScene   = preload("res://Scenes/Sprites/merc.tscn")
 const GrenadeScene = preload("res://Scenes/Sprites/tnt.tscn")
+const HomingGrenadeScene = preload("res://Scenes/Sprites/tnt_yellow.tscn")
 const MineScene    = preload("res://Scenes/Sprites/mine.tscn")
 const MuzzleFlashParticles = preload("res://Scenes/Sprites/muzzle_flash.tscn")
 
@@ -388,6 +391,14 @@ func _on_attack() -> void:
 	attack_cooldown_timer.wait_time = firerate
 	attack_cooldown_timer.start()
 
+func enable_homing_grenades(duration: float) -> void:
+	if homing_mode:
+		return
+	homing_mode = true
+	# after `duration` seconds, turn it off
+	await get_tree().create_timer(duration).timeout
+	homing_mode = false
+
 func _on_level_changed(new_level: int) -> void:
 	# Example: reduce interval by 40% each level, to a floor of 0.1s
 	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.40, 1.0)
@@ -486,7 +497,13 @@ func flash() -> void:
 	anim.modulate = Color(1, 1, 1, 1)
 
 func _throw_grenade() -> void:
-	var g = GrenadeScene.instantiate()
+	var g
+	if homing_mode:
+		# your yellow, homing grenade
+		g = HomingGrenadeScene.instantiate()
+	else:
+		g = GrenadeScene.instantiate()
+
 	# spawn at the muzzle or player hand
 	g.global_position = global_position
 	g.global_position.y -= 16

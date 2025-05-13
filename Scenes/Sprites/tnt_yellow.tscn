@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsipxmo60mvd7"]
+
+[ext_resource type="Script" path="res://Scripts/tnt_yellow.gd" id="1_xv4xk"]
+[ext_resource type="Texture2D" uid="uid://dss40m73km22n" path="res://Projectiles/tnt_yellow/tnt_yellow1.png" id="2_k0rhx"]
+[ext_resource type="Texture2D" uid="uid://402pi0xvstd6" path="res://Projectiles/tnt_yellow/tnt_yellow2.png" id="3_e7t6u"]
+[ext_resource type="AudioStream" uid="uid://cyr02pq4bnedt" path="res://Audio/SFX/toss.wav" id="4_4pawk"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_113ie"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_k0rhx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_e7t6u")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2tum8"]
+radius = 5.0
+
+[node name="TNT_yellow" type="Area2D" groups=["TNT_yellow"]]
+script = ExtResource("1_xv4xk")
+initial_speed = 125.0
+initial_upward = -200.0
+gravity_force = 175.0
+fuse_time = 4.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_113ie")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2tum8")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_4pawk")
+volume_db = 24.0
+autoplay = true
