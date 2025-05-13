@@ -93,6 +93,9 @@ var is_climbing: bool = false
 # how long we disable one-way before re-enabling
 const DROP_THROUGH_TIME := 0.4
 
+@export var extra_spawn_offset: float = 16.0  # tweak-able in the inspector
+
+
 var on_roof: bool = false
 var _left_roof: bool = false
 
@@ -401,19 +404,20 @@ func apply_star(duration: float, damage: int) -> void:
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
-	# position…
-	var x_off = abs(muzzle_point.position.x)
+
+	# combine muzzle_point offset with your extra offset
+	var base_off = abs(muzzle_point.position.x)
+	var x_off = base_off + extra_spawn_offset
+
 	dog.global_position = Vector2(
 		global_position.x - x_off,
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(dog)
 
-	# 🚩 only ignore roof collisions here
 	if on_roof or _left_roof:
 		_add_roof_exceptions(dog)
 
-	# also avoid dog vs merc collisions
 	for m in get_tree().get_nodes_in_group("Merc"):
 		if m is PhysicsBody2D:
 			dog.add_collision_exception_with(m)
@@ -423,19 +427,19 @@ func _spawn_dog() -> void:
 func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
-	# position…
-	var x_off = abs(muzzle_point.position.x)
+
+	var base_off = abs(muzzle_point.position.x)
+	var x_off = base_off + extra_spawn_offset
+
 	merc.global_position = Vector2(
 		global_position.x + x_off,
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(merc)
 
-	# 🚩 only ignore roof collisions here
 	if on_roof or _left_roof:
 		_add_roof_exceptions(merc)
 
-	# also avoid merc vs dog collisions
 	for d in get_tree().get_nodes_in_group("Dog"):
 		if d is PhysicsBody2D:
 			merc.add_collision_exception_with(d)
