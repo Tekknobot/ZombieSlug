@@ -1,3 +1,4 @@
+VBoxContainer
 Node2D
 CollisionShape2D
 StaticBody2D
@@ -10,5 +11,4 @@ CPUParticles2D
 TextureRect
 Label
 Button
-VBoxContainer
 CenterContainer

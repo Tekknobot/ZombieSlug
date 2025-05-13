@@ -7314,24 +7314,25 @@ offset_right = 565.0
 offset_bottom = 69.0
 texture = ExtResource("5_rbj0p")
 
-[node name="Bumpers" type="HBoxContainer" parent="HUD/TopLeft"]
+[node name="Bumpers" type="VBoxContainer" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 183.0
-offset_top = 41.0
-offset_right = 337.0
-offset_bottom = 55.0
+offset_left = 258.5
+offset_top = 53.0
+offset_right = 308.5
+offset_bottom = 77.0
+theme_override_constants/separation = -10
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(40, 10)
+custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "TNT: 5"
 
 [node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
-custom_minimum_size = Vector2(40, 10)
+custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
-text = "MINE: 5"
+text = "MINES: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_uw5wu")
