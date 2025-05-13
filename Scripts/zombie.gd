@@ -69,14 +69,18 @@ func _physics_process(delta: float) -> void:
 	# 2) move/tackle exactly as before, but using `target`:
 	var to_target = target.global_position - global_position
 	var dist = to_target.length()
-
+	var dx = to_target.x
+	var DEADZONE := 1.0
+	
 	if dist > attack_range:
 		velocity.x = sign(to_target.x) * speed
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		if anim.animation != "move":
 			anim.play("move")
-		anim.flip_h = velocity.x > 0
+		 # only re-flip if target is well to one side
+		if abs(dx) > DEADZONE:
+			anim.flip_h = velocity.x > 0
 	else:
 		velocity.x = 0
 		if attack_timer.is_stopped():
@@ -85,6 +89,9 @@ func _physics_process(delta: float) -> void:
 			death_sfx.play()
 			anim.play("attack")
 		anim.flip_h = to_target.x > 0
+		# similarly, only flip during attack if target isn’t directly underneath
+		if abs(dx) > DEADZONE:
+			anim.flip_h = dx > 0
 
 	# 3) gravity + slide
 	if not is_on_floor():
@@ -146,7 +153,7 @@ func take_damage(amount: int = 1) -> void:
 			drop4.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop4)		
 
-		if randi() % 100 < 100:
+		if randi() % 100 < 10:
 			var drop5 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
 			drop5.global_position = global_position
 			drop5.global_position.y -= 8
