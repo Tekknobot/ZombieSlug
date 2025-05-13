@@ -194,7 +194,14 @@ func take_damage(amount: int = 1) -> void:
 			drop11.global_position = global_position
 			drop11.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop11)	
+
+		if randi() % 100 < 10:
+			var drop12 = preload("res://Scenes/Sprites/SporePickup.tscn").instantiate()
+			drop12.global_position = global_position
+			drop12.global_position.y -= 8
+			get_tree().get_current_scene().add_child(drop12)	
 		
+				
 		# 1) award kill + XP, play effects, drop pickups, etc.
 		is_dead = true
 		_die_cleanup()

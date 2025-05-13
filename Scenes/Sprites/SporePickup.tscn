@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cphopadnwiw84"]
+
+[ext_resource type="Script" path="res://Scripts/spore_pickup.gd" id="1_gu7h4"]
+[ext_resource type="Texture2D" uid="uid://c42jwg73bg1yo" path="res://Assets/Items/spore_drop.png" id="2_2l42b"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_lucme"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_gu7h4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2l42b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_lucme")

@@ -31,3 +31,11 @@ res://Scripts/dog.gd
 res://Scripts/lightning_pickup.gd
 res://Scenes/Sprites/bullet.tscn
 res://Scripts/bullet.gd
+res://Scenes/Effects/ToxicSporeCloud.tscn
+res://Scenes/Sprites/SporePickup.tscn
+res://Scripts/spore_pickup.gd
+res://Scenes/Sprites/HealthPickup.tscn
+res://Scripts/toxic_spore_cloud.gd
+res://Scenes/Effects/SporePatch.tscn
+res://Scenes/Effects/ToxicSporeController.tscn
+res://Scripts/spore_patch.gd

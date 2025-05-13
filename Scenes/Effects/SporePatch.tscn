@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpdf2ykbnf1xp"]
+
+[ext_resource type="Script" path="res://Scripts/spore_patch.gd" id="1_geiy8"]
+[ext_resource type="Texture2D" uid="uid://cj8ffy88vxbm5" path="res://Scenes/Effects/radioactive_gradient.png" id="2_o0e8k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y7no0"]
+radius = 34.1321
+
+[node name="SporePatch" type="Area2D"]
+script = ExtResource("1_geiy8")
+duration = 3.0
+slow_percent = 0.25
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y7no0")
+disabled = true
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+modulate = Color(0, 1, 0, 1)
+scale = Vector2(2, 2)
+amount = 64
+lifetime = 2.0
+emission_shape = 1
+emission_sphere_radius = 8.0
+gravity = Vector2(0, 0)
+radial_accel_min = 4.0
+radial_accel_max = 4.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 0, 0.458824)
+scale = Vector2(2, 2)
+texture = ExtResource("2_o0e8k")

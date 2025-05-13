@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6ni8mflvajos"]
+
+[ext_resource type="Script" path="res://Scripts/toxic_spore_cloud.gd" id="1_glbwe"]
+[ext_resource type="AudioStream" uid="uid://drvx60gkcnqvh" path="res://Audio/SFX/spore_sfx.wav" id="2_qnpwh"]
+
+[node name="ToxicSporeController" type="Node2D"]
+script = ExtResource("1_glbwe")
+duration = 4.0
+patch_duration = 3.0
+sfx_stream = ExtResource("2_qnpwh")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
