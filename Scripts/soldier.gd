@@ -184,9 +184,9 @@ func _physics_process(delta: float) -> void:
 			velocity.y = (Input.get_action_strength("ui_down")
 						 - Input.get_action_strength("ui_up")) * climb_speed
 			if velocity.y != 0:
-				anim.play("climb")
+				anim.play("move")
 			else:
-				anim.play("climb_idle")
+				anim.play("move")
 			move_and_slide()
 			return
 

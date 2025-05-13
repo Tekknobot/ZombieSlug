@@ -25,3 +25,5 @@ res://Scripts/ladder.gd
 res://Scenes/Sprites/ladder.tscn
 res://Scripts/roof.gd
 res://Scripts/merc.gd
+res://Scripts/OrbitalStrikeController.gd
+res://Scripts/FirestormController.gd

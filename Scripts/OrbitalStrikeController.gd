@@ -45,38 +45,47 @@ func _strike_all() -> void:
 	var vr    = get_viewport().get_visible_rect()
 	var top_y = vr.position.y - laser_height
 
-	# 1) take a snapshot of valid zombies
-	var zombies := []
+	# 1) snapshot valid zombies and their positions
+	var targets := []
 	for z in get_tree().get_nodes_in_group("Zombie"):
-		if is_instance_valid(z) and z.has_method("take_damage"):
-			zombies.append(z)
+		if z is CharacterBody2D and z.has_method("take_damage") and is_instance_valid(z):
+			targets.append({
+				"zombie": z,
+				"pos": z.global_position
+			})
 
-	# 2) now iterate that safe list
-	for z in zombies:
-		# pick a random start X around the zombie
-		var start_x = z.global_position.x + randf_range(-start_offset_x, start_offset_x)
+	# 2) iterate that static list
+	for entry in targets:
+		var z = entry.zombie
+		var target_pos = entry.pos
+		target_pos.y -= 8   # offset your strike
+
+		# a) pick a random beam start
+		var start_x = target_pos.x + randf_range(-start_offset_x, start_offset_x)
 		var start_pos = Vector2(start_x, top_y)
 
-		# draw the angled laser beam
+		# b) draw the beam
 		var beam = Line2D.new()
 		beam.width         = laser_width
 		beam.default_color = laser_color
-		beam.add_point(beam.to_local(start_pos))
-		z.global_position.y -= 8
-		beam.add_point(beam.to_local(z.global_position))
+		beam.add_point( beam.to_local(start_pos) )
+		beam.add_point( beam.to_local(target_pos) )
 		get_tree().get_current_scene().add_child(beam)
 
-		# linger at full alpha, then fade out and free
+		# c) fade & free the beam
 		var twb = get_tree().create_tween()
 		twb.tween_interval(laser_linger)
 		twb.tween_property(beam, "modulate:a", 0.0, laser_fade)
 		twb.tween_callback(Callable(beam, "queue_free"))
 
-		# spawn explosion & deal damage
+		# d) spawn explosion
 		var exp = ExplosionScene.instantiate()
-		exp.global_position = z.global_position
+		exp.global_position = target_pos
 		get_tree().get_current_scene().add_child(exp)
-		z.take_damage(9999)
 
-		# wait before next beam
+		# e) apply damage if still alive
+		if is_instance_valid(z):
+			z.take_damage(9999)
+
+		# f) wait before the next beam
 		await get_tree().create_timer(laser_delay).timeout
