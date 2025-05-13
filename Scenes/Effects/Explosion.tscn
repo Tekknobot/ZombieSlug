@@ -67,7 +67,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 12.0
+"speed": 16.0
 }]
 
 [node name="Explosion" type="Area2D" groups=["Explosion"]]

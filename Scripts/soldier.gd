@@ -75,6 +75,7 @@ var merc_cooldown_timer: Timer
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
 @onready var hitbox          := $Hitbox as Area2D
+@onready var _star_timer := Timer.new()
 
 var _default_material:Material
 var _star_material:ShaderMaterial  # assign this in _ready()
@@ -147,6 +148,12 @@ func _ready() -> void:
 	
 	grenade_damage = initial_grenade_damage
 	mine_damage    = initial_mine_damage
+
+	# Configure a reusable star-power timer
+	_star_timer.one_shot = true
+	add_child(_star_timer)
+	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
+
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -293,44 +300,36 @@ func _on_hitbox_body_entered(body: Node) -> void:
 			body._explode()
 
 func apply_star(duration: float, damage: int) -> void:
-	if is_invincible:
-		return
-	is_invincible = true
-	star_damage   = damage
+	var time_left = 0.0
+	if not _star_timer.is_stopped():
+		time_left = _star_timer.time_left
+		_star_timer.stop()
+	_star_timer.start(time_left + duration)
+	star_damage = damage
 
-	# ————— BOOST SPEED —————
-	_orig_speed = speed
-	speed = _orig_speed * 1.15
+	if not is_invincible:
+		is_invincible = true
+		_orig_speed = speed
+		speed = _orig_speed * 1.15
+		anim.material = _star_material
 
-	anim.material = _star_material
-
-	# 1) exempt ONLY your body from colliding with zombies:
-	_zombie_exceptions.clear()
 	for z in get_tree().get_nodes_in_group("Zombie"):
-		if z is PhysicsBody2D:
+		if z is PhysicsBody2D and not _zombie_exceptions.has(z):
 			add_collision_exception_with(z)
 			_zombie_exceptions.append(z)
-
-	# 2) turn on the hitbox so it still overlaps zombies
 	hitbox.monitoring = true
 
-	# 3) wait out the duration
-	await get_tree().create_timer(duration).timeout
-
-	# ————— RESTORE SPEED —————
+func _on_star_timeout() -> void:
 	speed = _orig_speed
-
-	# 4) restore normal collisions
 	for z in _zombie_exceptions:
 		if is_instance_valid(z):
 			remove_collision_exception_with(z)
 	_zombie_exceptions.clear()
-
-	is_invincible     = false
-	star_damage       = 0
+	is_invincible = false
+	star_damage = 0
 	hitbox.monitoring = false
-	anim.material     = _default_material
-			
+	anim.material = _default_material
+				
 # --- New spawn functions ---
 
 func _spawn_dog() -> void:
@@ -400,16 +399,16 @@ func enable_homing_grenades(duration: float) -> void:
 	homing_mode = false
 
 func _on_level_changed(new_level: int) -> void:
-	# Example: reduce interval by 40% each level, to a floor of 0.1s
-	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.40, 1.0)
+	# Example: reduce interval by 50% each level, to a floor of 0.1s
+	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.50, 1.0)
 	firerate = initial_firerate * factor
 
-	# --- grenade cooldown reduction (10% per level, floor 20%) ---
+	# --- grenade cooldown reduction (20% per level, floor 20%) ---
 	var gren_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	grenade_cooldown = initial_grenade_cooldown * gren_factor
 	grenade_cooldown_timer.wait_time = grenade_cooldown
 
-	# --- mine cooldown reduction (10% per level, floor 20%) ---
+	# --- mine cooldown reduction (20% per level, floor 20%) ---
 	var mine_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	mine_cooldown = initial_mine_cooldown * mine_factor
 	mine_cooldown_timer.wait_time = mine_cooldown

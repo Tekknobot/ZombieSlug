@@ -74,7 +74,7 @@ func _explode() -> void:
 
 	# area‐damage
 	for z in get_tree().get_nodes_in_group("Zombie"):
-		if z.has_method("take_damage") and z.global_position.distance_to(global_position) < 64.0:
+		if z.has_method("take_damage") and z.global_position.distance_to(global_position) < 80.0:
 			z.take_damage(damage)
 
 	queue_free()

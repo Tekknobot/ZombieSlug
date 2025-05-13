@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export var xp_award: int         = 5
 @export var min_speed: float      = 25.0
 @export var max_speed: float      = 75.0
-@export var attack_range: float   = 32.0
+@export var attack_range: float   = 24.0
 @export var attack_damage: int    = 1
 @export var attack_cooldown: float= 0.2
 @export var max_health: int       = 5
@@ -146,7 +146,7 @@ func take_damage(amount: int = 1) -> void:
 			drop4.global_position.y -= 8
 			get_tree().get_current_scene().add_child(drop4)		
 
-		if randi() % 100 < 3:
+		if randi() % 100 < 10:
 			var drop5 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
 			drop5.global_position = global_position
 			drop5.global_position.y -= 8
@@ -204,24 +204,31 @@ func take_damage(amount: int = 1) -> void:
 		queue_free()
 
 func _die_cleanup() -> void:
-	# prevent any further damage calls
+	# 1) prevent any further _physics_process/attack logic
 	is_dead = true
 
-	# remove it from the "Zombie" group so spawners, storms, etc. skip it
+	# 2) remove from the “Zombie” group
 	remove_from_group("Zombie")
 
-	# turn off ALL collisions on the body
+	# 3) stop and tear down the attack timer so it never calls back
+	if attack_timer:
+		attack_timer.stop()
+		attack_timer.disconnect("timeout", Callable(self, "_on_attack_timeout"))
+		attack_timer.queue_free()
+
+	# 4) turn off ALL collisions on this body
 	collision_layer = 0
 	collision_mask  = 0
 
-	# disable every CollisionShape2D child
+	# 5) disable every CollisionShape2D child
 	for shape in get_children():
 		if shape is CollisionShape2D:
 			shape.disabled = true
 
-	# if you also have an Area2D hitbox, disable its monitoring
+	# 6) if you also have an Area2D hitbox, disable its monitoring
 	if has_node("Hitbox"):
 		$Hitbox.monitoring = false
+
 
 # Briefly tint the sprite red, then restore
 func flash() -> void:

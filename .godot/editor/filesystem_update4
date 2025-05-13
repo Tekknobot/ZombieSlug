@@ -16,3 +16,5 @@ res://Scripts/tnt_yellow_pickup.gd
 res://Scripts/zombie.gd
 res://Scenes/Sprites/tnt.tscn
 res://Scripts/tnt_yellow.gd
+res://Scenes/Effects/Explosion.tscn
+res://Scenes/Sprites/StarPickup.tscn
