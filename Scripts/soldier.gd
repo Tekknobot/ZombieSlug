@@ -93,6 +93,8 @@ var is_climbing: bool = false
 # how long we disable one-way before re-enabling
 const DROP_THROUGH_TIME := 0.4
 
+var on_roof: bool = false
+
 func _ready() -> void:	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
@@ -165,111 +167,125 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
-	# if they press Down + Jump while standing on a roof, drop through:
-	if is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down"):
+	# ——— Drop-through when pressing Down+Jump on a roof ———
+	if is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down") and on_roof:
 		_drop_through_roofs()
-		return   # skip the rest so gravity applies next frame
+		return
 
 	# ——— Ladder climbing override ———
 	if on_ladder:
-		# start or stop climbing based on Up/Down
 		if Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down"):
 			is_climbing = true
+		else:
+			is_climbing = false
 
 		if is_climbing:
-			# lock X, move Y
 			velocity.x = 0
-			velocity.y = ( Input.get_action_strength("ui_down")
-						  - Input.get_action_strength("ui_up") ) * climb_speed
-
-			# play climb anim or idle
+			velocity.y = (Input.get_action_strength("ui_down")
+						 - Input.get_action_strength("ui_up")) * climb_speed
 			if velocity.y != 0:
 				anim.play("climb")
 			else:
 				anim.play("climb_idle")
-
 			move_and_slide()
-		
-	# ————— AIR DASH —————
+			return
+
+	# ——— Air dash ———
 	if is_dashing:
 		velocity = dash_dir * dash_speed
 		move_and_slide()
 		_spawn_afterimage()
 		return
 
-	# when in the air and Attack is pressed, dash instead of firing
 	if not is_on_floor() and Input.is_action_just_pressed("attack") and can_dash:
+		var dash_input = Vector2(
+			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+			Input.get_action_strength("ui_down")  - Input.get_action_strength("ui_up")
+		)
+		if dash_input == Vector2.ZERO:
+			dash_input = Vector2.UP
+		dash_input = dash_input.normalized()
 		_start_dash()
 		return
 
-	# on ground, Attack works normally
+	# ——— Ground attack ———
 	if is_on_floor() and Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
 
-	# kick off a dash
+	# ——— Kick off an air dash via button ———
 	if Input.is_action_just_pressed("dash") and can_dash and not is_on_floor():
+		var dash_input = Vector2(
+			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+			Input.get_action_strength("ui_down")  - Input.get_action_strength("ui_up")
+		)
+		if dash_input == Vector2.ZERO:
+			dash_input = Vector2.UP
+		dash_input = dash_input.normalized()
 		_start_dash()
-		
-	# Dog spawn on left
-	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped():
+
+	# ——— Spawns blocked on roofs ———
+	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped() and not on_roof:
 		_spawn_dog()
 		dog_cooldown_timer.start()
 
-	# Merc spawn on right
-	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped():
+	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped() and not on_roof:
 		_spawn_merc()
 		merc_cooldown_timer.start()
 
-	# (The rest of your gravity/attack/movement code stays exactly the same…)
+	# ——— Movement, gravity, other attacks ———
 	velocity.y += gravity * delta
 
-	# trigger attack if the player hits “attack” and we're off‐cooldown
 	if Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
 
 	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
-		# only throw if we have grenades left
 		if Playerstats.use_grenade():
 			_throw_grenade()
 			grenade_cooldown_timer.start()
 		else:
-			$EmptyClickSfx.play()   # optional “out of ammo” sound
+			empty_sfx.play()
 
-	if is_on_floor() and Input.is_action_just_pressed("mine") and mine_cooldown_timer.is_stopped():
+	if is_on_floor() and Input.is_action_just_pressed("mine") and mine_cooldown_timer.is_stopped() and not on_roof:
 		if Playerstats.use_mine():
 			_drop_mine()
 			mine_cooldown_timer.start()
 		else:
-			$EmptyClickSfx.play()
-		
-	var can_move := not is_attacking or not is_on_floor()
-	var dir: float = 0.0
+			empty_sfx.play()
+
+	var can_move = not is_attacking or not is_on_floor()
+	var dir = 0.0
 	if can_move:
 		dir = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-		velocity.x = dir * speed
-	else:
-		velocity.x = 0
+	velocity.x = dir * speed
 
 	if dir != 0 and can_move:
 		facing_right = dir > 0
-		anim.flip_h  = facing_right
-		var abs_off: float = abs(muzzle_point.position.x)
+		anim.flip_h = facing_right
+		var abs_off = abs(muzzle_point.position.x)
 		if facing_right:
 			muzzle_point.position.x = abs_off
 		else:
 			muzzle_point.position.x = -abs_off
 
 	if can_move and is_on_floor() and Input.is_action_just_pressed("jump"):
-		# play jump sound
 		jump_sfx.play()
-		
 		velocity.y = jump_velocity
 
 	self.velocity = velocity
 	move_and_slide()
 
+	# ——— Detect if standing on a Roof collider ———
+	on_roof = false
+	if is_on_floor():
+		for i in range(get_slide_collision_count()):
+			var col = get_slide_collision(i)
+			if col and col.get_collider().is_in_group("Roof"):
+				on_roof = true
+				break
+
+	# ——— Ground snap & animations ———
 	if is_on_floor() and abs(velocity.y) < 1:
-		velocity.y      = 0
+		velocity.y = 0
 		self.velocity.y = 0
 
 	if not is_attacking:
