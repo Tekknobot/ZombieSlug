@@ -94,6 +94,7 @@ var is_climbing: bool = false
 const DROP_THROUGH_TIME := 0.4
 
 var on_roof: bool = false
+var _left_roof: bool = false
 
 func _ready() -> void:	
 	#Place elswhere when needed
@@ -270,9 +271,12 @@ func _physics_process(delta: float) -> void:
 	if can_move and is_on_floor() and Input.is_action_just_pressed("jump"):
 		jump_sfx.play()
 		velocity.y = jump_velocity
-
+		
 	self.velocity = velocity
 	move_and_slide()
+
+	# While in the air.
+	_left_roof = true	
 
 	# ——— Detect if standing on a Roof collider ———
 	on_roof = false
@@ -281,6 +285,7 @@ func _physics_process(delta: float) -> void:
 			var col = get_slide_collision(i)
 			if col and col.get_collider().is_in_group("Roof"):
 				on_roof = true
+				_left_roof = false
 				break
 
 	# ——— Ground snap & animations ———
@@ -396,7 +401,7 @@ func apply_star(duration: float, damage: int) -> void:
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
-	# position in front of player
+	# position…
 	var x_off = abs(muzzle_point.position.x)
 	dog.global_position = Vector2(
 		global_position.x - x_off,
@@ -404,13 +409,11 @@ func _spawn_dog() -> void:
 	)
 	get_tree().get_current_scene().add_child(dog)
 
-	# if we spawned on a roof, ignore collisions with all roof bodies
-	if on_roof:
-		for roof in get_tree().get_nodes_in_group("Roof"):
-			if roof is PhysicsBody2D:
-				dog.add_collision_exception_with(roof)
+	# 🚩 only ignore roof collisions here
+	if on_roof or _left_roof:
+		_add_roof_exceptions(dog)
 
-	# rest of your existing setup…
+	# also avoid dog vs merc collisions
 	for m in get_tree().get_nodes_in_group("Merc"):
 		if m is PhysicsBody2D:
 			dog.add_collision_exception_with(m)
@@ -420,7 +423,7 @@ func _spawn_dog() -> void:
 func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
-	# position in front of player
+	# position…
 	var x_off = abs(muzzle_point.position.x)
 	merc.global_position = Vector2(
 		global_position.x + x_off,
@@ -428,19 +431,22 @@ func _spawn_merc() -> void:
 	)
 	get_tree().get_current_scene().add_child(merc)
 
-	# if we spawned on a roof, ignore collisions with all roof bodies
-	if on_roof:
-		for roof in get_tree().get_nodes_in_group("Roof"):
-			if roof is PhysicsBody2D:
-				merc.add_collision_exception_with(roof)
+	# 🚩 only ignore roof collisions here
+	if on_roof or _left_roof:
+		_add_roof_exceptions(merc)
 
-	# rest of your existing setup…
+	# also avoid merc vs dog collisions
 	for d in get_tree().get_nodes_in_group("Dog"):
 		if d is PhysicsBody2D:
 			merc.add_collision_exception_with(d)
 			d.add_collision_exception_with(merc)
 	_fade_and_free(merc, 5.0, 1.0)
 
+func _add_roof_exceptions(body: PhysicsBody2D) -> void:
+	for roof in get_tree().get_nodes_in_group("Roof"):
+		if roof is PhysicsBody2D:
+			body.add_collision_exception_with(roof)
+			
 # Fades out a CanvasItem over `fade_time` seconds after a `delay`, then frees it.
 func _fade_and_free(node: CanvasItem, delay: float, fade_time: float) -> void:
 	var tw = get_tree().create_tween()
