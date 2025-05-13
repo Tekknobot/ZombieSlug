@@ -3,7 +3,7 @@ extends Area2D
 @export var duration:            float = 5.0   # total seconds storm lasts
 @export var interval:            float = 1.0   # seconds between volleys
 @export var strikes_per_interval: int   = 3    # how many bolts each volley
-@export var damage:              int   = 3    # damage per bolt
+@export var damage:              int   = 9999    # damage per bolt
 
 # wiggle params
 @export var wiggle_angle: float = 10.0  # degrees either side

@@ -28,3 +28,4 @@ res://Scripts/merc.gd
 res://Scripts/OrbitalStrikeController.gd
 res://Scripts/FirestormController.gd
 res://Scripts/dog.gd
+res://Scripts/lightning_pickup.gd
