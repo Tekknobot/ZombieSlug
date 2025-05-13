@@ -29,3 +29,5 @@ res://Scripts/OrbitalStrikeController.gd
 res://Scripts/FirestormController.gd
 res://Scripts/dog.gd
 res://Scripts/lightning_pickup.gd
+res://Scenes/Sprites/bullet.tscn
+res://Scripts/bullet.gd

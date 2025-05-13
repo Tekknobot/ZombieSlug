@@ -1,11 +1,12 @@
-VBoxContainer
-Node2D
+VisibleOnScreenNotifier2D
+AnimatedSprite2D
 CollisionShape2D
+Node2D
+VBoxContainer
 StaticBody2D
 Area2D
 RayCast2D
 CharacterBody2D
-AnimatedSprite2D
 AudioStreamPlayer2D
 CPUParticles2D
 TextureRect
