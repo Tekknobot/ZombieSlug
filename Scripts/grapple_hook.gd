@@ -79,10 +79,16 @@ func _on_end_body_entered(body: Node) -> void:
 		latch(last_pt, body as Node2D)
 
 func _physics_process(delta):
+	# — bail out if rope isn’t active or muzzle/player has been freed —
 	if not rope_active:
 		return
-
-	# allow “mine” to finish off a hooked zombie
+	if not is_instance_valid(muzzle) or not is_instance_valid(player):
+		# clean up so we don’t keep crashing
+		rope_active = false
+		queue_free()
+		return
+		
+	# 0) allow “mine” to finish off a hooked zombie
 	if hook_target and Input.is_action_just_pressed("mine"):
 		if hook_target.has_method("take_damage"):
 			hook_target.take_damage(player.mine_damage)
@@ -102,7 +108,7 @@ func _physics_process(delta):
 
 	# 3) pin end
 	var last_idx = points.size() - 1
-	if hook_target:
+	if hook_target and is_instance_valid(hook_target):
 		points[last_idx] = hook_target.global_position + latch_offset
 	elif not dangling:
 		points[last_idx] = hook_pos
