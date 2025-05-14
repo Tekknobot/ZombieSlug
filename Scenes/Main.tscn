@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=45 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://bwniodxwhoe8c" path="res://Scenes/Sprites/ladder.tscn" id="1_aa7xg"]
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
@@ -24,8 +24,9 @@
 [ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
-[ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="13_uw5wu"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
+[ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
+[ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="26_6i0e4"]
 [ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="26_rksku"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n51e"]
@@ -7343,9 +7344,9 @@ theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "MINES: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("13_uw5wu")
 autoplay = true
-parameters/looping = true
+script = ExtResource("25_te7ld")
+tracks = Array[AudioStream]([ExtResource("26_6i0e4")])
 
 [node name="HelicopterSpawner" type="Node2D" parent="."]
 position = Vector2(0, -129)

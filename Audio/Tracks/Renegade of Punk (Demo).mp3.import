@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dp7f86701wogu"
+path="res://.godot/imported/Renegade of Punk (Demo).mp3-d47ac459fa7d023fc43452672fd41a2c.mp3str"
+
+[deps]
+
+source_file="res://Audio/Tracks/Renegade of Punk (Demo).mp3"
+dest_files=["res://.godot/imported/Renegade of Punk (Demo).mp3-d47ac459fa7d023fc43452672fd41a2c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -27,7 +27,7 @@ GameOverManager="*res://Scenes/game_over_manager.tscn"
 
 [display]
 
-window/size/mode=3
+window/size/mode=2
 window/stretch/mode="viewport"
 
 [input]

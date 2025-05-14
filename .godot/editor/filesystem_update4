@@ -1,10 +1,9 @@
-res://Scenes/Sprites/grapple_hook.tscn
+res://Scenes/Main.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Shaders/star_effect.gdshader
 res://Shaders/StarEffect.tres
-res://Scenes/Main.tscn
 res://Scenes/Sprites/hud.tscn
 res://Scenes/Sprites/soldier.tscn
 res://Scenes/Sprites/zombie.tscn
-res://Scripts/grapple_hook.gd
-res://Scripts/soldier.gd
+res://Scenes/Sprites/grapple_hook.tscn
+res://Scripts/music_random.gd
