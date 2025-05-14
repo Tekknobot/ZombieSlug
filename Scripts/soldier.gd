@@ -134,6 +134,7 @@ func _ready() -> void:
 	Playerstats.health     = max_health
 	Playerstats.xp         = 0
 	Playerstats.kills      = 0
+	Playerstats.level      = 1
 
 	health = max_health
 	print("Soldier health set to", health)
@@ -173,6 +174,9 @@ func _ready() -> void:
 	_star_timer.one_shot = true
 	add_child(_star_timer)
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
+
+	await get_tree().create_timer(1).timeout
+	_on_level_changed(Playerstats.level)
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -498,11 +502,10 @@ func enable_homing_grenades(duration: float) -> void:
 	homing_mode = false
 
 func _on_level_changed(new_level: int) -> void:
-	# reduce by 25% per level, but never below 0.1s
-	var min_factor = 0.01 / initial_firerate
-	var factor = clamp(1.0 - (new_level - 1) * 0.25, min_factor, 1.0)
+	# reduce by 15% per level, but never below 0.1s
+	var min_factor = 0.1 / initial_firerate
+	var factor = clamp(1.0 - (new_level - 1) * 0.15, min_factor, 1.0)
 	firerate = initial_firerate * factor
-
 
 	# --- grenade cooldown reduction (20% per level, floor 20%) ---
 	var gren_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)

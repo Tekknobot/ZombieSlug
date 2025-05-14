@@ -46,7 +46,10 @@ func spawn_zombie() -> void:
 
 	var lvl = Playerstats.level
 	if lvl > 1 and z.has_method("take_damage"):
-		z.max_health += 2 * (lvl - 1)
+		# grow health by 10% each level (compounds)
+		var base = z.max_health
+		var scale = pow(1.45, lvl - 1)      # 1.10 == +10% per level
+		z.max_health = int(base * scale)
 		z.health     = z.max_health
 
 	if not z.is_in_group("Zombie"):

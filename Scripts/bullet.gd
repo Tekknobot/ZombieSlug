@@ -37,7 +37,8 @@ func _on_zombie_hit(zombie: Node) -> void:
 	print("✅ Hit zombie:", zombie.name)
 
 	if zombie.has_method("take_damage"):
-		var dmg: int = 1 + (stats.level - 1)
+		# linear curve: level 1→1dmg, 2→2dmg, 3→3dmg, …
+		var dmg: int = stats.level
 		zombie.take_damage(dmg)
 		print("Called take_damage on", zombie.name, "for", dmg)
 
