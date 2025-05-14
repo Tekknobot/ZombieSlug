@@ -95,9 +95,16 @@ const DROP_THROUGH_TIME := 0.4
 
 @export var extra_spawn_offset: float = 16.0  # tweak-able in the inspector
 
-
 var on_roof: bool = false
 var _left_roof: bool = false
+
+# -- near your other exports --
+@export var dog_base_damage: int          = 3
+@export var dog_damage_per_level: int     = 1
+@export var merc_base_damage: int         = 5
+@export var merc_damage_per_level: int    = 2
+
+const CLIMB_DEADZONE: float = 0.2
 
 func _ready() -> void:	
 	#Place elswhere when needed
@@ -178,22 +185,27 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Ladder climbing override ———
 	if on_ladder:
-		if Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down"):
-			is_climbing = true
-		else:
-			is_climbing = false
+		var up_strength   = Input.get_action_strength("ui_up")
+		var down_strength = Input.get_action_strength("ui_down")
+
+		# only climb if input exceeds deadzone
+		is_climbing = (up_strength > CLIMB_DEADZONE or down_strength > CLIMB_DEADZONE)
 
 		if is_climbing:
 			velocity.x = 0
-			velocity.y = (Input.get_action_strength("ui_down")
-						 - Input.get_action_strength("ui_up")) * climb_speed
-			if velocity.y != 0:
-				anim.play("move")
+
+			# apply only one direction
+			if up_strength > CLIMB_DEADZONE:
+				velocity.y = -climb_speed
+			elif down_strength > CLIMB_DEADZONE:
+				velocity.y = climb_speed
 			else:
-				anim.play("move")
+				velocity.y = 0
+
+			anim.play("move")
 			move_and_slide()
 			return
-
+			
 	# ——— Air dash ———
 	if is_dashing:
 		velocity = dash_dir * dash_speed
@@ -405,6 +417,11 @@ func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
 
+	# assign damage based on level
+	var lvl = Playerstats.level
+	if dog.has_meta("damage"):
+		dog.damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
+
 	# combine muzzle_point offset with your extra offset
 	var base_off = abs(muzzle_point.position.x)
 	var x_off = base_off + extra_spawn_offset
@@ -428,6 +445,10 @@ func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
 
+	var lvl = Playerstats.level
+	if merc.has_meta("damage"):
+		merc.damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
+		
 	var base_off = abs(muzzle_point.position.x)
 	var x_off = base_off + extra_spawn_offset
 
@@ -477,9 +498,11 @@ func enable_homing_grenades(duration: float) -> void:
 	homing_mode = false
 
 func _on_level_changed(new_level: int) -> void:
-	# Example: reduce interval by 50% each level, to a floor of 0.1s
-	var factor = clamp(1.0 - (new_level - 1) * 0.50, 0.50, 1.0)
+	# reduce by 25% per level, but never below 0.1s
+	var min_factor = 0.01 / initial_firerate
+	var factor = clamp(1.0 - (new_level - 1) * 0.25, min_factor, 1.0)
 	firerate = initial_firerate * factor
+
 
 	# --- grenade cooldown reduction (20% per level, floor 20%) ---
 	var gren_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
@@ -508,6 +531,16 @@ func _on_level_changed(new_level: int) -> void:
 	speed = base_speed + speed_increase_per_lvl * (new_level - 1)
 	speed = clamp(speed, base_speed, max_speed)
 	print("Level ", new_level, " → player speed: ", speed)
+
+	# buff all live dogs:
+	for d in get_tree().get_nodes_in_group("Dog"):
+		if d.has_meta("damage"):
+			d.damage = dog_base_damage + (new_level - 1) * dog_damage_per_level
+	# buff all live mercs:
+	for m in get_tree().get_nodes_in_group("Merc"):
+		if m.has_meta("damage"):
+			m.damage = merc_base_damage + (new_level - 1) * merc_damage_per_level
+
 
 	print("Level ", new_level, 
 		  " → mine cooldown: ", mine_cooldown)
