@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1vog1y8slig"]
+
+[ext_resource type="Script" path="res://Scripts/grapple_hook.gd" id="1_h1p7l"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ol8hp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r03wb"]
+
+[node name="GrappleHook" type="Area2D"]
+script = ExtResource("1_h1p7l")
+point_count = 16
+rope_length = 160.0
+rope_width = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ol8hp")
+
+[node name="EndDetector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndDetector"]
+shape = SubResource("CircleShape2D_r03wb")
+
+[node name="ReelSprite" type="Sprite2D" parent="."]

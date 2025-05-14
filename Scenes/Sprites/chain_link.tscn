@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://24k0uyesgdki"]
+
+[ext_resource type="Texture2D" uid="uid://7i40iwrvw3av" path="res://Scenes/Sprites/soldier/hook/chainlink.png" id="1_7hb8i"]
+
+[node name="ChainLink" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_7hb8i")

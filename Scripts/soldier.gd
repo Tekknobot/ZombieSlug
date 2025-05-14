@@ -105,6 +105,7 @@ var _left_roof: bool = false
 @export var merc_damage_per_level: int    = 2
 
 const CLIMB_DEADZONE: float = 0.2
+const GrappleScene = preload("res://Scenes/Sprites/grapple_hook.tscn")
 
 func _ready() -> void:	
 	#Place elswhere when needed
@@ -181,7 +182,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
+	
+	# ——— Roof‐only grapple override ———
+	if on_roof:
+		if Input.is_action_just_pressed("mine"):
+			_shoot_grapple()
+			return
+			
 	# ——— Drop-through when pressing Down+Jump on a roof ———
 	if is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down") and on_roof:
 		_drop_through_roofs()
@@ -662,3 +669,10 @@ func _drop_mine() -> void:
 	m.damage = mine_damage
 	get_tree().get_current_scene().add_child(m)
 	print("💣 Dropped mine at", m.global_position)
+
+func _shoot_grapple() -> void:
+	var hook = GrappleScene.instantiate()
+	hook.global_position = muzzle_point.global_position
+	hook.player = self
+	hook.rope_active = true
+	get_tree().get_current_scene().add_child(hook)
