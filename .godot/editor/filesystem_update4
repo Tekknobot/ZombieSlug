@@ -42,3 +42,4 @@ res://Scripts/spore_patch.gd
 res://Scenes/Effects/Rain_system.scn
 res://Scripts/playerstats.gd
 res://Scripts/zombie_spawner.gd
+res://Scenes/Sprites/dog.tscn

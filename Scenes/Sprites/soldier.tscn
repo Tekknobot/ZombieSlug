@@ -207,7 +207,6 @@ mine_cooldown = 1.0
 initial_grenade_damage = 2
 initial_mine_damage = 2
 dash_speed = 400.0
-extra_spawn_offset = 8.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")

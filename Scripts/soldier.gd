@@ -100,7 +100,7 @@ var _left_roof: bool = false
 
 # -- near your other exports --
 @export var dog_base_damage: int          = 3
-@export var dog_damage_per_level: int     = 1
+@export var dog_damage_per_level: int     = 2
 @export var merc_base_damage: int         = 5
 @export var merc_damage_per_level: int    = 2
 
@@ -443,7 +443,12 @@ func _spawn_dog() -> void:
 		if m is PhysicsBody2D:
 			dog.add_collision_exception_with(m)
 			m.add_collision_exception_with(dog)
-	_fade_and_free(dog, 5.0, 1.0)
+
+	var base_duration = 5.0
+	var extra_per_level = 1.0
+	var life_delay = base_duration + (lvl - 1) * extra_per_level
+			
+	_fade_and_free(dog, life_delay, 1.0)
 
 func _spawn_merc() -> void:
 	merc_sfx.play()
@@ -469,7 +474,12 @@ func _spawn_merc() -> void:
 		if d is PhysicsBody2D:
 			merc.add_collision_exception_with(d)
 			d.add_collision_exception_with(merc)
-	_fade_and_free(merc, 5.0, 1.0)
+
+	var base_duration = 5.0
+	var extra_per_level = 1.0
+	var life_delay = base_duration + (lvl - 1) * extra_per_level
+		
+	_fade_and_free(merc, life_delay, 1.0)
 
 func _add_roof_exceptions(body: PhysicsBody2D) -> void:
 	for roof in get_tree().get_nodes_in_group("Roof"):
