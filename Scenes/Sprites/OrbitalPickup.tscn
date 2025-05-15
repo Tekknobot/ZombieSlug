@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
 size = Vector2(14, 14)
 
-[node name="Node2D" type="Area2D"]
+[node name="Node2D" type="Area2D" groups=["Pickup"]]
 script = ExtResource("1_grptj")
 sfx_stream = ExtResource("3_73w8p")
 

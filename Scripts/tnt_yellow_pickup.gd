@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 
 @export var amount:      int   = 3     # how many grenades this gives
 @export var wiggle_angle: float = 10.0  # max degrees to each side
@@ -13,7 +13,6 @@ extends Area2D
 var _time: float = 0.0
 
 func _ready() -> void:
-	monitoring = true
 	connect("body_entered", Callable(self, "_on_body_entered"))
 	set_process(true)
 

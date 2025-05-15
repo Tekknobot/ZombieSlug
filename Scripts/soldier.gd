@@ -135,7 +135,7 @@ func _ready() -> void:
 	Playerstats.health     = max_health
 	Playerstats.xp         = 0
 	Playerstats.kills      = 0
-	Playerstats.level      = 10
+	Playerstats.level      = 1
 
 	health = max_health
 	print("Soldier health set to", health)
