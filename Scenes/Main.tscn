@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=45 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://bwniodxwhoe8c" path="res://Scenes/Sprites/ladder.tscn" id="1_aa7xg"]
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
@@ -23,7 +23,6 @@
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="8_4q5fy"]
 [ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
-[ext_resource type="PackedScene" uid="uid://c1kasuwd185cp" path="res://Scenes/Sprites/DashAfterImage.tscn" id="10_htdt5"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
@@ -7147,26 +7146,7 @@ shake_magnitude = 4.0
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, 35)
 base_speed = 60.0
-speed_increase_per_lvl = 10.0
-max_speed = 100.0
 initial_firerate = 1.0
-gravity = 900.0
-max_health = 5
-initial_grenade_cooldown = 1
-grenade_cooldown = 1.0
-mine_offset = 16.0
-dash_time = 0.2
-dash_cooldown = 0.3
-dash_afterimage_sc = ExtResource("10_htdt5")
-shock_radius = 150.0
-shock_damage = 9999
-shock_knockback = 300.0
-shock_cooldown = 1.0
-initial_shocks = 5
-climb_speed = 80.0
-extra_spawn_offset = 16.0
-dog_base_damage = 3
-merc_base_damage = 5
 
 [node name="CloudsMover1" type="Node2D" parent="."]
 position = Vector2(0, -129)
