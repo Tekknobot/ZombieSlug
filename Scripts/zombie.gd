@@ -114,7 +114,6 @@ func take_damage(amount: int = 1) -> void:
 		return
 
 	hit_sfx.play()
-
 	flash()  # your red‐flash helper
 
 	health -= amount
@@ -122,97 +121,54 @@ func take_damage(amount: int = 1) -> void:
 
 	if health <= 0:
 		is_dead = true
-		
+
 		# 1) award kill + XP
 		Playerstats.add_kill(xp_award)
-		
+
 		death_sfx.play()
-		
-		# after awarding the kill...
-		if randi() % 100 < 5:
-			var drop = preload("res://Scenes/Sprites/TNTPickup.tscn").instantiate()
-			drop.global_position = global_position
-			drop.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop)	
-		
-		if randi() % 100 < 5:
-			var drop2 = preload("res://Scenes/Sprites/MinePickup.tscn").instantiate()
-			drop2.global_position = global_position
-			drop2.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop2)		
 
-		if randi() % 100 < 2.5:
-			var drop3 = preload("res://Scenes/Sprites/HealthPickup.tscn").instantiate()
-			drop3.global_position = global_position
-			drop3.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop3)		
-		
-		if randi() % 100 < 1.5:
-			var drop4 = preload("res://Scenes/Sprites/LightningPickup.tscn").instantiate()
-			drop4.global_position = global_position
-			drop4.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop4)		
+		# 2) Define your pickups and their relative weights (including a “nothing” entry)
+		var drops = [
+			{ "scene": null,                                                   "weight": 40.0 },  # 40% nothing
+			{ "scene": preload("res://Scenes/Sprites/TNTPickup.tscn"),          "weight": 4.0  },
+			{ "scene": preload("res://Scenes/Sprites/TNT_YellowPickup.tscn"),   "weight": 4.0  },
+			{ "scene": preload("res://Scenes/Sprites/MinePickup.tscn"),         "weight": 4.0  },
+			{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 2.5  },
+			{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 2.5 },			
+			{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 1  },
+			{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 1  },
+			{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 1  },
+			{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 1  },
+		]
 
-		if randi() % 100 < 5:
-			var drop5 = preload("res://Scenes/Sprites/StarPickup.tscn").instantiate()
-			drop5.global_position = global_position
-			drop5.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop5)		
-			
-		if randi() % 100 < 1.5:
-			var drop6 = preload("res://Scenes/Sprites/FirestormPickup.tscn").instantiate()
-			drop6.global_position = global_position
-			drop6.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop6)		
-			
-		if randi() % 100 < 1.5:
-			var drop7 = preload("res://Scenes/Sprites/FreezePickup.tscn").instantiate()
-			drop7.global_position = global_position
-			drop7.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop7)		
+		# 3) Sum weights
+		var total_weight = 0.0
+		for drop in drops:
+			total_weight += drop.weight
 
-		if randi() % 100 < 1.5:
-			var drop8 = preload("res://Scenes/Sprites/BulletPickup.tscn").instantiate()
-			drop8.global_position = global_position
-			drop8.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop8)		
+		# 4) Pick one based on weights
+		var r = randf() * total_weight
+		for drop in drops:
+			r -= drop.weight
+			if r <= 0:
+				if drop.scene != null:
+					var instance = drop.scene.instantiate()
+					instance.global_position = global_position
+					instance.global_position.y -= 8
+					get_tree().get_current_scene().add_child(instance)
+				break
 
-		if randi() % 100 < 1.5:
-			var drop9 = preload("res://Scenes/Sprites/TimeWarpPickup.tscn").instantiate()
-			drop9.global_position = global_position
-			drop9.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop9)		
-
-		if randi() % 100 < 1.5:
-			var drop10 = preload("res://Scenes/Sprites/OrbitalPickup.tscn").instantiate()
-			drop10.global_position = global_position
-			drop10.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop10)		
-		
-		if randi() % 100 < 5:
-			var drop11 = preload("res://Scenes/Sprites/TNT_YellowPickup.tscn").instantiate()
-			drop11.global_position = global_position
-			drop11.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop11)	
-
-		if randi() % 100 < 5:
-			var drop12 = preload("res://Scenes/Sprites/SporePickup.tscn").instantiate()
-			drop12.global_position = global_position
-			drop12.global_position.y -= 8
-			get_tree().get_current_scene().add_child(drop12)	
-		
-				
-		# 1) award kill + XP, play effects, drop pickups, etc.
-		is_dead = true
+		# 5) cleanup and death effects
 		_die_cleanup()
 		$Blood.emitting = true
 		Playerstats.add_kill(xp_award)
 		death_sfx.play()
 
-		# emit our new died signal, passing the world position
 		emit_signal("died", global_position)
-		
-		# 2) play death anim, wait, then free
+
 		anim.play("death")
 		await get_tree().create_timer(3).timeout
 		queue_free()

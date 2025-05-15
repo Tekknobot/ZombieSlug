@@ -7,3 +7,6 @@ res://Scenes/Sprites/soldier.tscn
 res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/grapple_hook.tscn
 res://Scripts/music_random.gd
+res://Scripts/zombie.gd
+res://Scripts/zombie_spawner.gd
+res://Scripts/soldier.gd

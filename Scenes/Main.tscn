@@ -7190,6 +7190,15 @@ spawn_distance = 600.0
 boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
 
+[node name="Point" type="Node2D" parent="ZombieSpawner"]
+position = Vector2(-109, 42)
+
+[node name="Point2" type="Node2D" parent="ZombieSpawner"]
+position = Vector2(-20, 42)
+
+[node name="Point3" type="Node2D" parent="ZombieSpawner"]
+position = Vector2(158, 42)
+
 [node name="HUD" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)

@@ -1,3 +1,5 @@
+# Attach this script to an AudioStreamPlayer node
+
 extends AudioStreamPlayer2D
 
 @export var tracks: Array[AudioStream] = []  # assign your audio files in the Inspector

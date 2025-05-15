@@ -135,7 +135,7 @@ func _ready() -> void:
 	Playerstats.health     = max_health
 	Playerstats.xp         = 0
 	Playerstats.kills      = 0
-	Playerstats.level      = 1
+	Playerstats.level      = 10
 
 	health = max_health
 	print("Soldier health set to", health)
@@ -519,7 +519,7 @@ func enable_homing_grenades(duration: float) -> void:
 	homing_mode = false
 
 func _on_level_changed(new_level: int) -> void:
-	# reduce by 15% per level, but never below 0.1s
+	# reduce cooldown by 15% per level, but never below 0.1s
 	var min_factor = 0.1 / initial_firerate
 	var factor = clamp(1.0 - (new_level - 1) * 0.15, min_factor, 1.0)
 	firerate = initial_firerate * factor
