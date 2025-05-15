@@ -177,7 +177,7 @@ func _ready() -> void:
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(10)
+	Playerstats.set_level(1)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -430,8 +430,8 @@ func _spawn_dog() -> void:
 
 	# assign damage based on level
 	var lvl = Playerstats.level
-	if dog.has_meta("damage"):
-		dog.damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
+	if dog.has_meta("attack_damage"):
+		dog.attack_damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
 
 	# combine muzzle_point offset with your extra offset
 	var base_off = abs(muzzle_point.position.x)
@@ -462,8 +462,8 @@ func _spawn_merc() -> void:
 	var merc = MercScene.instantiate() as PhysicsBody2D
 
 	var lvl = Playerstats.level
-	if merc.has_meta("damage"):
-		merc.damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
+	if merc.has_meta("attack_damage"):
+		merc.attack_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
 		
 	var base_off = abs(muzzle_point.position.x)
 	var x_off = base_off + extra_spawn_offset

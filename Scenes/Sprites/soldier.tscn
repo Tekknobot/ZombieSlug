@@ -207,6 +207,8 @@ mine_cooldown = 1.0
 initial_grenade_damage = 2
 initial_mine_damage = 2
 dash_speed = 400.0
+dog_damage_per_level = 5
+merc_damage_per_level = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")
