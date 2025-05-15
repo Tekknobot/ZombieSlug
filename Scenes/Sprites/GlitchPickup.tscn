@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8tuyvivdge6c"]
+
+[ext_resource type="Script" path="res://Scripts/glitch_pickup.gd" id="1_8x53f"]
+[ext_resource type="Texture2D" uid="uid://cwhlkcvy6bsuf" path="res://Assets/Items/glitch_drop.png" id="2_2i6qm"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_4guso"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Aread2D" type="Area2D" groups=["Pickup"]]
+script = ExtResource("1_8x53f")
+amount = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2i6qm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_4guso")

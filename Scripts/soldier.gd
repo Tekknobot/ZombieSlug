@@ -41,6 +41,15 @@ var mine_damage: int
 @export var dash_cooldown:       float        = 0.3    # time before you can dash again
 @export var dash_afterimage_sc:  PackedScene = preload("res://Scenes/Sprites/DashAfterImage.tscn")
 
+@export var shock_radius:       float = 150.0  # how far down it hits
+@export var shock_damage:      int   = 9999     # flat damage to each zombie
+@export var shock_knockback:   float = 300.0  # impulse strength
+@export var shock_cooldown:    float = 1.0   # seconds between uses
+@export var initial_shocks: int = 5       # start with 5 shocks
+var shocks: int                          # runtime count
+
+var shock_timer: Timer
+
 var homing_mode: bool = false
 
 var can_dash:     bool     = true
@@ -76,6 +85,9 @@ var merc_cooldown_timer: Timer
 
 @onready var hitbox          := $Hitbox as Area2D
 @onready var _star_timer := Timer.new()
+
+const ShockEffectScene = preload("res://Scenes/Sprites/shock_effect.tscn")
+@onready var shock_effect = ShockEffectScene.instantiate()
 
 var _default_material:Material
 var _star_material:ShaderMaterial  # assign this in _ready()
@@ -166,6 +178,11 @@ func _ready() -> void:
 	mine_cooldown_timer.one_shot  = true
 	add_child(mine_cooldown_timer)
 	
+	shock_timer = Timer.new()
+	shock_timer.wait_time = shock_cooldown
+	shock_timer.one_shot  = true
+	add_child(shock_timer)	
+
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
 	
 	grenade_damage = initial_grenade_damage
@@ -176,13 +193,20 @@ func _ready() -> void:
 	add_child(_star_timer)
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
 
+	shocks = initial_shocks
+	add_child(shock_effect)
+	shock_effect.visible = false
+
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(1)
+	Playerstats.set_level(10)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-	
+
+	if on_roof and Input.is_action_just_pressed("shock") and shock_timer.is_stopped():
+		_perform_roof_shock()
+			
 	# ——— Roof‐only grapple override ———
 	if on_roof:
 		if Input.is_action_just_pressed("mine"):
@@ -675,3 +699,34 @@ func _shoot_grapple() -> void:
 	hook.player = self
 	hook.rope_active = true
 	get_tree().get_current_scene().add_child(hook)
+
+func _perform_roof_shock() -> void:
+	if Playerstats.shocks <= 0:
+		empty_sfx.play()    # or some “no ammo” feedback
+		return
+
+	Playerstats.use_shock()
+
+	shock_timer.start()
+	shock_effect.visible = true
+	var mat = shock_effect.get_node("ColorRect").material as ShaderMaterial
+	mat.set_shader_parameter("time",             0.0)
+	mat.set_shader_parameter("glitch_intensity", 0.3)
+	mat.set_shader_parameter("glitch_speed",     5.0)
+	mat.set_shader_parameter("slice_count",      50.0)
+
+	var tw = create_tween()
+	tw.tween_property(mat, "shader_parameter/time", 1.0, 0.5)
+	tw.tween_callback(Callable(self, "_hide_shock_effect"))
+
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if not (z is CharacterBody2D) or not is_instance_valid(z):
+			continue
+		var to_z = z.global_position - global_position
+		if to_z.length() <= shock_radius:
+			if z.has_method("take_damage"):
+				z.take_damage(shock_damage)
+			z.velocity = to_z.normalized() * shock_knockback
+
+func _hide_shock_effect() -> void:
+	shock_effect.visible = false

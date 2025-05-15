@@ -1,22 +1,21 @@
-# res://Scripts/PlayerStats.gd
 extends Node
 class_name PlayerStats
 
-@export var max_health: int = 5       # Player's maximum health
-@export var xp_base: int      = 200   # Base XP required per level
-@export var initial_grenades: int = 5 # ← start with 5 TNT
-@export var initial_mines:    int = 5 # ← start with 5 mines
+@export var max_health: int       = 5       # Player's maximum health
+@export var xp_base: int          = 200     # Base XP required per level
+@export var initial_grenades: int = 5       # start with 5 TNT
+@export var initial_mines: int    = 5       # start with 5 mines
+@export var initial_shocks: int   = 5       # start with 5 roof shocks
 
 # Runtime stats
-var health:   int
-var xp:       int
-var kills:    int
-var level:    int
-var grenades: int
-var mines:    int
-
-# Track current XP needed for next levelar xp_needed: int
-var xp_needed
+var health:    int
+var xp:        int
+var kills:     int
+var level:     int
+var grenades:  int
+var mines:     int
+var shocks:    int
+var xp_needed: int                 # XP required for next level
 
 # Signals for UI updates
 signal health_changed(new_health: int)
@@ -26,6 +25,7 @@ signal kills_changed(new_kills: int)
 signal level_changed(new_level: int)
 signal grenades_changed(new_grenades: int)
 signal mines_changed(new_mines: int)
+signal shocks_changed(new_shocks: int)
 
 func _ready() -> void:
 	# Initialize default values
@@ -35,10 +35,11 @@ func _ready() -> void:
 	level    = 1
 	grenades = initial_grenades
 	mines    = initial_mines
-	
-	# Compute and store XP needed for next level
+	shocks   = initial_shocks
+
+	# Compute XP needed for next level
 	xp_needed = xp_to_next_level()
-	
+
 	# Emit initial signals so UI can populate
 	emit_signal("health_changed", health)
 	emit_signal("xp_changed", xp)
@@ -47,6 +48,19 @@ func _ready() -> void:
 	emit_signal("level_changed", level)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
+	emit_signal("shocks_changed", shocks)
+
+func xp_to_next_level() -> int:
+	return xp_base * level
+
+func _level_up() -> void:
+	level += 1
+	max_health += 2
+	health = max_health
+	xp_needed = xp_to_next_level()
+	emit_signal("level_changed", level)
+	emit_signal("health_changed", health)
+	emit_signal("xp_needed_changed", xp_needed)
 
 # Apply damage to player
 func damage(amount: int) -> void:
@@ -56,13 +70,9 @@ func damage(amount: int) -> void:
 # Gain XP and handle level-up
 func add_xp(amount: int) -> void:
 	xp += amount
-	
-	# Check for level-ups
 	while xp >= xp_to_next_level():
 		xp -= xp_to_next_level()
 		_level_up()
-	
-	# update XP needed after changes
 	xp_needed = xp_to_next_level()
 	emit_signal("xp_changed", xp)
 	emit_signal("xp_needed_changed", xp_needed)
@@ -73,37 +83,17 @@ func add_kill(xp_award: int = 1) -> void:
 	emit_signal("kills_changed", kills)
 	add_xp(xp_award)
 
-# Calculate XP needed for next level
-func xp_to_next_level() -> int:
-	return xp_base * level
-
-# Internal: level-up logic
-func _level_up() -> void:
-	level += 1
-	max_health += 2
-	health = max_health
-	
-	# update XP needed for new level
-	xp_needed = xp_to_next_level()
-	emit_signal("level_changed", level)
-	emit_signal("health_changed", health)
-	emit_signal("xp_needed_changed", xp_needed)
-
+# Reset all stats to initial values
 func reset_stats() -> void:
 	Engine.time_scale = 1
-	
-	# Reset runtime values
 	health   = max_health
 	xp       = 0
 	kills    = 0
 	level    = 1
 	grenades = initial_grenades
 	mines    = initial_mines
-	
-	# Recompute XP needed
+	shocks   = initial_shocks
 	xp_needed = xp_to_next_level()
-	
-	# Emit signals so UI updates
 	emit_signal("health_changed", health)
 	emit_signal("xp_changed", xp)
 	emit_signal("xp_needed_changed", xp_needed)
@@ -111,6 +101,7 @@ func reset_stats() -> void:
 	emit_signal("level_changed", level)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
+	emit_signal("shocks_changed", shocks)
 
 # Use and modify ammo counts
 func use_grenade() -> bool:
@@ -127,35 +118,34 @@ func use_mine() -> bool:
 		return true
 	return false
 
-func add_grenade(amount: int = 1) -> void:
+func use_shock() -> bool:
+	if shocks > 0:
+		shocks -= 1
+		emit_signal("shocks_changed", shocks)
+		return true
+	return false
+
+func add_grenades(amount: int = 1) -> void:
 	grenades += amount
 	emit_signal("grenades_changed", grenades)
 
-func add_mine(amount: int = 1) -> void:
+func add_mines(amount: int = 1) -> void:
 	mines += amount
 	emit_signal("mines_changed", mines)
 
-func add_grenades(amount: int) -> void:
-	grenades += amount
-	emit_signal("grenades_changed", grenades)
+func add_shock(amount: int = 1) -> void:
+	shocks += amount
+	emit_signal("shocks_changed", shocks)
 
-func add_mines(amount: int) -> void:
-	mines += amount
-	emit_signal("mines_changed", mines)
-
-# Call this to instantly bump to `target_level`
+# Instantly bump to a target level for testing
 func set_level(target_level: int) -> void:
 	if target_level <= level:
 		return
-	# Back up your current xp & kills if you care, then clear xp so you don't auto-level again
 	xp = 0
 	kills = 0
-	# Level up until you hit the desired level
 	while level < target_level:
 		_level_up()
-	# Recompute xp_needed for UI
 	xp_needed = xp_to_next_level()
-	# Emit all the signals so HUD/UI redraws
 	emit_signal("level_changed", level)
 	emit_signal("xp_changed", xp)
 	emit_signal("xp_needed_changed", xp_needed)
@@ -163,3 +153,4 @@ func set_level(target_level: int) -> void:
 	emit_signal("kills_changed", kills)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
+	emit_signal("shocks_changed", shocks)

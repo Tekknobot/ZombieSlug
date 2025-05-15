@@ -137,7 +137,7 @@ func _physics_process(delta):
 	# Update end detector and target position
 	var last_pt = points[last_idx]
 	end_detector.global_position = last_pt
-	if hook_target:
+	if hook_target and is_instance_valid(hook_target):
 		hook_target.global_position = last_pt - latch_offset
 
 	queue_redraw()

@@ -11,6 +11,7 @@ extends CanvasLayer
 
 @onready var tnt_label    = $TopLeft/Bumpers/TNT    as RichTextLabel
 @onready var mines_label  = $TopLeft/Bumpers/MINES  as RichTextLabel
+@onready var shock_label = $TopLeft/Bumpers/SHOCK as RichTextLabel
 
 var level_names := [
 	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Conqueror",
@@ -38,6 +39,10 @@ func _ready() -> void:
 
 	tnt_label.text        = "TNT: %d"    % stats.grenades
 	mines_label.text      = "MINES: %d"  % stats.mines
+	shock_label.text     = "GLITCH: %d" % stats.shocks
+
+	# connect the new signal:
+	stats.connect("shocks_changed", Callable(self, "_on_shocks_changed"))
 
 	# connect
 	stats.connect("kills_changed",   Callable(self, "_on_kills_changed"))
@@ -76,3 +81,6 @@ func _on_grenades_changed(g):
 
 func _on_mines_changed(m):
 	mines_label.text = "MINES: %d" % m
+
+func _on_shocks_changed(s: int) -> void:
+	shock_label.text = "GLITCH: %d" % s

@@ -33,3 +33,9 @@ res://Scripts/tnt_pickup.gd
 res://Scripts/playerstats.gd
 res://Scenes/Sprites/dog.tscn
 res://Scenes/Sprites/merc.tscn
+res://Shaders/distort_effect.gdshader
+res://Scenes/Sprites/shock_effect.tscn
+res://Scripts/hud.gd
+res://Scenes/Sprites/GlitchPickup.tscn
+res://Scripts/glitch_pickup.gd
+res://Scenes/Sprites/tnt.tscn

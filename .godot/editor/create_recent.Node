@@ -1,3 +1,5 @@
+ColorRect
+CanvasLayer
 Area2D
 Node2D
 CollisionShape2D
@@ -11,4 +13,3 @@ CPUParticles2D
 VisibleOnScreenNotifier2D
 AnimatedSprite2D
 VBoxContainer
-StaticBody2D
