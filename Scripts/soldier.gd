@@ -73,13 +73,14 @@ var is_dead:       bool = false
 var dog_cooldown_timer: Timer
 var merc_cooldown_timer: Timer
 
-@onready var dog_sfx      := $DogSfx       as AudioStreamPlayer2D
-@onready var merc_sfx     := $MercSfx      as AudioStreamPlayer2D
-@onready var jump_sfx     := $JumpSfx      as AudioStreamPlayer2D
-@onready var hurt_sfx     := $HurtSfx      as AudioStreamPlayer2D
-@onready var levelup_sfx     := $LevelUpSfx      as AudioStreamPlayer2D
-@onready var empty_sfx     := $EmptyClickSfx      as AudioStreamPlayer2D
-@onready var dash_sfx     := $DashSfx      as AudioStreamPlayer2D
+@onready var dog_sfx      := $DogSfx          as AudioStreamPlayer2D
+@onready var merc_sfx     := $MercSfx         as AudioStreamPlayer2D
+@onready var jump_sfx     := $JumpSfx         as AudioStreamPlayer2D
+@onready var hurt_sfx     := $HurtSfx         as AudioStreamPlayer2D
+@onready var levelup_sfx  := $LevelUpSfx      as AudioStreamPlayer2D
+@onready var empty_sfx    := $EmptyClickSfx   as AudioStreamPlayer2D
+@onready var dash_sfx     := $DashSfx         as AudioStreamPlayer2D
+@onready var panther_sfx  := $PantherSfx      as AudioStreamPlayer2D
 
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
@@ -230,24 +231,18 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Summon Dog or Mech ———
 	if Input.is_action_just_pressed("dog"):
-		# 1) if up is held, try to spawn the mech
 		if Input.is_action_pressed("ui_up") and mech_cooldown_timer.is_stopped():
 			_spawn_mech()
 			mech_cooldown_timer.start()
-
-		# 2) otherwise fall back to a normal dog spawn
 		elif dog_cooldown_timer.is_stopped():
 			_spawn_dog()
 			dog_cooldown_timer.start()
 
-	# ——— Summon Merc or Mech ———
+	# ——— Summon Merc or Mech Panther ———
 	if Input.is_action_just_pressed("merc"):
-		# 1) if up is held, try to spawn the mech
 		if Input.is_action_pressed("ui_up") and mech_panther_cooldown_timer.is_stopped():
 			_spawn_mech_panther()
-			mech_cooldown_timer.start()
-
-		# 2) otherwise fall back to a normal dog spawn
+			mech_panther_cooldown_timer.start()
 		elif merc_cooldown_timer.is_stopped():
 			_spawn_merc()
 			merc_cooldown_timer.start()
@@ -492,9 +487,19 @@ func apply_star(duration: float, damage: int) -> void:
 					
 # --- New spawn functions ---
 
+### Helper to prevent collisions between all ally summons
+func _add_ally_exceptions(body: PhysicsBody2D) -> void:
+	for grp in ["Dog", "Merc", "Mech", "MechPanther"]:
+		for other in get_tree().get_nodes_in_group(grp):
+			if other is PhysicsBody2D and other != body:
+				body.add_collision_exception_with(other)
+				other.add_collision_exception_with(body)
+
+### Spawn Dog
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
+	dog.add_to_group("Dog")
 
 	# assign damage based on level
 	var lvl = Playerstats.level
@@ -514,25 +519,23 @@ func _spawn_dog() -> void:
 	if on_roof or _left_roof:
 		_add_roof_exceptions(dog)
 
-	for m in get_tree().get_nodes_in_group("Merc"):
-		if m is PhysicsBody2D:
-			dog.add_collision_exception_with(m)
-			m.add_collision_exception_with(dog)
+	_add_ally_exceptions(dog)
 
 	var base_duration = 5.0
 	var extra_per_level = 1.0
 	var life_delay = base_duration + (lvl - 1) * extra_per_level
-			
 	_fade_and_free(dog, life_delay, 1.0)
 
+### Spawn Merc
 func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
+	merc.add_to_group("Merc")
 
 	var lvl = Playerstats.level
 	if merc.has_meta("attack_damage"):
 		merc.attack_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
-		
+
 	var base_off = abs(muzzle_point.position.x)
 	var x_off = base_off + extra_spawn_offset
 
@@ -545,20 +548,19 @@ func _spawn_merc() -> void:
 	if on_roof or _left_roof:
 		_add_roof_exceptions(merc)
 
-	for d in get_tree().get_nodes_in_group("Dog"):
-		if d is PhysicsBody2D:
-			merc.add_collision_exception_with(d)
-			d.add_collision_exception_with(merc)
+	_add_ally_exceptions(merc)
 
 	var base_duration = 5.0
 	var extra_per_level = 1.0
 	var life_delay = base_duration + (lvl - 1) * extra_per_level
-		
 	_fade_and_free(merc, life_delay, 1.0)
 
+### Spawn Mech
 func _spawn_mech() -> void:
 	# instantiate mech
+	merc_sfx.play()
 	var mech = MechScene.instantiate() as PhysicsBody2D
+	mech.add_to_group("Mech")
 	var lvl = Playerstats.level
 
 	# scale its damage by level
@@ -574,101 +576,70 @@ func _spawn_mech() -> void:
 	if not facing_right:
 		dir = -1
 
-	# position mech in front of player
 	mech.global_position = Vector2(
 		global_position.x + dir * x_off,
 		global_position.y + muzzle_point.position.y
 	)
+	get_tree().get_current_scene().add_child(mech)
 
 	# flip its sprite to match player
 	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	# if player is facing right, mech should face right (flip_h = false)
-	# if player is facing left, mech should face left (flip_h = true)
 	if facing_right:
 		sprite.flip_h = false
 	else:
 		sprite.flip_h = true
 
-	# add to scene
-	get_tree().get_current_scene().add_child(mech)
-
-	# roof collision exceptions
 	if on_roof or _left_roof:
 		_add_roof_exceptions(mech)
 
-	# avoid colliding with other summons
-	for other in get_tree().get_nodes_in_group("Dog"):
-		if other is PhysicsBody2D:
-			mech.add_collision_exception_with(other)
-			other.add_collision_exception_with(mech)
-	for other in get_tree().get_nodes_in_group("Merc"):
-		if other is PhysicsBody2D:
-			mech.add_collision_exception_with(other)
-			other.add_collision_exception_with(mech)
+	_add_ally_exceptions(mech)
 
-	# give it a timed lifespan
-	var base_duration   = 8.0
+	var base_duration = 8.0
 	var extra_per_level = 2.0
-	var life_time       = base_duration + (lvl - 1) * extra_per_level
+	var life_time = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(mech, life_time, 1.0)
 
+### Spawn Mech Panther
 func _spawn_mech_panther() -> void:
-	# instantiate mech
-	var mech = MechScene_Panther.instantiate() as PhysicsBody2D
+	# instantiate mech panther
+	panther_sfx.play()
+	var pan = MechScene_Panther.instantiate() as PhysicsBody2D
+	pan.add_to_group("MechPanther")
 	var lvl = Playerstats.level
 
 	# scale its damage by level
-	if mech.has_meta("attack_damage"):
-		mech.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
+	if pan.has_meta("attack_damage"):
+		pan.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
 
 	# compute horizontal offset
 	var base_off = abs(muzzle_point.position.x)
 	var x_off = base_off + extra_spawn_offset
 
-	# pick direction multiplier without ternary
 	var dir = 1
 	if not facing_right:
 		dir = -1
 
-	mech.global_position = Vector2(
+	pan.global_position = Vector2(
 		global_position.x - x_off,
 		global_position.y + muzzle_point.position.y
 	)
-	get_tree().get_current_scene().add_child(mech)
+	get_tree().get_current_scene().add_child(pan)
 
-
-	# flip its sprite to match player
-	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	# if player is facing right, mech should face right (flip_h = false)
-	# if player is facing left, mech should face left (flip_h = true)
+	var sprite = pan.get_node("AnimatedSprite2D") as AnimatedSprite2D
 	if facing_right:
 		sprite.flip_h = false
 	else:
 		sprite.flip_h = true
 
-	# add to scene
-	get_tree().get_current_scene().add_child(mech)
-
-	# roof collision exceptions
 	if on_roof or _left_roof:
-		_add_roof_exceptions(mech)
+		_add_roof_exceptions(pan)
 
-	# avoid colliding with other summons
-	for other in get_tree().get_nodes_in_group("Dog"):
-		if other is PhysicsBody2D:
-			mech.add_collision_exception_with(other)
-			other.add_collision_exception_with(mech)
-	for other in get_tree().get_nodes_in_group("Merc"):
-		if other is PhysicsBody2D:
-			mech.add_collision_exception_with(other)
-			other.add_collision_exception_with(mech)
+	_add_ally_exceptions(pan)
 
-	# give it a timed lifespan
-	var base_duration   = 8.0
+	var base_duration = 8.0
 	var extra_per_level = 2.0
-	var life_time       = base_duration + (lvl - 1) * extra_per_level
-	_fade_and_free(mech, life_time, 1.0)
-
+	var life_time = base_duration + (lvl - 1) * extra_per_level
+	_fade_and_free(pan, life_time, 1.0)
 
 func _add_roof_exceptions(body: PhysicsBody2D) -> void:
 	for roof in get_tree().get_nodes_in_group("Roof"):
