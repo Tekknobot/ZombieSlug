@@ -177,8 +177,8 @@ func _ready() -> void:
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
 
 	await get_tree().create_timer(1).timeout
-	_on_level_changed(Playerstats.level)
-
+	Playerstats.set_level(10)
+	
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
@@ -560,7 +560,6 @@ func _on_level_changed(new_level: int) -> void:
 	for m in get_tree().get_nodes_in_group("Merc"):
 		if m.has_meta("damage"):
 			m.damage = merc_base_damage + (new_level - 1) * merc_damage_per_level
-
 
 	print("Level ", new_level, 
 		  " → mine cooldown: ", mine_cooldown)

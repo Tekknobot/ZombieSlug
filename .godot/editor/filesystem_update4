@@ -30,3 +30,4 @@ res://Scenes/Sprites/TimeWarpPickup.tscn
 res://Scenes/Sprites/TNTPickup.tscn
 res://Scripts/tnt_yellow_pickup.gd
 res://Scripts/tnt_pickup.gd
+res://Scripts/playerstats.gd

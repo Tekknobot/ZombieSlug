@@ -142,3 +142,24 @@ func add_grenades(amount: int) -> void:
 func add_mines(amount: int) -> void:
 	mines += amount
 	emit_signal("mines_changed", mines)
+
+# Call this to instantly bump to `target_level`
+func set_level(target_level: int) -> void:
+	if target_level <= level:
+		return
+	# Back up your current xp & kills if you care, then clear xp so you don't auto-level again
+	xp = 0
+	kills = 0
+	# Level up until you hit the desired level
+	while level < target_level:
+		_level_up()
+	# Recompute xp_needed for UI
+	xp_needed = xp_to_next_level()
+	# Emit all the signals so HUD/UI redraws
+	emit_signal("level_changed", level)
+	emit_signal("xp_changed", xp)
+	emit_signal("xp_needed_changed", xp_needed)
+	emit_signal("health_changed", health)
+	emit_signal("kills_changed", kills)
+	emit_signal("grenades_changed", grenades)
+	emit_signal("mines_changed", mines)
