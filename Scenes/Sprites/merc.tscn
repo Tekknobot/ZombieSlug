@@ -193,6 +193,7 @@ script = ExtResource("1_qdyaa")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_4d2hf")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
+animation = &"attack"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
