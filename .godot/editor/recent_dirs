@@ -1,6 +1,7 @@
+res://Scripts/meks
+res://Scripts
 /Users/machome/Godot/_Builds/Zombie Heaven
 /Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
-res://Scripts
 res://Scenes/Sprites
 res://Scenes/Effects
 res://Projectiles/tnt_yellow
@@ -19,4 +20,3 @@ res://Scenes/Sprites/soldier/attack
 res://Portraits
 res://UI
 res://Projectiles/tnt
-res://Scenes/Sprites/rambo

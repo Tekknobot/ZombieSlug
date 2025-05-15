@@ -116,6 +116,19 @@ var _left_roof: bool = false
 @export var merc_base_damage: int         = 5
 @export var merc_damage_per_level: int    = 2
 
+const MechScene = preload("res://Scenes/Meks_Scenes/PLAYER/M1.scn")
+const MechScene_Panther = preload("res://Scenes/Meks_Scenes/PLAYER/M2.scn")
+
+@export var mech_cooldown: float         = 10.0
+@export var mech_base_damage: int       = 10
+@export var mech_damage_per_level: int  = 5
+var mech_cooldown_timer: Timer
+
+@export var mech_panther_cooldown: float         = 10.0
+@export var mech_panther_base_damage: int       = 10
+@export var mech_panther_damage_per_level: int  = 5
+var mech_panther_cooldown_timer: Timer
+
 const CLIMB_DEADZONE: float = 0.2
 const GrappleScene = preload("res://Scenes/Sprites/grapple_hook.tscn")
 
@@ -183,6 +196,17 @@ func _ready() -> void:
 	shock_timer.one_shot  = true
 	add_child(shock_timer)	
 
+	mech_cooldown_timer = Timer.new()
+	mech_cooldown_timer.wait_time = mech_cooldown
+	mech_cooldown_timer.one_shot  = true
+	add_child(mech_cooldown_timer)
+
+	mech_panther_cooldown_timer = Timer.new()
+	mech_panther_cooldown_timer.wait_time = mech_cooldown
+	mech_panther_cooldown_timer.one_shot  = true
+	add_child(mech_panther_cooldown_timer)
+
+
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
 	
 	grenade_damage = initial_grenade_damage
@@ -203,6 +227,30 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+
+	# ——— Summon Dog or Mech ———
+	if Input.is_action_just_pressed("dog"):
+		# 1) if up is held, try to spawn the mech
+		if Input.is_action_pressed("ui_up") and mech_cooldown_timer.is_stopped():
+			_spawn_mech()
+			mech_cooldown_timer.start()
+
+		# 2) otherwise fall back to a normal dog spawn
+		elif dog_cooldown_timer.is_stopped():
+			_spawn_dog()
+			dog_cooldown_timer.start()
+
+	# ——— Summon Merc or Mech ———
+	if Input.is_action_just_pressed("merc"):
+		# 1) if up is held, try to spawn the mech
+		if Input.is_action_pressed("ui_up") and mech_panther_cooldown_timer.is_stopped():
+			_spawn_mech_panther()
+			mech_cooldown_timer.start()
+
+		# 2) otherwise fall back to a normal dog spawn
+		elif merc_cooldown_timer.is_stopped():
+			_spawn_merc()
+			merc_cooldown_timer.start()
 
 	if on_roof and Input.is_action_just_pressed("shock") and shock_timer.is_stopped():
 		_perform_roof_shock()
@@ -275,10 +323,6 @@ func _physics_process(delta: float) -> void:
 		_start_dash()
 
 	# ——— Spawns ———
-	if Input.is_action_just_pressed("dog") and dog_cooldown_timer.is_stopped():
-		_spawn_dog()
-		dog_cooldown_timer.start()
-
 	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped():
 		_spawn_merc()
 		merc_cooldown_timer.start()
@@ -512,6 +556,120 @@ func _spawn_merc() -> void:
 		
 	_fade_and_free(merc, life_delay, 1.0)
 
+func _spawn_mech() -> void:
+	# instantiate mech
+	var mech = MechScene.instantiate() as PhysicsBody2D
+	var lvl = Playerstats.level
+
+	# scale its damage by level
+	if mech.has_meta("attack_damage"):
+		mech.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
+
+	# compute horizontal offset
+	var base_off = abs(muzzle_point.position.x)
+	var x_off = base_off + extra_spawn_offset
+
+	# pick direction multiplier without ternary
+	var dir = 1
+	if not facing_right:
+		dir = -1
+
+	# position mech in front of player
+	mech.global_position = Vector2(
+		global_position.x + dir * x_off,
+		global_position.y + muzzle_point.position.y
+	)
+
+	# flip its sprite to match player
+	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	# if player is facing right, mech should face right (flip_h = false)
+	# if player is facing left, mech should face left (flip_h = true)
+	if facing_right:
+		sprite.flip_h = false
+	else:
+		sprite.flip_h = true
+
+	# add to scene
+	get_tree().get_current_scene().add_child(mech)
+
+	# roof collision exceptions
+	if on_roof or _left_roof:
+		_add_roof_exceptions(mech)
+
+	# avoid colliding with other summons
+	for other in get_tree().get_nodes_in_group("Dog"):
+		if other is PhysicsBody2D:
+			mech.add_collision_exception_with(other)
+			other.add_collision_exception_with(mech)
+	for other in get_tree().get_nodes_in_group("Merc"):
+		if other is PhysicsBody2D:
+			mech.add_collision_exception_with(other)
+			other.add_collision_exception_with(mech)
+
+	# give it a timed lifespan
+	var base_duration   = 8.0
+	var extra_per_level = 2.0
+	var life_time       = base_duration + (lvl - 1) * extra_per_level
+	_fade_and_free(mech, life_time, 1.0)
+
+func _spawn_mech_panther() -> void:
+	# instantiate mech
+	var mech = MechScene_Panther.instantiate() as PhysicsBody2D
+	var lvl = Playerstats.level
+
+	# scale its damage by level
+	if mech.has_meta("attack_damage"):
+		mech.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
+
+	# compute horizontal offset
+	var base_off = abs(muzzle_point.position.x)
+	var x_off = base_off + extra_spawn_offset
+
+	# pick direction multiplier without ternary
+	var dir = 1
+	if not facing_right:
+		dir = -1
+
+	mech.global_position = Vector2(
+		global_position.x - x_off,
+		global_position.y + muzzle_point.position.y
+	)
+	get_tree().get_current_scene().add_child(mech)
+
+
+	# flip its sprite to match player
+	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	# if player is facing right, mech should face right (flip_h = false)
+	# if player is facing left, mech should face left (flip_h = true)
+	if facing_right:
+		sprite.flip_h = false
+	else:
+		sprite.flip_h = true
+
+	# add to scene
+	get_tree().get_current_scene().add_child(mech)
+
+	# roof collision exceptions
+	if on_roof or _left_roof:
+		_add_roof_exceptions(mech)
+
+	# avoid colliding with other summons
+	for other in get_tree().get_nodes_in_group("Dog"):
+		if other is PhysicsBody2D:
+			mech.add_collision_exception_with(other)
+			other.add_collision_exception_with(mech)
+	for other in get_tree().get_nodes_in_group("Merc"):
+		if other is PhysicsBody2D:
+			mech.add_collision_exception_with(other)
+			other.add_collision_exception_with(mech)
+
+	# give it a timed lifespan
+	var base_duration   = 8.0
+	var extra_per_level = 2.0
+	var life_time       = base_duration + (lvl - 1) * extra_per_level
+	_fade_and_free(mech, life_time, 1.0)
+
+
 func _add_roof_exceptions(body: PhysicsBody2D) -> void:
 	for roof in get_tree().get_nodes_in_group("Roof"):
 		if roof is PhysicsBody2D:
@@ -584,6 +742,11 @@ func _on_level_changed(new_level: int) -> void:
 	for m in get_tree().get_nodes_in_group("Merc"):
 		if m.has_meta("damage"):
 			m.damage = merc_base_damage + (new_level - 1) * merc_damage_per_level
+
+	# buff all live mechs:
+	for m in get_tree().get_nodes_in_group("Mech"):
+		if m.has_meta("attack_damage"):
+			m.attack_damage = mech_base_damage + (new_level - 1) * mech_damage_per_level
 
 	print("Level ", new_level, 
 		  " → mine cooldown: ", mine_cooldown)

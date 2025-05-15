@@ -168,7 +168,7 @@ sprite_frames = SubResource("SpriteFrames_yp3ch")
 animation = &"attack"
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Zombie"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
 shape = SubResource("CircleShape2D_n5t24")
 

@@ -9,3 +9,7 @@ res://Scenes/Sprites/hud.tscn
 res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/dog.tscn
 res://Scenes/Sprites/merc.tscn
+res://Scenes/Meks_Scenes/PLAYER/M1.scn
+res://Scripts/meks/m_1.gd
+res://Scenes/Meks_Scenes/PLAYER/M2.scn
+res://Scripts/meks/m_2.gd
