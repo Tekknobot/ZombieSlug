@@ -20,3 +20,7 @@ res://Scripts/time_warp_pickup.gd
 res://Scripts/tnt_pickup.gd
 res://Scripts/tnt_yellow_pickup.gd
 res://Scripts/soldier.gd
+res://Scripts/bullet_pickup.gd
+res://Scripts/firestorm_pickup.gd
+res://Scripts/freeze_pickup.gd
+res://Scripts/glitch_pickup.gd

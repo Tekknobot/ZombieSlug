@@ -37,6 +37,6 @@ func _on_body_entered(body: Node) -> void:
 
 		# give the player shocks
 		Playerstats.add_shock(amount)
-		Playerstats.currency += 1
+		Playerstats.add_currency(10)
 
 		queue_free()

@@ -46,6 +46,6 @@ func _on_body_entered(body: Node) -> void:
 	ctrl.damage              = damage
 	get_tree().get_current_scene().add_child(ctrl)
 
-	Playerstats.currency += 1
+	Playerstats.add_currency(10)
 	
 	queue_free()
