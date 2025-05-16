@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://mmhaqmvnwmyf"]
+
+[ext_resource type="Script" path="res://UI/shop_ui.gd" id="1_hfpgg"]
+[ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="2_w8yy6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_06x2b"]
+bg_color = Color(0.0676867, 0.0670771, 0.0618145, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[node name="ShopUI" type="CanvasLayer"]
+script = ExtResource("1_hfpgg")
+font = ExtResource("2_w8yy6")
+font_size = 64
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 410.0
+offset_top = 189.0
+offset_right = 450.0
+offset_bottom = 229.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_06x2b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+offset_left = 19.0
+offset_top = 6.0
+offset_right = 20.0
+offset_bottom = 33.0
+
+[node name="ShopName" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrencyLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="UpgradesContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2

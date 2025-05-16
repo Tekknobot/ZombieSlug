@@ -43,4 +43,6 @@ func _on_body_entered(body: Node) -> void:
 		if body.has_method("enable_homing_grenades"):
 			body.enable_homing_grenades(homing_duration)
 
+		Playerstats.add_currency(10)
+
 		queue_free()

@@ -34,4 +34,6 @@ func _on_body_entered(body: Node) -> void:
 	if body.has_method("apply_star"):
 		body.apply_star(duration, damage)
 
+	Playerstats.add_currency(10)
+
 	queue_free()

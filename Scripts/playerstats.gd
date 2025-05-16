@@ -23,9 +23,12 @@ signal xp_changed(new_xp: int)
 signal xp_needed_changed(new_xp_needed: int)
 signal kills_changed(new_kills: int)
 signal level_changed(new_level: int)
+signal currency_changed(new_currency: int)
 signal grenades_changed(new_grenades: int)
 signal mines_changed(new_mines: int)
 signal shocks_changed(new_shocks: int)
+
+var currency = 1000
 
 func _ready() -> void:
 	# Initialize default values
@@ -46,6 +49,7 @@ func _ready() -> void:
 	emit_signal("xp_needed_changed", xp_needed)
 	emit_signal("kills_changed", kills)
 	emit_signal("level_changed", level)
+	emit_signal("currency_changed", currency)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
 	emit_signal("shocks_changed", shocks)
@@ -99,6 +103,7 @@ func reset_stats() -> void:
 	emit_signal("xp_needed_changed", xp_needed)
 	emit_signal("kills_changed", kills)
 	emit_signal("level_changed", level)
+	emit_signal("currency_changed", currency)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
 	emit_signal("shocks_changed", shocks)
@@ -137,6 +142,17 @@ func add_shock(amount: int = 1) -> void:
 	shocks += amount
 	emit_signal("shocks_changed", shocks)
 
+func use_currency(amount: int) -> bool:
+	if currency >= amount:
+		currency -= amount
+		emit_signal("currency_changed", currency)
+		return true
+	return false
+
+func add_currency(amount: int) -> void:
+	currency += amount
+	emit_signal("currency_changed", currency)
+
 # Instantly bump to a target level for testing
 func set_level(target_level: int) -> void:
 	if target_level <= level:
@@ -151,6 +167,7 @@ func set_level(target_level: int) -> void:
 	emit_signal("xp_needed_changed", xp_needed)
 	emit_signal("health_changed", health)
 	emit_signal("kills_changed", kills)
+	emit_signal("currency_changed", currency)
 	emit_signal("grenades_changed", grenades)
 	emit_signal("mines_changed", mines)
 	emit_signal("shocks_changed", shocks)

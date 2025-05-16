@@ -45,5 +45,6 @@ func _on_body_entered(body: Node) -> void:
 
 	# heal via negative damage
 	Playerstats.damage(-amount)
+	Playerstats.add_currency(10)
 
 	queue_free()

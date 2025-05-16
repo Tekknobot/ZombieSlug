@@ -33,5 +33,6 @@ func _on_body_entered(body: Node) -> void:
 	var ctrl = OrbitalController.new()
 	ctrl.sfx_stream = sfx_stream
 	get_tree().get_current_scene().add_child(ctrl)
+	Playerstats.add_currency(10)
 
 	queue_free()

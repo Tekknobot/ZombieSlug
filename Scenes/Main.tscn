@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=48 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://bwniodxwhoe8c" path="res://Scenes/Sprites/ladder.tscn" id="1_aa7xg"]
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
@@ -28,6 +28,8 @@
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
 [ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="26_6i0e4"]
 [ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="26_rksku"]
+[ext_resource type="Script" path="res://UI/shop_trigger.gd" id="29_bfhrc"]
+[ext_resource type="PackedScene" uid="uid://mmhaqmvnwmyf" path="res://UI/shop_ui.tscn" id="30_4rxpf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n51e"]
 size = Vector2(1, 31)
@@ -111,6 +113,8 @@ bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
 bg_color = Color(1, 1, 0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d2peu"]
 
 [node name="Level" type="Node2D"]
 
@@ -7334,11 +7338,17 @@ texture = ExtResource("5_rbj0p")
 
 [node name="Bumpers" type="VBoxContainer" parent="HUD/TopLeft"]
 layout_mode = 0
-offset_left = 258.5
+offset_left = 259.0
 offset_top = 47.0
-offset_right = 308.5
-offset_bottom = 75.0
+offset_right = 329.0
+offset_bottom = 81.0
 theme_override_constants/separation = -10
+
+[node name="CURRENCY" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
+custom_minimum_size = Vector2(50, 16)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("7_vaiej")
+text = "CURRENCY: 5"
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 16)
@@ -7359,7 +7369,7 @@ theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "GLITCH: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
-autoplay = true
+volume_db = -80.0
 script = ExtResource("25_te7ld")
 tracks = Array[AudioStream]([ExtResource("26_6i0e4")])
 
@@ -7369,3 +7379,14 @@ script = ExtResource("23_vhlg4")
 
 [node name="ParticleSystem" parent="." instance=ExtResource("26_rksku")]
 position = Vector2(0, -381)
+
+[node name="Shop" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui")]
+position = Vector2(-109, 11)
+script = ExtResource("29_bfhrc")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shop"]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_d2peu")
+
+[node name="ShopUI" parent="." instance=ExtResource("30_4rxpf")]

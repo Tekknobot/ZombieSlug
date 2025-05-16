@@ -37,5 +37,6 @@ func _on_body_entered(body: Node) -> void:
 
 		# give the player grenades
 		Playerstats.add_mines(amount)
+		Playerstats.add_currency(10)
 
 		queue_free()

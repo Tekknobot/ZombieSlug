@@ -47,5 +47,7 @@ func _on_body_entered(body: Node) -> void:
 	cloud.duration = gas_duration
 	cloud.dps = gas_dps
 	get_tree().get_current_scene().add_child(cloud)
+	
+	Playerstats.add_currency(10)
 
 	queue_free()

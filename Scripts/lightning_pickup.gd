@@ -36,4 +36,6 @@ func _on_body_entered(body: Node) -> void:
 		var ctrl = LightningController.new()
 		get_tree().get_current_scene().add_child(ctrl)
 		ctrl.start(duration, interval, strikes_per_interval, damage)
+		Playerstats.add_currency(10)
+
 		queue_free()

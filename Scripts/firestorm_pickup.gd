@@ -37,4 +37,7 @@ func _on_body_entered(body: Node) -> void:
 		ctrl.radius                 = radius
 		ctrl.sfx_stream             = sfx_stream
 		get_tree().get_current_scene().add_child(ctrl)
+	
+		Playerstats.currency += 1
+
 		queue_free()

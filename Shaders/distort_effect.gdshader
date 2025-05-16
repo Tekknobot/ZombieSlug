@@ -18,19 +18,19 @@ void fragment() {
     vec2 uv = SCREEN_UV;
     vec2 px = SCREEN_PIXEL_SIZE;                  // one pixel in UV
     vec2 vp = vec2(1.0/px.x, 1.0/px.y);            // viewport size in pixels
-    
+
     // compute screen-space position
     vec2 screen_pos = uv * vp;
     float dist = distance(screen_pos, center);
-    
+
     // default sample
     vec4 base_col = texture(screen_texture, uv);
-    
+
     // if outside radius, just output normal
     if (dist > radius) {
         COLOR = base_col;
     }
-    
+
     // inside shock radius: apply glitch
     float t = time * glitch_speed;
     float slice = floor(uv.y * slice_count);
@@ -39,15 +39,15 @@ void fragment() {
         float wave = sin(t * 10.0 + slice) * glitch_intensity * 0.05;
         glitch_uv.x += wave;
     }
-    
+
     // sample glitch color
     vec4 col = texture(screen_texture, glitch_uv);
-    
+
     // RGB split
     float shift = glitch_intensity * 0.02;
     float r = texture(screen_texture, glitch_uv + vec2( shift, 0.0)).r;
     float g = col.g;
     float b = texture(screen_texture, glitch_uv - vec2( shift, 0.0)).b;
-    
+
     COLOR = vec4(r, g, b, col.a);
 }

@@ -9,9 +9,10 @@ extends CanvasLayer
 @onready var xp_label     = $TopLeft/XPStatus    as RichTextLabel
 @onready var name_label   = $TopLeft/Name        as RichTextLabel
 
-@onready var tnt_label    = $TopLeft/Bumpers/TNT    as RichTextLabel
-@onready var mines_label  = $TopLeft/Bumpers/MINES  as RichTextLabel
-@onready var shock_label = $TopLeft/Bumpers/SHOCK as RichTextLabel
+@onready var currency_label    	= $TopLeft/Bumpers/CURRENCY			as RichTextLabel
+@onready var tnt_label    		= $TopLeft/Bumpers/TNT    			as RichTextLabel
+@onready var mines_label  		= $TopLeft/Bumpers/MINES  			as RichTextLabel
+@onready var shock_label 		= $TopLeft/Bumpers/SHOCK 			as RichTextLabel
 
 var level_names := [
 	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Conqueror",
@@ -37,6 +38,7 @@ func _ready() -> void:
 	level_label.text      = "Level: %d"     % stats.level
 	name_label.text       = level_names[0]
 
+	currency_label.text        = "CURRENCY: %d"    % stats.currency
 	tnt_label.text        = "TNT: %d"    % stats.grenades
 	mines_label.text      = "MINES: %d"  % stats.mines
 	shock_label.text     = "GLITCH: %d" % stats.shocks
@@ -49,6 +51,7 @@ func _ready() -> void:
 	stats.connect("health_changed",  Callable(self, "_on_health_changed"))
 	stats.connect("xp_changed",      Callable(self, "_on_xp_changed"))
 	stats.connect("level_changed",   Callable(self, "_on_level_changed"))
+	stats.connect("currency_changed",Callable(self, "_on_currency_changed"))
 	stats.connect("grenades_changed",Callable(self, "_on_grenades_changed"))
 	stats.connect("mines_changed",   Callable(self, "_on_mines_changed"))
 
@@ -84,3 +87,6 @@ func _on_mines_changed(m):
 
 func _on_shocks_changed(s: int) -> void:
 	shock_label.text = "GLITCH: %d" % s
+
+func _on_currency_changed(s: int) -> void:
+	currency_label.text = "CURRENCY: %d" % s
