@@ -1,3 +1,4 @@
+AnimatedSprite2D
 AudioStreamPlayer2D
 Control
 Button
@@ -12,4 +13,3 @@ CharacterBody2D
 ColorRect
 Node2D
 GPUParticles2D
-Node
