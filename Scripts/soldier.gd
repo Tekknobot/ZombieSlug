@@ -317,11 +317,6 @@ func _physics_process(delta: float) -> void:
 		dash_input = dash_input.normalized()
 		_start_dash()
 
-	# ——— Spawns ———
-	if Input.is_action_just_pressed("merc") and merc_cooldown_timer.is_stopped():
-		_spawn_merc()
-		merc_cooldown_timer.start()
-
 	# ——— Movement, gravity, other attacks ———
 	velocity.y += gravity * delta
 
