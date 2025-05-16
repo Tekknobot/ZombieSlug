@@ -13,3 +13,5 @@ res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scripts/meks/m_1.gd
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
 res://Scripts/meks/m_2.gd
+res://Scenes/Titlescreen.tscn
+res://Scenes/game_over_manager.tscn

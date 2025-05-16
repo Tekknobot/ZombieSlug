@@ -223,7 +223,7 @@ func _ready() -> void:
 	shock_effect.visible = false
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(10)
+	Playerstats.set_level(1)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -328,7 +328,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
 
-	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
+	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped() and not on_roof:
 		if Playerstats.use_grenade():
 			_throw_grenade()
 			grenade_cooldown_timer.start()

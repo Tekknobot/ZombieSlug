@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/game_over_manager.gd" id="1_7vwdm"]
 [ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="1_bnsp5"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_0as55"]
-[ext_resource type="AudioStream" uid="uid://hpbsc8peolxc" path="res://Audio/Tracks/Enter Da Zombie (Demo).mp3" id="4_sq6mb"]
+[ext_resource type="AudioStream" uid="uid://cht60ugafwdyx" path="res://Audio/Tracks/Enter Da Zombie (Demo).mp3" id="4_v3upe"]
 
 [sub_resource type="Animation" id="Animation_k8iae"]
 resource_name = "fade_in"
@@ -76,4 +76,4 @@ libraries = {
 }
 
 [node name="GameOverSfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_sq6mb")
+stream = ExtResource("4_v3upe")
