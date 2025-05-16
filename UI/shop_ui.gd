@@ -82,13 +82,13 @@ func _input(event: InputEvent) -> void:
 
 
 func update_currency_label():
-	currency_label.text = "Currency: " + str(Playerstats.currency)
+	currency_label.text = "$ " + str(Playerstats.currency)
 	if font:
 		currency_label.add_theme_font_override("font", font)
 		currency_label.add_theme_constant_override("font_size", font_size)
 
 func update_shop_label():
-	shop_label.text = "UPGRADE MERCHANT"
+	shop_label.text = "MERCHANT"
 	if font:
 		shop_label.add_theme_font_override("font", font)
 		shop_label.add_theme_constant_override("font_size", font_size)
@@ -161,6 +161,7 @@ func _on_buy_pressed(data: Dictionary) -> void:
 		if is_instance_valid(desc):
 			desc.modulate = Color(1,1,1)
 		populate_upgrades()
+		$AudioStreamPlayer2D.play()
 	else:
 		# flash description red
 		if is_instance_valid(desc):

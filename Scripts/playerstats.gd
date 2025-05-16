@@ -28,7 +28,7 @@ signal grenades_changed(new_grenades: int)
 signal mines_changed(new_mines: int)
 signal shocks_changed(new_shocks: int)
 
-var currency = 1000
+var currency = 0
 
 func _ready() -> void:
 	# Initialize default values
