@@ -7414,7 +7414,6 @@ theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "GLITCH: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
-volume_db = -80.0
 script = ExtResource("25_te7ld")
 tracks = Array[AudioStream]([ExtResource("26_6i0e4")])
 
