@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bphbsyugii4oy"]
+[gd_scene load_steps=50 format=3 uid="uid://bphbsyugii4oy"]
 
 [ext_resource type="Script" path="res://Scripts/zombie.gd" id="1_75npq"]
 [ext_resource type="Texture2D" uid="uid://cwttiy82qxf31" path="res://Scenes/Sprites/zombie/attack/zomb_atk1.png" id="1_gtwuh"]
@@ -44,6 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://b35xkorashy3" path="res://Scenes/Sprites/zombie/move/zomb6.png" id="39_dp0bc"]
 [ext_resource type="AudioStream" uid="uid://b8orw1u5dj45q" path="res://Audio/SFX/hitHurt.wav" id="41_r82yv"]
 [ext_resource type="AudioStream" uid="uid://dg6i58j3chf0p" path="res://Audio/Zombie/zombie_massacre_vocal_attack_short_02.wav" id="42_nbebp"]
+[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="45_r0rwi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sxfp4"]
 shader = ExtResource("2_3ka2c")
@@ -197,6 +198,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5t24"]
 radius = 11.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2iqh7"]
+shader = ExtResource("2_3ka2c")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
 [node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 script = ExtResource("1_75npq")
 max_health = 3
@@ -233,3 +240,11 @@ emission_sphere_radius = 8.0
 gravity = Vector2(0, 2)
 angular_velocity_min = -254.54
 angular_velocity_max = -254.54
+
+[node name="HealthLabel" type="Label" parent="."]
+material = SubResource("ShaderMaterial_2iqh7")
+offset_top = -48.0
+offset_right = 40.0
+offset_bottom = -35.0
+theme_override_fonts/font = ExtResource("45_r0rwi")
+text = "3HP"

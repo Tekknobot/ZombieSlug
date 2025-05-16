@@ -46,9 +46,9 @@ func spawn_zombie() -> void:
 
 	var lvl = Playerstats.level
 	if lvl > 1 and z.has_method("take_damage"):
-		# grow health by 10% each level (compounds)
+		# grow health by 40% each level (compounds)
 		var base = z.max_health
-		var scale = pow(1.45, lvl - 1)      # 1.10 == +10% per level
+		var scale = pow(1.40, lvl - 1)      # 1.10 == +10% per level
 		z.max_health = int(base * scale)
 		z.health     = z.max_health
 
@@ -88,13 +88,28 @@ func _spawn_boss() -> void:
 		side = -1
 	else:
 		side = 1
+		
+	var spawn_pos = Vector2(
+		player.global_position.x + side * spawn_distance,
+		global_position.y
+	)
 
-	var boss = boss_scene.instantiate()
+	# instantiate the boss
+	var boss = boss_scene.instantiate() as CharacterBody2D
 	boss.global_position = Vector2(
 		player.global_position.x + side * spawn_distance * 1.5,
 		global_position.y
 	)
+
+	# scale boss health by level (e.g. +50% per level)
+	var lvl = Playerstats.level
+	if lvl > 1 and boss.has_method("take_damage"):
+		var base = boss.max_health
+		var scale = pow(1.50, lvl - 1)     # 1.50 == +50% per level
+		boss.max_health = int(base * scale)
+		boss.health     = boss.max_health
+
 	if not boss.is_in_group("Zombie"):
 		boss.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(boss)
-	print("Boss spawned for level ", Playerstats.level)
+	print("Boss spawned for level ", lvl, " with max_health=", boss.max_health)

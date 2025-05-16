@@ -231,7 +231,7 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Summon Dog or Mech ———
 	if Input.is_action_just_pressed("dog"):
-		if Input.is_action_pressed("ui_up") and mech_cooldown_timer.is_stopped():
+		if Input.is_action_pressed("ui_down") and mech_cooldown_timer.is_stopped():
 			_spawn_mech()
 			mech_cooldown_timer.start()
 		elif dog_cooldown_timer.is_stopped():
@@ -240,7 +240,7 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Summon Merc or Mech Panther ———
 	if Input.is_action_just_pressed("merc"):
-		if Input.is_action_pressed("ui_up") and mech_panther_cooldown_timer.is_stopped():
+		if Input.is_action_pressed("ui_down") and mech_panther_cooldown_timer.is_stopped():
 			_spawn_mech_panther()
 			mech_panther_cooldown_timer.start()
 		elif merc_cooldown_timer.is_stopped():

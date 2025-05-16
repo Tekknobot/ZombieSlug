@@ -14,6 +14,7 @@ extends CharacterBody2D
 
 @onready var hit_sfx: AudioStreamPlayer2D   = $HitSfx
 @onready var death_sfx: AudioStreamPlayer2D = $DeathSfx
+@onready var health_label: Label = $HealthLabel
 
 # Internal state
 var speed: float   = 0.0
@@ -33,6 +34,7 @@ func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
 	health = max_health
+	update_health_label()
 	print("Zombie speed=", speed, "health=", health)
 
 	attack_timer = Timer.new()
@@ -117,11 +119,15 @@ func take_damage(amount: int = 1) -> void:
 	flash()  # your red‐flash helper
 
 	health -= amount
+	update_health_label()
+
 	print("Zombie took", amount, "damage; remaining=", health)
 
 	if health <= 0:
 		is_dead = true
-
+		update_health_label()   # will show “0 HP” in red
+		health_label.hide()
+		
 		# 1) award kill + XP
 		Playerstats.add_kill(xp_award)
 
@@ -240,3 +246,20 @@ func _on_shake_timeout() -> void:
 	position      = _shake_orig_pos
 	set_process(false)
 	_shake_timer.queue_free()
+
+func update_health_label() -> void:
+	if not is_instance_valid(health_label):
+		return
+			
+	# Show “X HP”
+	health_label.text = "%dHP" % health
+	# Choose a color tier: >66% green, >33% yellow, else red
+	var pct := float(health) / float(max_health)
+	var tint := Color(1, 1, 1)
+	if pct > 0.66:
+		tint = Color(0, 1, 0)
+	elif pct > 0.33:
+		tint = Color(1, 1, 0)
+	else:
+		tint = Color(1, 0, 0)
+	health_label.modulate = tint

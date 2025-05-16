@@ -1,3 +1,4 @@
+Label
 AnimatedSprite2D
 AudioStreamPlayer2D
 Control
@@ -7,9 +8,7 @@ CenterContainer
 CollisionShape2D
 Area2D
 VBoxContainer
-Label
 CanvasLayer
 CharacterBody2D
 ColorRect
 Node2D
-GPUParticles2D

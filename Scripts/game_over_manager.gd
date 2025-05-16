@@ -4,10 +4,10 @@ extends CanvasLayer
 @export var fade_duration := 0.5    # seconds to fade in
 @export var fade_target   := 0.8    # alpha at end of fade
 
-@onready var fade        := $Fade
-@onready var menu        := $Menu
-@onready var restart_btn := $Menu/VBoxContainer/HBoxContainer/Restart
-@onready var quit_btn    := $Menu/VBoxContainer/HBoxContainer/Quit
+@onready var fade        	:= $Fade
+@onready var menu        	:= $Menu
+@onready var restart_btn 	:= $Menu/VBoxContainer/HBoxContainer/Restart
+@onready var quit_btn    	:= $Menu/VBoxContainer/HBoxContainer/Quit
 @onready var GameOverSfx    := $GameOverSfx
 
 var _is_fading := false
