@@ -18,3 +18,4 @@ shape = SubResource("RectangleShape2D_p0eij")
 
 [node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_pg00l")
+volume_db = 12.0
