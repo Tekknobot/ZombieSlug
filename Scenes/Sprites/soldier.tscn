@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=55 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
@@ -49,6 +49,7 @@
 [ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="46_g5a44"]
 [ext_resource type="AudioStream" uid="uid://dsawtr8wn3bm6" path="res://Audio/SFX/empty-gun-shot-6209.mp3" id="47_bp0as"]
 [ext_resource type="AudioStream" uid="uid://gcqmtyb21gm0" path="res://Audio/SFX/dash_sfx.wav" id="48_t5a0g"]
+[ext_resource type="AudioStream" uid="uid://8c083clar0gj" path="res://Audio/Zombie/human_death.wav" id="50_n5ay0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jd2l6"]
 shader = ExtResource("2_mb8vu")
@@ -251,6 +252,21 @@ stream = ExtResource("47_bp0as")
 [node name="DashSfx" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("48_t5a0g")
 volume_db = 6.0
+
+[node name="DeathSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("50_n5ay0")
+
+[node name="Blood" type="CPUParticles2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(0, -20)
+emitting = false
+amount = 128
+lifetime = 6.0
+one_shot = true
+speed_scale = 4.0
+emission_shape = 1
+emission_sphere_radius = 16.0
+gravity = Vector2(0, -2)
 
 [node name="Hitbox" type="Area2D" parent="."]
 

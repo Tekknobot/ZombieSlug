@@ -247,8 +247,10 @@ func _fit_panel_to_content() -> void:
 	panel.custom_minimum_size = content_size + panel_padding * 2
 
 func show_shop() -> void:
+	$Music.play()
 	visible = true
 	_grab_first_button_focus()
 
 func hide_shop() -> void:
+	$Music.stop()
 	visible = false

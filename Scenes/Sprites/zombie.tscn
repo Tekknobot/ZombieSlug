@@ -238,8 +238,6 @@ speed_scale = 4.0
 emission_shape = 1
 emission_sphere_radius = 8.0
 gravity = Vector2(0, 2)
-angular_velocity_min = -254.54
-angular_velocity_max = -254.54
 
 [node name="HealthLabel" type="Label" parent="."]
 material = SubResource("ShaderMaterial_2iqh7")

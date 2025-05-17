@@ -723,14 +723,40 @@ func take_damage(amount: int = 1) -> void:
 		die()
 
 func die() -> void:
+	# disable further logic
 	is_dead = true
+
+	# ——— bullet-time kick in ———
+	Engine.time_scale = 0.2
+
+	# blood + sound
+	$Blood.emitting = true
+	$DeathSfx.play()
+
+	# play death animation
 	anim.play("death")
-	await anim.animation_finished
 	
+	# Castlevania knock-back: backwards relative to facing, and up
+	var dir = -1 if facing_right else 1
+	var push_vec = Vector2(dir * 30, -30)
+
+	# Tween: fly up & back, then fall down
+	var tw = create_tween()
+	tw.tween_property(self, "global_position", global_position + push_vec, 0.3) \
+	  .set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "global_position", global_position + push_vec + Vector2(0, 30), 0.7) \
+	  .set_delay(0.3) \
+	  .set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	await tw.finished
+
+	# ——— restore normal time ———
+	Engine.time_scale = 1.0
+
+	# pause, then game over
+	await get_tree().create_timer(0).timeout
 	GameOverManager.show_game_over()
-	
+
 	glow_mat.set_shader_parameter("active", false)
-	
 	queue_free()
 
 func flash() -> void:
