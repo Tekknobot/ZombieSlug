@@ -11,3 +11,4 @@ res://Scenes/Sprites/zombie.tscn
 res://Scripts/zombie.gd
 res://Scenes/Sprites/zombie_xl.tscn
 res://Scripts/zombie_spawner.gd
+res://Scenes/Effects/Rain_system.scn

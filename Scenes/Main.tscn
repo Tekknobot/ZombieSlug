@@ -155,6 +155,7 @@ bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 bg_color = Color(1, 1, 0, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2peu"]
+size = Vector2(2, 33)
 
 [node name="Level" type="Node2D"]
 
@@ -7421,7 +7422,7 @@ tracks = Array[AudioStream]([ExtResource("26_6i0e4")])
 position = Vector2(0, -129)
 script = ExtResource("23_vhlg4")
 
-[node name="ParticleSystem" parent="." instance=ExtResource("26_rksku")]
+[node name="Rain" parent="." instance=ExtResource("26_rksku")]
 position = Vector2(0, -381)
 
 [node name="Shop" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui")]
@@ -7430,7 +7431,7 @@ script = ExtResource("29_bfhrc")
 shop_ui = NodePath("../ShopUI")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Shop"]
-position = Vector2(0, 10)
+position = Vector2(0, -6.5)
 shape = SubResource("RectangleShape2D_d2peu")
 
 [node name="ShopUI" parent="." instance=ExtResource("30_4rxpf")]

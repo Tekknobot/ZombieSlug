@@ -489,31 +489,30 @@ func _add_ally_exceptions(body: PhysicsBody2D) -> void:
 			if other is PhysicsBody2D and other != body:
 				body.add_collision_exception_with(other)
 				other.add_collision_exception_with(body)
+# Add this helper at the top of your Soldier.gd (or wherever these lives):
+func _get_spawn_offset_x() -> float:
+	# Dogs and Mechs on the left  => return negative offset
+	# Mercs and Panthers on the right => return positive offset
+	# We'll pass in a “side” parameter when calling if we need to reverse.
+	return abs(muzzle_point.position.x) + extra_spawn_offset
 
-### Spawn Dog
+### Spawn Dog (always left)
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
 	dog.add_to_group("Dog")
-
-	# assign damage based on level
 	var lvl = Playerstats.level
 	if dog.has_meta("attack_damage"):
 		dog.attack_damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
 
-	# combine muzzle_point offset with your extra offset
-	var base_off = abs(muzzle_point.position.x)
-	var x_off = base_off + extra_spawn_offset
-
+	var x_off = _get_spawn_offset_x()
 	dog.global_position = Vector2(
-		global_position.x - x_off,
+		global_position.x - x_off,  # left
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(dog)
-
 	if on_roof or _left_roof:
 		_add_roof_exceptions(dog)
-
 	_add_ally_exceptions(dog)
 
 	var base_duration = 5.0
@@ -521,72 +520,25 @@ func _spawn_dog() -> void:
 	var life_delay = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(dog, life_delay, 1.0)
 
-### Spawn Merc
-func _spawn_merc() -> void:
-	merc_sfx.play()
-	var merc = MercScene.instantiate() as PhysicsBody2D
-	merc.add_to_group("Merc")
-
-	var lvl = Playerstats.level
-	if merc.has_meta("attack_damage"):
-		merc.attack_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
-
-	var base_off = abs(muzzle_point.position.x)
-	var x_off = base_off + extra_spawn_offset
-
-	merc.global_position = Vector2(
-		global_position.x + x_off,
-		global_position.y + muzzle_point.position.y
-	)
-	get_tree().get_current_scene().add_child(merc)
-
-	if on_roof or _left_roof:
-		_add_roof_exceptions(merc)
-
-	_add_ally_exceptions(merc)
-
-	var base_duration = 5.0
-	var extra_per_level = 1.0
-	var life_delay = base_duration + (lvl - 1) * extra_per_level
-	_fade_and_free(merc, life_delay, 1.0)
-
-### Spawn Mech
+### Spawn Mech (always left)
 func _spawn_mech() -> void:
-	# instantiate mech
 	merc_sfx.play()
 	var mech = MechScene.instantiate() as PhysicsBody2D
 	mech.add_to_group("Mech")
 	var lvl = Playerstats.level
-
-	# scale its damage by level
 	if mech.has_meta("attack_damage"):
 		mech.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
 
-	# compute horizontal offset
-	var base_off = abs(muzzle_point.position.x)
-	var x_off = base_off + extra_spawn_offset
-
-	# pick direction multiplier without ternary
-	var dir = 1
-	if not facing_right:
-		dir = -1
-
+	var x_off = _get_spawn_offset_x()
 	mech.global_position = Vector2(
-		global_position.x + dir * x_off,
+		global_position.x - x_off,  # left
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(mech)
-
-	# flip its sprite to match player
 	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	if facing_right:
-		sprite.flip_h = false
-	else:
-		sprite.flip_h = true
-
+	sprite.flip_h = not facing_right
 	if on_roof or _left_roof:
 		_add_roof_exceptions(mech)
-
 	_add_ally_exceptions(mech)
 
 	var base_duration = 8.0
@@ -594,41 +546,49 @@ func _spawn_mech() -> void:
 	var life_time = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(mech, life_time, 1.0)
 
-### Spawn Mech Panther
+### Spawn Merc (always right)
+func _spawn_merc() -> void:
+	merc_sfx.play()
+	var merc = MercScene.instantiate() as PhysicsBody2D
+	merc.add_to_group("Merc")
+	var lvl = Playerstats.level
+	if merc.has_meta("attack_damage"):
+		merc.attack_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
+
+	var x_off = _get_spawn_offset_x()
+	merc.global_position = Vector2(
+		global_position.x + x_off,  # right
+		global_position.y + muzzle_point.position.y
+	)
+	get_tree().get_current_scene().add_child(merc)
+	if on_roof or _left_roof:
+		_add_roof_exceptions(merc)
+	_add_ally_exceptions(merc)
+
+	var base_duration = 5.0
+	var extra_per_level = 1.0
+	var life_delay = base_duration + (lvl - 1) * extra_per_level
+	_fade_and_free(merc, life_delay, 1.0)
+
+### Spawn Mech Panther (always right)
 func _spawn_mech_panther() -> void:
-	# instantiate mech panther
 	panther_sfx.play()
 	var pan = MechScene_Panther.instantiate() as PhysicsBody2D
 	pan.add_to_group("MechPanther")
 	var lvl = Playerstats.level
-
-	# scale its damage by level
 	if pan.has_meta("attack_damage"):
-		pan.attack_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
+		pan.attack_damage = mech_panther_base_damage + (lvl - 1) * mech_panther_damage_per_level
 
-	# compute horizontal offset
-	var base_off = abs(muzzle_point.position.x)
-	var x_off = base_off + extra_spawn_offset
-
-	var dir = 1
-	if not facing_right:
-		dir = -1
-
+	var x_off = _get_spawn_offset_x()
 	pan.global_position = Vector2(
-		global_position.x - x_off,
+		global_position.x + x_off,  # right
 		global_position.y + muzzle_point.position.y
 	)
 	get_tree().get_current_scene().add_child(pan)
-
 	var sprite = pan.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	if facing_right:
-		sprite.flip_h = false
-	else:
-		sprite.flip_h = true
-
+	sprite.flip_h = facing_right == false
 	if on_roof or _left_roof:
 		_add_roof_exceptions(pan)
-
 	_add_ally_exceptions(pan)
 
 	var base_duration = 8.0
