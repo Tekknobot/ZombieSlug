@@ -8,10 +8,6 @@ res://Scenes/Main.tscn
 res://UI/shop_ui.tscn
 res://Scenes/game_over_manager.tscn
 res://Scenes/Sprites/zombie.tscn
-res://Scripts/zombie.gd
 res://Scenes/Sprites/zombie_xl.tscn
-res://Scripts/zombie_spawner.gd
 res://Scenes/Effects/Rain_system.scn
 res://Scenes/Sprites/StarPickup.tscn
-res://UI/shop_ui.gd
-res://Scripts/LightningStrike.gd

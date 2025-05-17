@@ -742,7 +742,8 @@ func take_damage(amount: int = 1) -> void:
 func die() -> void:
 	# disable further logic
 	is_dead = true
-
+	$DeathSfx.play()
+	
 	# ——— bullet-time kick in ———
 	Engine.time_scale = 0.2
 
