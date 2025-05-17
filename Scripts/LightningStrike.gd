@@ -63,10 +63,14 @@ func fire(target_pos: Vector2, damage: int) -> void:
 		spark.global_position = p
 		spark.emitting = true
 
-	# --- Explosion & damage ---
-	var exp = ExplosionScene.instantiate()
-	exp.global_position = target_pos
-	get_tree().get_current_scene().add_child(exp)
+	for z in get_tree().get_nodes_in_group("Player"):
+		if z is CharacterBody2D and z.global_position.distance_to(target_pos) < 16:
+			continue
+		else:	
+			# --- Explosion & damage ---
+			var exp = ExplosionScene.instantiate()
+			exp.global_position = target_pos
+			get_tree().get_current_scene().add_child(exp)
 
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if z is CharacterBody2D and z.global_position.distance_to(target_pos) < 16:

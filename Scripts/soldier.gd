@@ -64,6 +64,8 @@ const HomingGrenadeScene = preload("res://Scenes/Sprites/tnt_yellow.tscn")
 const MineScene    = preload("res://Scenes/Sprites/mine.tscn")
 const MuzzleFlashParticles = preload("res://Scenes/Sprites/muzzle_flash.tscn")
 
+const LightningStrike = preload("res://Scripts/LightningStrike.gd")
+
 var facing_right: bool = false
 var is_attacking:  bool = false
 var health:        int  = 0
@@ -81,6 +83,8 @@ var merc_cooldown_timer: Timer
 @onready var empty_sfx    := $EmptyClickSfx   as AudioStreamPlayer2D
 @onready var dash_sfx     := $DashSfx         as AudioStreamPlayer2D
 @onready var panther_sfx  := $PantherSfx      as AudioStreamPlayer2D
+
+@onready var levelup_voice_sfx  := $LevelUpVoiceSfx      as AudioStreamPlayer2D
 
 @onready var glow_mat := $AnimatedSprite2D.material as ShaderMaterial
 
@@ -680,6 +684,19 @@ func _on_level_changed(new_level: int) -> void:
 	print("Leveled to ", new_level, " → new firerate: ", firerate)
 	play_level_up_effect()
 	levelup_sfx.play()
+	#levelup_voice_sfx.play()
+	
+	# spawn a yellow bolt on the player
+	var bolt = LightningStrike.new()
+	# tint it yellow
+	bolt.line_color = Color(1, 1, 0)
+	# shorter fade so it feels snappier on level-up
+	bolt.flash_time = 0.3
+	# parent into the world
+	get_tree().get_current_scene().add_child(bolt)
+	# fire at the player's position (damage=0 since it's just FX)
+	bolt.fire(global_position, 0)
+	
 
 func _await_landing() -> void:
 	while not is_on_floor():
@@ -731,7 +748,6 @@ func die() -> void:
 
 	# blood + sound
 	$Blood.emitting = true
-	$DeathSfx.play()
 
 	# play death animation
 	anim.play("death")
@@ -785,12 +801,19 @@ func _throw_grenade() -> void:
 	get_tree().get_current_scene().add_child(g)
 
 func play_level_up_effect():
+	# ——— bullet-time kick in ———
+	Engine.time_scale = 0.2
+	
 	# turn on your shader’s “active” uniform
 	glow_mat.set_shader_parameter("active", true)
+	$LevelUp.emitting = true
 	# wait however long you want the glow to last
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(0.5).timeout
 	# turn it off again
 	glow_mat.set_shader_parameter("active", false)
+
+	# ——— restore normal time ———
+	Engine.time_scale = 1.0
 
 func _drop_mine() -> void:
 	# determine direction without ternary
