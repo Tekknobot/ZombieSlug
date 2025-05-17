@@ -65,21 +65,22 @@ func _input(event: InputEvent) -> void:
 	if not visible:
 		return
 
-	# Navigate with up/down
-	if event.is_action_pressed("ui_up"):
-		_focus_prev_button()
-		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("ui_down"):
-		_focus_next_button()
+	# Only respond to true D-pad up/down
+	if event is InputEventJoypadButton and event.pressed and (event.button_index == JOY_BUTTON_DPAD_UP or event.button_index == JOY_BUTTON_DPAD_DOWN):
+
+		if event.button_index == JOY_BUTTON_DPAD_UP:
+			_focus_prev_button()
+		else:
+			_focus_next_button()
+
 		get_viewport().set_input_as_handled()
 
-	# Activate focused button with jump (keyboard or gamepad)
+	# Activate with jump (keyboard or gamepad A)
 	elif event.is_action_pressed("jump"):
 		var focused = get_viewport().gui_get_focus_owner()
 		if focused and focused is Button:
 			focused.emit_signal("pressed")
 			get_viewport().set_input_as_handled()
-
 
 func update_currency_label():
 	currency_label.text = "$ " + str(Playerstats.currency)

@@ -10,16 +10,24 @@ func _ready() -> void:
 		[name, monitoring, collision_layer, collision_mask])
 	connect("body_entered", Callable(self, "_on_body_entered"))
 	connect("body_exited",  Callable(self, "_on_body_exited"))
-	set_process(true)
+	# make sure we get input events
+	set_process_input(true)
+	set_process_unhandled_input(true)
 
-func _process(delta: float) -> void:
-	# if player is in the zone and presses Up, open the shop
-	if _player_in_zone and Input.is_action_just_pressed("ui_up"):
-		print("ui_up pressed in shop zone → opening shop")
-		shop_ui.update_currency_label()
-		shop_ui.populate_upgrades()
-		shop_ui.show_shop()
-		get_tree().paused = true
+# no more _process() watching ui_up()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _player_in_zone:
+		return
+
+	# Only open on gamepad D-pad Up
+	if event is InputEventJoypadButton:
+		if event.button_index == JOY_BUTTON_DPAD_UP and event.pressed:
+			print("D-pad Up pressed in shop zone → opening shop")
+			shop_ui.update_currency_label()
+			shop_ui.populate_upgrades()
+			shop_ui.show_shop()
+			get_tree().paused = true
 
 func _on_body_entered(body: Node) -> void:
 	print("[%s] body_entered -> %s, groups=%s" %

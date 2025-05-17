@@ -1,13 +1,10 @@
-res://Scenes/Sprites/soldier.tscn
+res://Scenes/Main.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Shaders/distort_effect.gdshader
 res://Shaders/star_effect.gdshader
 res://Shaders/StarEffect.tres
-res://Scripts/soldier.gd
-res://Scenes/Main.tscn
+res://Scenes/Sprites/soldier.tscn
 res://UI/shop_ui.tscn
 res://Scenes/game_over_manager.tscn
-res://Scenes/Sprites/zombie.tscn
-res://Scenes/Sprites/zombie_xl.tscn
-res://Scenes/Effects/Rain_system.scn
-res://Scenes/Sprites/StarPickup.tscn
+res://UI/shop_trigger.gd
+res://UI/shop_ui.gd
