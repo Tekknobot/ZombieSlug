@@ -1,3 +1,4 @@
+Node2D
 AudioListener2D
 AudioStreamPlayer2D
 Label
@@ -12,4 +13,3 @@ VBoxContainer
 CanvasLayer
 CharacterBody2D
 ColorRect
-Node2D
