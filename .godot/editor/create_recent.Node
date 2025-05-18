@@ -12,4 +12,3 @@ Area2D
 VBoxContainer
 CanvasLayer
 CharacterBody2D
-ColorRect

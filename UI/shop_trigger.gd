@@ -35,12 +35,3 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("Player"):
 		_player_in_zone = true
 		print("  → Player entered shop zone")
-
-func _on_body_exited(body: Node) -> void:
-	print("[%s] body_exited  -> %s, groups=%s" %
-		[name, body.name, body.get_groups()])
-	if body.is_in_group("Player"):
-		_player_in_zone = false
-		print("  → Player left shop zone, closing shop")
-		shop_ui.hide_shop()
-		get_tree().paused = false
