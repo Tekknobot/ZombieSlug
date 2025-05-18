@@ -88,8 +88,8 @@ position = Vector2(0, -381)
 [node name="ZombieSpawner" type="Node2D" parent="Soldier"]
 position = Vector2(-98, -52)
 script = ExtResource("4_js2x2")
-base_spawn_interval = 1.0
-min_spawn_factor = 0.5
+base_spawn_interval = 0.6
+min_spawn_factor = 0.1
 spawn_distance = 600.0
 boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
@@ -107,6 +107,10 @@ position = Vector2(158, 42)
 position = Vector2(-98, -35)
 script = ExtResource("25_te7ld")
 tracks = Array[AudioStream]([ExtResource("34_f7ybr")])
+
+[node name="HelicopterSpawner" type="Node2D" parent="Soldier"]
+position = Vector2(-98, -164)
+script = ExtResource("23_vhlg4")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
@@ -272,10 +276,6 @@ custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vaiej")
 text = "GLITCH: 5"
-
-[node name="HelicopterSpawner" type="Node2D" parent="."]
-position = Vector2(0, -129)
-script = ExtResource("23_vhlg4")
 
 [node name="BlockManager" type="Node2D" parent="."]
 script = ExtResource("20_omn77")
