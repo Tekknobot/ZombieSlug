@@ -6,6 +6,13 @@ extends CharacterBody2D
 @export var max_speed:              float = 100.0  # absolute cap
 var speed: float
 
+@export var knockback_speed:    float = 150.0   # horizontal speed when hit
+@export var knockback_upward:   float = -150.0  # vertical boost when hit
+# how long the knockback lasts
+@export var knockback_duration: float = 0.2
+
+var _knockback_time_left: float = 0.0
+
 # remember what your speed was before the star power
 var _orig_speed: float = 0.0
 
@@ -232,7 +239,16 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
+		
+	# —————————————————— KNOCKBACK HANDLING ——————————————————
+	if _knockback_time_left > 0.0:
+		_knockback_time_left -= delta
+		# gravity still applies
+		velocity.y += gravity * delta
+		# slide with current velocity, ignore all other input
+		move_and_slide()
+		return
+		
 	# ——— Summon Dog or Mech ———
 	if Input.is_action_just_pressed("dog"):
 		if Input.is_action_pressed("ui_down") and mech_cooldown_timer.is_stopped():
@@ -729,13 +745,19 @@ func take_damage(amount: int = 1) -> void:
 	if is_dead or is_invincible:
 		return
 
+	# 1) Castlevania-style knockback
+	var dir = -1 if facing_right else 1
+	velocity = Vector2(dir * knockback_speed, knockback_upward)
+
+	# 2) start the timer
+	_knockback_time_left = knockback_duration
+
+	# 3) Hurt effects
 	hurt_sfx.play()
-
 	flash()
-	# apply damage via the PlayerStats singleton
-	Playerstats.damage(amount)
-	print("Soldier took", amount, "damage; remaining health", Playerstats.health)
 
+	# 4) subtract health
+	Playerstats.damage(amount)
 	if Playerstats.health <= 0:
 		die()
 

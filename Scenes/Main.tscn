@@ -34,10 +34,10 @@
 [ext_resource type="Texture2D" uid="uid://b0i0weiro5tlo" path="res://Assets/Backgrounds/open_sign/open_sign8.png" id="21_b8d2w"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
-[ext_resource type="AudioStream" uid="uid://63yq6nmq73ny" path="res://Audio/Tracks/80s Zombie (Demo).mp3" id="26_6i0e4"]
 [ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="26_rksku"]
 [ext_resource type="Script" path="res://UI/shop_trigger.gd" id="29_bfhrc"]
 [ext_resource type="PackedScene" uid="uid://mmhaqmvnwmyf" path="res://UI/shop_ui.tscn" id="30_4rxpf"]
+[ext_resource type="AudioStream" uid="uid://b74e0uncchnts" path="res://Audio/Tracks/80s Zombie.wav" id="34_f7ybr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n51e"]
 size = Vector2(1, 31)
@@ -7416,7 +7416,7 @@ text = "GLITCH: 5"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource("25_te7ld")
-tracks = Array[AudioStream]([ExtResource("26_6i0e4")])
+tracks = Array[AudioStream]([ExtResource("34_f7ybr")])
 
 [node name="HelicopterSpawner" type="Node2D" parent="."]
 position = Vector2(0, -129)

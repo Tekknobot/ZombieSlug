@@ -89,13 +89,14 @@ func _on_end_area_entered(area_obj: Area2D) -> void:
 func _physics_process(delta):
 	if not rope_active:
 		return
+		
 	if not is_instance_valid(muzzle) or not is_instance_valid(player):
 		rope_active = false
 		queue_free()
 		return
 
 	# Allow “mine” to finish off a hooked target
-	if hook_target and Input.is_action_just_pressed("mine"):
+	if is_instance_valid(hook_target) and Input.is_action_just_pressed("mine"):
 		if hook_target.has_method("take_damage"):
 			hook_target.take_damage(player.mine_damage)
 		_release_target()

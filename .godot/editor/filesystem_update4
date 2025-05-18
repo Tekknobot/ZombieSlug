@@ -6,5 +6,4 @@ res://Shaders/StarEffect.tres
 res://Scenes/Sprites/soldier.tscn
 res://UI/shop_ui.tscn
 res://Scenes/game_over_manager.tscn
-res://UI/shop_trigger.gd
-res://UI/shop_ui.gd
+res://Scripts/grapple_hook.gd
