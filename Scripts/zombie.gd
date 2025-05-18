@@ -142,7 +142,7 @@ func take_damage(amount: int = 1) -> void:
 			{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 3.0  },			
 			{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 2 },			
 			{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 100  },
+			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 1  },
 			{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 1  },			
 			{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 1  },
 			{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 1  },
