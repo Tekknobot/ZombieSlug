@@ -205,6 +205,7 @@ animations = [{
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_bbe55")
 jump_velocity = -275.0
+max_health = 3
 initial_mine_cooldown = 1.0
 mine_cooldown = 1.0
 initial_grenade_damage = 2
@@ -212,6 +213,8 @@ initial_mine_damage = 2
 dash_speed = 400.0
 dog_damage_per_level = 5
 merc_damage_per_level = 3
+mech_cooldown = 20.0
+mech_panther_cooldown = 20.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")

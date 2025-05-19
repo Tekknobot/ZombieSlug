@@ -187,19 +187,19 @@ func take_damage(amount: int = 1) -> void:
 		# 2) Define your pickups and their relative weights (including a “nothing” entry)
 		var drops = [
 			{ "scene": null,                                                   "weight": 30.0 },  # 40% nothing
-			{ "scene": preload("res://Scenes/Sprites/TNTPickup.tscn"),          "weight": 3.0  },
-			{ "scene": preload("res://Scenes/Sprites/TNT_YellowPickup.tscn"),   "weight": 3.0  },
-			{ "scene": preload("res://Scenes/Sprites/MinePickup.tscn"),         "weight": 3.0  },
-			{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 3.0  },			
-			{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 2 },			
-			{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 1  },			
-			{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/GlitchPickup.tscn"),       "weight": 1  },			
-			{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 0.5  },
-			{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 0.5  },			
+			{ "scene": preload("res://Scenes/Sprites/TNTPickup.tscn"),          "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/TNT_YellowPickup.tscn"),   "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/MinePickup.tscn"),         "weight": 1.5  },
+			{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 1.5  },			
+			{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 1 },			
+			{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 0.5  },
+			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 0.5  },
+			{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 0.5  },			
+			{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 0.5  },
+			{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 0.5  },
+			{ "scene": preload("res://Scenes/Sprites/GlitchPickup.tscn"),       "weight": 0.5  },			
+			{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 0.25  },
+			{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 0.25  },			
 		]
 
 		# 3) Sum weights
@@ -294,7 +294,7 @@ func _do_chain_reaction() -> void:
 				# Spawn the bolt
 				_spawn_chain_bolt(src_pos, other.global_position)
 				# Deal chain damage
-				other.take_damage(max_health/2)
+				other.take_damage(max_health/3)
 
 				# Remember we’ve hit this one
 				visited.append(other)

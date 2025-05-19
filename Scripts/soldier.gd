@@ -184,12 +184,12 @@ func _ready() -> void:
 	attack_cooldown_timer.timeout.connect(Callable(self, "_on_attack_cooldown_finished"))
 
 	dog_cooldown_timer = Timer.new()
-	dog_cooldown_timer.wait_time = 10.0
+	dog_cooldown_timer.wait_time = 20.0
 	dog_cooldown_timer.one_shot  = true
 	add_child(dog_cooldown_timer)
 
 	merc_cooldown_timer = Timer.new()
-	merc_cooldown_timer.wait_time = 10.0
+	merc_cooldown_timer.wait_time = 20.0
 	merc_cooldown_timer.one_shot  = true
 	add_child(merc_cooldown_timer)
 
