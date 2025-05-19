@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://crekpcpu77hnm"]
+
+[ext_resource type="Script" path="res://Scripts/chain_bolt.gd" id="1_nxh1d"]
+[ext_resource type="AudioStream" uid="uid://c3l76n3lfd1l4" path="res://Audio/SFX/electric-155027.mp3" id="2_86sjm"]
+
+[node name="ChainBolt" type="Node2D"]
+script = ExtResource("1_nxh1d")
+
+[node name="BoltLine" type="Line2D" parent="."]
+width = 1.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_86sjm")

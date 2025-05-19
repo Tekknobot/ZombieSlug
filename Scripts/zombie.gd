@@ -45,6 +45,10 @@ var is_charging: bool   = false
 @export var spore_interval: float   = 2.0   # seconds between spore drops
 var _spore_timer: Timer = null
 
+@export var chain_radius: float = 48.0
+@export var chain_damage: int   = 2
+var _lightning_fx := preload("res://Scenes/Effects/Chain_Bolt.tscn")
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -235,6 +239,9 @@ func _die_cleanup() -> void:
 	if behavior == "spore" and is_instance_valid(self):
 		_drop_spore()
 
+	if behavior == "chain" and is_instance_valid(self):
+		_do_chain_reaction()
+	
 	# 2) remove from the “Zombie” group
 	remove_from_group("Zombie")
 
@@ -257,7 +264,63 @@ func _die_cleanup() -> void:
 	if has_node("Hitbox"):
 		$Hitbox.monitoring = false
 
+func _do_chain_reaction() -> void:
+	# Track which zombies we’ve already struck
+	var visited: Array[CharacterBody2D] = [ self ]
+	# Queue of positions to chain from (start with this zombie’s position)
+	var queue_positions: Array[Vector2]  = [ global_position ]
 
+	# Origin spark
+	_spawn_chain_bolt(global_position, global_position)
+
+	while queue_positions.size() > 0:
+		var src_pos = queue_positions.pop_front()
+
+		# Grab a fresh list of all live zombies
+		for other_node in get_tree().get_nodes_in_group("Zombie").duplicate():
+			# Must still exist and be a CharacterBody2D
+			if not is_instance_valid(other_node) or not (other_node is CharacterBody2D):
+				continue
+			var other = other_node as CharacterBody2D
+			# Skip if we’ve already hit it
+			if other in visited:
+				continue
+
+			# If within chain radius of our current source position
+			if src_pos.distance_to(other.global_position) <= chain_radius:
+				# Spawn the bolt
+				_spawn_chain_bolt(src_pos, other.global_position)
+				# Deal chain damage
+				other.take_damage(9999)
+
+				# Remember we’ve hit this one
+				visited.append(other)
+				# If it’s still alive, chain from its position;
+				# if it died, use its last known position
+				queue_positions.append(other.global_position)
+
+				# Small pause so you can actually see the chain crawl
+				await get_tree().create_timer(0.1).timeout
+
+func _spawn_chain_bolt(start_pos: Vector2, end_pos: Vector2) -> void:
+	# 1) Instantiate the bolt scene
+	var bolt_scene = preload("res://Scenes/Effects/Chain_Bolt.tscn")
+	var bolt = bolt_scene.instantiate()
+
+	# 2) Make sure it isn’t in the “Zombie” group (so you don’t pick it up again)
+	if bolt.is_in_group("Zombie"):
+		bolt.remove_from_group("Zombie")
+
+	start_pos.y -= 16
+	
+	# 3) Position and add to the world *before* you call its play() method
+	bolt.global_position = start_pos
+	get_tree().get_current_scene().add_child(bolt)
+
+	# 4) Kick off the bolt’s own logic—no set_target, just use its play() API
+	if bolt.has_method("play"):
+		bolt.play(end_pos)
+		
 # Briefly tint the sprite red, then restore
 func flash() -> void:
 	var orig = anim.modulate

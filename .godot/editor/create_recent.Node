@@ -1,6 +1,7 @@
+AudioStreamPlayer2D
+Line2D
 Node2D
 AudioListener2D
-AudioStreamPlayer2D
 Label
 AnimatedSprite2D
 Control
@@ -11,4 +12,3 @@ CollisionShape2D
 Area2D
 VBoxContainer
 CanvasLayer
-CharacterBody2D

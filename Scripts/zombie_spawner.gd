@@ -45,32 +45,41 @@ func spawn_zombie() -> void:
 	# decide archetype *probabilistically*:
 	var lvl  = Playerstats.level
 	var roll = randf()  # [0,1)
-
+	
 	if lvl >= 8:
-		if roll < 0.25:
-			# 25% chance → spore
+		# Level 8+: 30% chain, 25% spore, 20% charger, 25% vanilla
+		if roll < 0.30:
+			z.behavior = "chain"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChainEffect.tres")
+		elif roll < 0.55:
 			z.behavior = "spore"
-			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
-			sprite.material = preload("res://Shaders/SporeEffect.tres")
-		elif roll < 0.50:
-			# next 25% → charger
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/SporeEffect.tres")
+		elif roll < 0.75:
 			z.behavior = "charger"
-			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
-			sprite.material = preload("res://Shaders/ChargerEffect.tres")
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
 		else:
-			# remaining 50% → vanilla
 			z.behavior = ""
 	elif lvl >= 5:
+		# Level 5–7: 25% spore, 20% charger, 55% vanilla
 		if roll < 0.25:
-			# 25% chance → charger (levels 5–7)
+			z.behavior = "spore"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/SporeEffect.tres")
+		elif roll < 0.45:
 			z.behavior = "charger"
-			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
-			sprite.material = preload("res://Shaders/ChargerEffect.tres")
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+		else:
+			z.behavior = ""
+	elif lvl >= 3:
+		# Level 3–4: 20% charger, 80% vanilla
+		if roll < 0.20:
+			z.behavior = "charger"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
 		else:
 			z.behavior = ""
 	else:
+		# below level 3: always vanilla
 		z.behavior = ""
-
+		
 	# then your health‐scaling, grouping, etc.
 	if lvl > 1 and z.has_method("take_damage"):
 		var base  = z.max_health

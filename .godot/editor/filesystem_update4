@@ -70,3 +70,7 @@ res://Shaders/JumperEffect.tres
 res://Scenes/Effects/SporePatch.tscn
 res://Shaders/SporeEffect.tres
 res://Shaders/spore_effect.gdshader
+res://Scripts/chain_bolt.gd
+res://Scenes/Effects/Chain_Bolt.tscn
+res://Shaders/ChainEffect.tres
+res://Shaders/chain_effect.gdshader

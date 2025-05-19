@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b12fsrjer35ws"]
+
+[ext_resource type="Shader" path="res://Shaders/chain_effect.gdshader" id="1_8b3qf"]
+
+[resource]
+shader = ExtResource("1_8b3qf")
+shader_parameter/glitch_intensity = 1.0
+shader_parameter/glitch_speed = 10.0
+shader_parameter/color_separation = 0.05
+shader_parameter/scanline_count = 120
+shader_parameter/flicker_strength = 0.5
