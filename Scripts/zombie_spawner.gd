@@ -46,7 +46,7 @@ func spawn_zombie() -> void:
 	var lvl  = Playerstats.level
 	var roll = randf()  # [0,1)
 	
-	if lvl >= 8:
+	if lvl >= 5:
 		# Level 8+: 30% chain, 25% spore, 20% charger, 25% vanilla
 		if roll < 0.30:
 			z.behavior = "chain"
@@ -59,7 +59,7 @@ func spawn_zombie() -> void:
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
 		else:
 			z.behavior = ""
-	elif lvl >= 5:
+	elif lvl >= 4:
 		# Level 5–7: 25% spore, 20% charger, 55% vanilla
 		if roll < 0.25:
 			z.behavior = "spore"

@@ -291,7 +291,7 @@ func _do_chain_reaction() -> void:
 				# Spawn the bolt
 				_spawn_chain_bolt(src_pos, other.global_position)
 				# Deal chain damage
-				other.take_damage(9999)
+				other.take_damage(max_health/2)
 
 				# Remember we’ve hit this one
 				visited.append(other)
@@ -391,7 +391,7 @@ func _explode() -> void:
 	# 2) deal area damage to player(s)
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p.global_position.distance_to(global_position) <= 32:
-			p.take_damage(explosion_damage)
+			p.take_damage(9999)
 
 	# 3) deal area damage to other zombies
 	for z in get_tree().get_nodes_in_group("Zombie"):
