@@ -85,19 +85,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-	
+
 	# find your target first
-	var players = get_tree().get_nodes_in_group("Player")
-	if players.is_empty():
+	var players_target = get_tree().get_nodes_in_group("Player")
+	if players_target.is_empty():
 		return
-	var player_pos = players[0].global_position
-	var to_target  = player_pos - global_position
-	var dist       = to_target.length()
+	var player_pos 			= players_target[0].global_position
+	var to_player_target  	= player_pos - global_position
+	var player_dist       			= to_player_target.length()
 
 	if behavior == "charger":
-		if dist <= 32:
+		if player_dist <= 32:
 			_explode()
-		
+
 	# 1) If any homing grenades exist, chase the nearest one instead of the player:
 	var grenades = get_tree().get_nodes_in_group("TNT_yellow")
 	var target: Node2D = null
@@ -112,6 +112,7 @@ func _physics_process(delta: float) -> void:
 				target    = g
 	else:
 		# fall back to the player
+		var players = get_tree().get_nodes_in_group("Player")
 		if players.is_empty():
 			if not attack_timer.is_stopped():
 				attack_timer.stop()
@@ -119,6 +120,8 @@ func _physics_process(delta: float) -> void:
 		target = players[0] as CharacterBody2D
 
 	# 2) move/tackle exactly as before, but using `target`:
+	var to_target = target.global_position - global_position
+	var dist = to_target.length()
 	var dx = to_target.x
 	var DEADZONE := 1.0
 	
@@ -150,7 +153,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0
 
 	move_and_slide()
-
+	
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p is CharacterBody2D and p.has_method("take_damage"):
@@ -391,7 +394,7 @@ func _explode() -> void:
 	# 2) deal area damage to player(s)
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p.global_position.distance_to(global_position) <= 32:
-			p.take_damage(9999)
+			p.take_damage(p.max_health/2)
 
 	# 3) deal area damage to other zombies
 	for z in get_tree().get_nodes_in_group("Zombie"):
