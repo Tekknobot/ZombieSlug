@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=41 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
@@ -16,7 +16,11 @@
 [ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
 [ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
+[ext_resource type="Texture2D" uid="uid://d2mtq3d5joemr" path="res://Portraits/Zombies/Rambo_portrait.png" id="17_7laas"]
+[ext_resource type="Texture2D" uid="uid://cle37oiwj581m" path="res://Portraits/Zombies/Dog_portrait.png" id="18_p40qc"]
+[ext_resource type="Texture2D" uid="uid://bedrjpys37gnq" path="res://Assets/Meks/M1/m1idle_1.png" id="19_k767o"]
 [ext_resource type="PackedScene" uid="uid://5r7h532lidgw" path="res://Scenes/Sprites/block.tscn" id="20_5cnqw"]
+[ext_resource type="Texture2D" uid="uid://dfrankfy0q8v1" path="res://Assets/Meks/M2/m2idle_1.png" id="20_5u86s"]
 [ext_resource type="Script" path="res://Scripts/block_manager.gd" id="20_omn77"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
@@ -30,6 +34,62 @@ shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25318"]
+bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6t3ug"]
+shader = ExtResource("8_4q5fy")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k30t"]
+bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0cnh"]
+shader = ExtResource("8_4q5fy")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkd0k"]
+bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8v7c"]
+shader = ExtResource("8_4q5fy")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7tma"]
+bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_notjr"]
+shader = ExtResource("8_4q5fy")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6xn7"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -159,6 +219,83 @@ offset_top = 1.0
 offset_right = 65.0
 offset_bottom = 65.0
 texture = ExtResource("6_vq0dw")
+
+[node name="Merc" type="Panel" parent="HUD/TopLeft"]
+material = SubResource("ShaderMaterial_6t3ug")
+layout_mode = 0
+offset_left = 347.0
+offset_top = 7.0
+offset_right = 382.0
+offset_bottom = 43.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
+
+[node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Merc"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = -14.0
+offset_top = -15.0
+offset_right = 50.0
+offset_bottom = 49.0
+texture = ExtResource("17_7laas")
+
+[node name="Dog" type="Panel" parent="HUD/TopLeft"]
+material = SubResource("ShaderMaterial_x0cnh")
+layout_mode = 0
+offset_left = 366.0
+offset_top = 7.0
+offset_right = 401.0
+offset_bottom = 43.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
+
+[node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Dog"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = -14.0
+offset_top = -15.0
+offset_right = 50.0
+offset_bottom = 49.0
+texture = ExtResource("18_p40qc")
+
+[node name="Mech" type="Panel" parent="HUD/TopLeft"]
+material = SubResource("ShaderMaterial_q8v7c")
+layout_mode = 0
+offset_left = 384.5
+offset_top = 7.0
+offset_right = 419.5
+offset_bottom = 43.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_b7tma")
+
+[node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Mech"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = 4.0
+offset_top = -4.0
+offset_right = 68.0
+offset_bottom = 76.0
+texture = ExtResource("19_k767o")
+stretch_mode = 4
+
+[node name="Panther" type="Panel" parent="HUD/TopLeft"]
+material = SubResource("ShaderMaterial_notjr")
+layout_mode = 0
+offset_left = 403.5
+offset_top = 7.0
+offset_right = 438.5
+offset_bottom = 43.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_x6xn7")
+
+[node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Panther"]
+material = SubResource("ShaderMaterial_od7e4")
+layout_mode = 0
+offset_left = 1.5
+offset_right = 65.5
+offset_bottom = 65.0
+texture = ExtResource("20_5u86s")
+stretch_mode = 4
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0

@@ -30,7 +30,17 @@ signal shocks_changed(new_shocks: int)
 
 var currency = 0
 
+signal merc_used
+signal dog_used
+signal mech_used
+signal panther_used
+
 func _ready() -> void:
+	self.connect("dog_used",     Callable(self, "_on_dog_used"))
+	self.connect("mech_used",    Callable(self, "_on_mech_used"))
+	self.connect("merc_used",    Callable(self, "_on_merc_used"))
+	self.connect("panther_used", Callable(self, "_on_panther_used"))	
+	
 	# Initialize default values
 	health   = max_health
 	xp       = 0

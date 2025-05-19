@@ -254,18 +254,23 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("ui_down") and mech_cooldown_timer.is_stopped():
 			_spawn_mech()
 			mech_cooldown_timer.start()
+			Playerstats.emit_signal("mech_used")
 		elif dog_cooldown_timer.is_stopped():
 			_spawn_dog()
 			dog_cooldown_timer.start()
+			Playerstats.emit_signal("dog_used")
+
 
 	# ——— Summon Merc or Mech Panther ———
 	if Input.is_action_just_pressed("merc"):
 		if Input.is_action_pressed("ui_down") and mech_panther_cooldown_timer.is_stopped():
 			_spawn_mech_panther()
 			mech_panther_cooldown_timer.start()
+			Playerstats.emit_signal("panther_used")
 		elif merc_cooldown_timer.is_stopped():
 			_spawn_merc()
 			merc_cooldown_timer.start()
+			Playerstats.emit_signal("merc_used")
 
 	if on_roof and Input.is_action_just_pressed("shock") and shock_timer.is_stopped():
 		_perform_roof_shock()

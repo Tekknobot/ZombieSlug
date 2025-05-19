@@ -14,6 +14,16 @@ extends CanvasLayer
 @onready var mines_label  		= $TopLeft/Bumpers/MINES  			as RichTextLabel
 @onready var shock_label 		= $TopLeft/Bumpers/SHOCK 			as RichTextLabel
 
+@onready var merc_portrait    = $TopLeft/Merc    as Panel
+@onready var dog_portrait     = $TopLeft/Dog     as Panel
+@onready var mech_portrait    = $TopLeft/Mech    as Panel
+@onready var panther_portrait = $TopLeft/Panther as Panel
+
+@export var merc_cooldown_time:     float = 20.0
+@export var dog_cooldown_time:      float = 20.0
+@export var mech_cooldown_time:     float = 20.0
+@export var panther_cooldown_time:  float = 20.0
+
 var level_names := [
 	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Conqueror",
 	"Plague Purifier","Decay Destroyer","Rot Ranger","Necro Nemesis",
@@ -27,6 +37,12 @@ var level_names := [
 func _ready() -> void:
 	var stats = Playerstats
 
+	# connect ally-used signals
+	stats.connect("merc_used",    Callable(self, "_on_merc_used"))
+	stats.connect("dog_used",     Callable(self, "_on_dog_used"))
+	stats.connect("mech_used",    Callable(self, "_on_mech_used"))
+	stats.connect("panther_used", Callable(self, "_on_panther_used"))
+	
 	# initialize
 	kills_label.text      = "Kills: %d"  % stats.kills
 	health_bar.max_value  = stats.max_health
@@ -90,3 +106,26 @@ func _on_shocks_changed(s: int) -> void:
 
 func _on_currency_changed(s: int) -> void:
 	currency_label.text = "CURRENCY: %d" % s
+
+func _on_merc_used() -> void:
+	_start_cooldown(merc_portrait, merc_cooldown_time)
+
+func _on_dog_used() -> void:
+	_start_cooldown(dog_portrait, dog_cooldown_time)
+
+func _on_mech_used() -> void:
+	_start_cooldown(mech_portrait, mech_cooldown_time)
+
+func _on_panther_used() -> void:
+	_start_cooldown(panther_portrait, panther_cooldown_time)
+
+# Helper to tween a panel’s alpha from fully opaque→transparent over `duration`.
+func _start_cooldown(panel: Panel, duration: float) -> void:
+	# Ensure it’s visible & fully opaque at start
+	panel.modulate.a = 0.0
+
+	# Create a tween on the panel
+	var tw = panel.create_tween()
+	# Over `duration`, animate its alpha down to 0
+	tw.tween_property(panel, "modulate:a", 1.0, duration)
+	tw.play()
