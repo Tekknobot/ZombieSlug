@@ -223,9 +223,9 @@ texture = ExtResource("6_vq0dw")
 [node name="Merc" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_6t3ug")
 layout_mode = 0
-offset_left = 347.0
+offset_left = 365.5
 offset_top = 7.0
-offset_right = 382.0
+offset_right = 400.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
@@ -242,9 +242,9 @@ texture = ExtResource("17_7laas")
 [node name="Dog" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_x0cnh")
 layout_mode = 0
-offset_left = 366.0
+offset_left = 347.0
 offset_top = 7.0
-offset_right = 401.0
+offset_right = 382.0
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
