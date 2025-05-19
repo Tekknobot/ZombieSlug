@@ -23,40 +23,65 @@ func _ready() -> void:
 
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
 
-
 func spawn_zombie() -> void:
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
 	var player = players[0] as Node2D
 
+	# spawn position logic…
 	var side: int
 	if (randi() & 1) == 0:
 		side = -1
 	else:
 		side = 1
-
-	var spawn_pos = Vector2(
-		player.global_position.x + side * spawn_distance,
-		global_position.y
-	)
+		
+	var spawn_pos = Vector2(player.global_position.x + side * spawn_distance,
+							global_position.y)
 
 	var z = zombie_scene.instantiate() as CharacterBody2D
 	z.global_position = spawn_pos
 
-	var lvl = Playerstats.level
+	# decide archetype *probabilistically*:
+	var lvl  = Playerstats.level
+	var roll = randf()  # [0,1)
+
+	if lvl >= 8:
+		if roll < 0.25:
+			# 25% chance → spore
+			z.behavior = "spore"
+			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
+			sprite.material = preload("res://Shaders/SporeEffect.tres")
+		elif roll < 0.50:
+			# next 25% → charger
+			z.behavior = "charger"
+			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
+			sprite.material = preload("res://Shaders/ChargerEffect.tres")
+		else:
+			# remaining 50% → vanilla
+			z.behavior = ""
+	elif lvl >= 5:
+		if roll < 0.25:
+			# 25% chance → charger (levels 5–7)
+			z.behavior = "charger"
+			var sprite = z.get_node("AnimatedSprite2D") as AnimatedSprite2D
+			sprite.material = preload("res://Shaders/ChargerEffect.tres")
+		else:
+			z.behavior = ""
+	else:
+		z.behavior = ""
+
+	# then your health‐scaling, grouping, etc.
 	if lvl > 1 and z.has_method("take_damage"):
-		# grow health by 40% each level (compounds)
-		var base = z.max_health
-		var scale = pow(1.40, lvl - 1)      # 1.10 == +10% per level
+		var base  = z.max_health
+		var scale = pow(1.40, lvl - 1)
 		z.max_health = int(base * scale)
 		z.health     = z.max_health
 
 	if not z.is_in_group("Zombie"):
 		z.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(z)
-	print("Spawned zombie at ", spawn_pos, " (max_health=", z.max_health, ")")
-
+	print("Spawned [", z.behavior, "] zombie at ", spawn_pos, " (health=", z.max_health, ")")
 
 func _on_level_changed(new_level: int) -> void:
 	# 10% faster per level, but never below min_spawn_factor

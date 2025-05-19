@@ -1,3 +1,4 @@
+# spore_patch.gd
 extends Area2D
 
 @export var dps: float = 5.0            # damage per second
@@ -38,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	# Fetch overlapping bodies to apply DPS and slow
 	var overlapping = get_overlapping_bodies()
 	for body in overlapping:
-		if body.is_in_group("Zombie") and body is CharacterBody2D:
+		if body.is_in_group("Zombie") and is_instance_valid(body):
 			if not _inside_zombies.has(body):
 				_on_zombie_enter(body)
 			# accumulate and apply DPS
@@ -54,18 +55,21 @@ func _physics_process(delta: float) -> void:
 
 	# Restore speed for zombies that left area
 	for z in _inside_zombies.duplicate():
-		if not overlapping.has(z):
+		if not overlapping.has(z) or not is_instance_valid(z):
 			_on_zombie_exit(z)
 
 	# Expire patch after duration
 	if _time >= duration:
 		for z in _inside_zombies:
-			_restore_speed(z)
+			if is_instance_valid(z):
+				_restore_speed(z)
 		_inside_zombies.clear()
 		_damage_accumulators.clear()
 		queue_free()
 
-func _on_zombie_enter(body: CharacterBody2D) -> void:
+func _on_zombie_enter(body) -> void:
+	if not is_instance_valid(body):
+		return
 	_inside_zombies.append(body)
 	_damage_accumulators[body] = 0.0
 	# immediate DPS tick
@@ -78,17 +82,19 @@ func _on_zombie_enter(body: CharacterBody2D) -> void:
 	# apply slow
 	if body.has_method("apply_slow"):
 		body.apply_slow(slow_percent, duration - _time)
-	elif body.has_meta("speed"):
-		var orig = body.speed
-		_original_speeds[body] = orig
-		body.speed = orig * (1.0 - slow_percent)
+	else:
+		# fallback: store and reduce speed
+		_original_speeds[body] = body.speed
+		body.speed = body.speed * (1.0 - slow_percent)
 
-func _on_zombie_exit(body: CharacterBody2D) -> void:
+func _on_zombie_exit(body) -> void:
+	if not is_instance_valid(body):
+		return
 	_restore_speed(body)
 	_inside_zombies.erase(body)
 	_damage_accumulators.erase(body)
 
-func _restore_speed(body: CharacterBody2D) -> void:
-	if _original_speeds.has(body) and body.is_inside_tree():
+func _restore_speed(body) -> void:
+	if _original_speeds.has(body) and is_instance_valid(body):
 		body.speed = _original_speeds[body]
 		_original_speeds.erase(body)

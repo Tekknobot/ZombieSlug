@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cp83b6jsxgx28"]
+
+[ext_resource type="Shader" path="res://Shaders/spore_effect.gdshader" id="1_jldpa"]
+
+[resource]
+shader = ExtResource("1_jldpa")

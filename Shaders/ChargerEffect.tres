@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://0jvd0xy1ont0"]
+
+[ext_resource type="Shader" path="res://Shaders/charger_effect.gdshader" id="1_6lc85"]
+
+[resource]
+shader = ExtResource("1_6lc85")
+shader_parameter/charge_color = Color(1, 0.2, 0, 1)
+shader_parameter/glow_strength = 2.0
+shader_parameter/glow_speed = 20.0
+shader_parameter/glow_thickness = 0.1

@@ -30,6 +30,21 @@ var _shake_magnitude: float   = 4.0
 
 signal died(pos: Vector2)
 
+var behavior: String = ""
+@export var leap_cooldown: float          = 1.0
+@export var leap_speed_multiplier: float = 2.0
+@export var leap_vertical_velocity: float= -300.0
+var can_leap: bool    = true
+var leap_timer: Timer
+
+@export var explosion_radius:        float = 128.0
+@export var explosion_damage:        int   = 3
+var is_charging: bool   = false
+
+@export var spore_scene: PackedScene = preload("res://Scenes/Effects/SporePatch.tscn")
+@export var spore_interval: float   = 2.0   # seconds between spore drops
+var _spore_timer: Timer = null
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -43,10 +58,42 @@ func _ready() -> void:
 	add_child(attack_timer)
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
+	if behavior == "leaper":
+		# set up a dedicated timer for leaps
+		leap_timer = Timer.new()
+		leap_timer.wait_time = leap_cooldown
+		leap_timer.one_shot  = true
+		add_child(leap_timer)
+		leap_timer.connect("timeout", Callable(self, "_on_leap_timeout"))
+
+	if behavior == "charger":
+		anim.play("move")  # ensure it’s in move state
+
+	if behavior == "spore":
+		# set up the repeating spore‐drop timer
+		_spore_timer = Timer.new()
+		_spore_timer.wait_time = spore_interval
+		_spore_timer.one_shot  = false
+		add_child(_spore_timer)
+		#_spore_timer.start()
+		_spore_timer.connect("timeout", Callable(self, "_drop_spore"))
+						
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	
+	# find your target first
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var player_pos = players[0].global_position
+	var to_target  = player_pos - global_position
+	var dist       = to_target.length()
 
+	if behavior == "charger":
+		if dist <= 32:
+			_explode()
+		
 	# 1) If any homing grenades exist, chase the nearest one instead of the player:
 	var grenades = get_tree().get_nodes_in_group("TNT_yellow")
 	var target: Node2D = null
@@ -61,7 +108,6 @@ func _physics_process(delta: float) -> void:
 				target    = g
 	else:
 		# fall back to the player
-		var players = get_tree().get_nodes_in_group("Player")
 		if players.is_empty():
 			if not attack_timer.is_stopped():
 				attack_timer.stop()
@@ -69,8 +115,6 @@ func _physics_process(delta: float) -> void:
 		target = players[0] as CharacterBody2D
 
 	# 2) move/tackle exactly as before, but using `target`:
-	var to_target = target.global_position - global_position
-	var dist = to_target.length()
 	var dx = to_target.x
 	var DEADZONE := 1.0
 	
@@ -184,6 +228,13 @@ func _die_cleanup() -> void:
 	# 1) prevent any further _physics_process/attack logic
 	is_dead = true
 
+	if behavior == "charger" and is_instance_valid(self):
+		_explode()
+
+	# if this was a spore zombie, drop one last patch on death
+	if behavior == "spore" and is_instance_valid(self):
+		_drop_spore()
+
 	# 2) remove from the “Zombie” group
 	remove_from_group("Zombie")
 
@@ -263,3 +314,39 @@ func update_health_label() -> void:
 	else:
 		tint = Color(1, 0, 0)
 	health_label.modulate = tint
+
+func _explode() -> void:
+	is_charging = false
+	is_dead     = true
+
+	# 1) play your explosion effect
+	var FX = preload("res://Scenes/Effects/Explosion.tscn").instantiate()
+	FX.global_position = global_position
+	FX.global_position.y -= 8
+	get_tree().get_current_scene().add_child(FX)
+
+	# 2) deal area damage to player(s)
+	for p in get_tree().get_nodes_in_group("Player"):
+		if p.global_position.distance_to(global_position) <= 32:
+			p.take_damage(explosion_damage)
+
+	# 3) deal area damage to other zombies
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if z == self:
+			continue  # don’t hit yourself
+		if z is CharacterBody2D and z.has_method("take_damage"):
+			if z.global_position.distance_to(global_position) <= explosion_radius:
+				z.take_damage(explosion_damage)
+
+	# 4) clean up this zombie
+	death_sfx.play()
+	emit_signal("died", global_position)
+	queue_free()
+
+func _drop_spore() -> void:
+	# spawn the patch at the zombie's feet
+	var patch = spore_scene.instantiate()
+	patch.global_position = Vector2(global_position.x, global_position.y)
+	patch.global_position.y -= 16
+	patch.duration = 5
+	get_tree().get_current_scene().add_child(patch)
