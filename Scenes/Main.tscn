@@ -112,7 +112,6 @@ bg_color = Color(1, 1, 0, 1)
 [node name="Level" type="Node2D"]
 
 [node name="Fader" type="CanvasLayer" parent="."]
-visible = false
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("2_5s4qg")
