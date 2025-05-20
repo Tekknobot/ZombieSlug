@@ -154,6 +154,13 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
+	# ——— NEW: despawn on any collision with “Street” ———
+	for i in range(get_slide_collision_count()):
+		var col = get_slide_collision(i).get_collider()
+		if col and col.is_in_group("Street"):
+			queue_free()
+			return	
+	
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p is CharacterBody2D and p.has_method("take_damage"):

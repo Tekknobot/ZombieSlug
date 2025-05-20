@@ -112,6 +112,7 @@ bg_color = Color(1, 1, 0, 1)
 [node name="Level" type="Node2D"]
 
 [node name="Fader" type="CanvasLayer" parent="."]
+visible = false
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
 script = ExtResource("2_5s4qg")
@@ -132,21 +133,8 @@ zoom = Vector2(2, 2)
 script = ExtResource("3_xltqf")
 shake_magnitude = 4.0
 
-[node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
-position = Vector2(98, 35)
-base_speed = 60.0
-initial_firerate = 1.0
-
-[node name="StarryNight" parent="Soldier" instance=ExtResource("10_eeh2b")]
-z_index = -1000
-position = Vector2(-20, -138)
-amount = 10000
-
-[node name="Rain" parent="Soldier" instance=ExtResource("26_rksku")]
-position = Vector2(0, -381)
-
-[node name="ZombieSpawner" type="Node2D" parent="Soldier"]
-position = Vector2(-98, -52)
+[node name="ZombieSpawner" type="Node2D" parent="Camera2D"]
+position = Vector2(98, 94)
 script = ExtResource("4_js2x2")
 base_spawn_interval = 1.0
 min_spawn_factor = 0.1
@@ -155,14 +143,27 @@ boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
 sidewalk_chance = 0.25
 
-[node name="Point" type="Node2D" parent="Soldier/ZombieSpawner"]
-position = Vector2(-109, 42)
+[node name="Point" type="Node2D" parent="Camera2D/ZombieSpawner"]
+position = Vector2(-89, 0)
 
-[node name="Point2" type="Node2D" parent="Soldier/ZombieSpawner"]
-position = Vector2(-20, 42)
+[node name="Point2" type="Node2D" parent="Camera2D/ZombieSpawner"]
 
-[node name="Point3" type="Node2D" parent="Soldier/ZombieSpawner"]
-position = Vector2(158, 42)
+[node name="Point3" type="Node2D" parent="Camera2D/ZombieSpawner"]
+position = Vector2(178, 0)
+
+[node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
+position = Vector2(98, 35)
+base_speed = 60.0
+initial_firerate = 1.0
+max_health = 5
+
+[node name="StarryNight" parent="Soldier" instance=ExtResource("10_eeh2b")]
+z_index = -1000
+position = Vector2(-20, -138)
+amount = 10000
+
+[node name="Rain" parent="Soldier" instance=ExtResource("26_rksku")]
+position = Vector2(0, -381)
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Soldier"]
 position = Vector2(-98, -35)

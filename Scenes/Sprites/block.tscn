@@ -829,7 +829,7 @@ shape = SubResource("RectangleShape2D_kr8lm")
 modulate = Color(0.262932, 0.262932, 0.262932, 1)
 position = Vector2(0, 84)
 
-[node name="Tile86" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile86" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-336, 0)
 
@@ -841,7 +841,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile87" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile87" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-304, 0)
 
@@ -853,7 +853,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile88" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile88" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-272, 0)
 
@@ -865,7 +865,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile89" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile89" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-240, 0)
 
@@ -877,7 +877,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile90" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile90" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-208, 0)
 
@@ -889,7 +889,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile91" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile91" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-176, 0)
 
@@ -901,7 +901,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile92" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile92" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-144, 0)
 
@@ -913,7 +913,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile93" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile93" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-112, 0)
 
@@ -925,7 +925,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile94" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile94" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-80, 0)
 
@@ -937,7 +937,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile95" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile95" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-48, 0)
 
@@ -949,7 +949,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile96" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile96" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(-16, 0)
 
@@ -961,7 +961,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile97" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile97" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(16, 0)
 
@@ -973,7 +973,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile98" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile98" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(48, 0)
 
@@ -985,7 +985,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile99" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile99" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(80, 0)
 
@@ -997,7 +997,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile100" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile100" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(112, 0)
 
@@ -1009,7 +1009,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile101" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile101" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(144, 0)
 
@@ -1021,7 +1021,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile102" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile102" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(176, 0)
 
@@ -1033,7 +1033,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile103" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile103" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(208, 0)
 
@@ -1045,7 +1045,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile104" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile104" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(240, 0)
 
@@ -1057,7 +1057,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile105" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile105" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(272, 0)
 
@@ -1069,7 +1069,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile106" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile106" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(304, 0)
 
@@ -1081,7 +1081,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile107" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile107" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(336, 0)
 
@@ -1093,7 +1093,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile108" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile108" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(368, 0)
 
@@ -1105,7 +1105,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile109" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile109" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(400, 0)
 
@@ -1117,7 +1117,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile110" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile110" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(432, 0)
 
@@ -1129,7 +1129,7 @@ texture = ExtResource("11_soryi")
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kr8lm")
 
-[node name="Tile111" type="StaticBody2D" parent="Floor/Street" groups=["Floor", "Street"]]
+[node name="Tile111" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
 position = Vector2(464, 0)
 
