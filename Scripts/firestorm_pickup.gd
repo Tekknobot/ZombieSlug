@@ -5,7 +5,7 @@ extends Area2D
 @export var interval:             float = 0.2
 @export var strikes_per_interval: int   = 3
 @export var damage:               int   = 2
-@export var radius:               float = 64.0
+@export var radius:               float = 128.0
 @export var sfx_stream:           AudioStream
 
 # wiggle params:

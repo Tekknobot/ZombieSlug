@@ -348,7 +348,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
 
-	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped() and not on_roof:
+	if Input.is_action_just_pressed("grenade") and grenade_cooldown_timer.is_stopped():
 		if Playerstats.use_grenade():
 			_throw_grenade()
 			grenade_cooldown_timer.start()

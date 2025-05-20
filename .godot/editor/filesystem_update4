@@ -74,3 +74,4 @@ res://Scripts/chain_bolt.gd
 res://Scenes/Effects/Chain_Bolt.tscn
 res://Shaders/ChainEffect.tres
 res://Shaders/chain_effect.gdshader
+res://Scenes/Sprites/FirestormPickup.tscn

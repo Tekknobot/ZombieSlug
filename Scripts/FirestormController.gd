@@ -5,7 +5,7 @@ extends Node2D
 @export var interval:             float = 0.2    # seconds between each volley
 @export var strikes_per_interval: int   = 3      # bolts per volley
 @export var damage:               int   = 9999   # damage per bolt
-@export var radius:               float = 48.0   # max radius for random blasts
+@export var radius:               float = 128.0   # max radius for random blasts
 @export var sfx_stream:           AudioStream             # optional storm SFX
 
 const ExplosionScene = preload("res://Scenes/Effects/Explosion.tscn")
