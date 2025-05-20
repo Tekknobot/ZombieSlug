@@ -144,6 +144,9 @@ var mech_panther_cooldown_timer: Timer
 const CLIMB_DEADZONE: float = 0.2
 const GrappleScene = preload("res://Scenes/Sprites/grapple_hook.tscn")
 
+var _on_sidewalk := false
+var _floor_exceptions := []
+
 func _ready() -> void:	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
@@ -239,7 +242,32 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-		
+
+	# ——— Step-down … ———
+	if is_on_floor() \
+	   and Input.is_action_pressed("ui_down") \
+	   and Input.is_action_just_pressed("jump"):
+
+		# only if you’re on a pure “floor”
+		var on_main = false
+		for i in range(get_slide_collision_count()):
+			var col = get_slide_collision(i)
+			if col and col.get_collider().is_in_group("Floor") \
+				   and not col.get_collider().is_in_group("Sidewalk"):
+				on_main = true
+				break
+		if on_main:
+			_drop_to_sidewalk()
+			return
+
+	# ——— Step-up … ———
+	if _on_sidewalk \
+	   and Input.is_action_pressed("ui_up") \
+	   and Input.is_action_just_pressed("jump"):
+
+		_climb_up_to_floor()
+		return
+					
 	# —————————————————— KNOCKBACK HANDLING ——————————————————
 	if _knockback_time_left > 0.0:
 		_knockback_time_left -= delta
@@ -377,10 +405,13 @@ func _physics_process(delta: float) -> void:
 		else:
 			muzzle_point.position.x = -abs_off
 
-	if can_move and is_on_floor() and Input.is_action_just_pressed("jump"):
+	if can_move \
+	   and is_on_floor() \
+	   and not Input.is_action_pressed("ui_down") \
+	   and Input.is_action_just_pressed("jump"):
 		jump_sfx.play()
 		velocity.y = jump_velocity
-		
+
 	self.velocity = velocity
 	move_and_slide()
 
@@ -896,3 +927,65 @@ func _perform_roof_shock() -> void:
 
 func _hide_shock_effect() -> void:
 	shock_effect.visible = false
+
+func _drop_to_sidewalk() -> void:
+	# disable your own collider so you pass through
+	$CollisionShape2D.disabled = true
+
+	# snap you down to the nearest sidewalk Y
+	var best_sw: Node2D
+	var best_dy = INF
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is Node2D:
+			var dy = sw.global_position.y - global_position.y
+			if dy > 0 and dy < best_dy:
+				best_dy = dy
+				best_sw = sw
+	if best_sw:
+		global_position.y = best_sw.global_position.y
+
+	# now re-enable collision…
+	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.disabled = false
+
+	# and tell the player to ignore all pure‐floor bodies
+	_on_sidewalk = true
+	$AnimatedSprite2D.z_index += 1
+	_floor_exceptions.clear()
+	for f in get_tree().get_nodes_in_group("Floor"):
+		if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+			add_collision_exception_with(f)
+			_floor_exceptions.append(f)
+
+# (optional) if you ever let the player step back up…
+func _climb_up_to_floor() -> void:
+	# 1) Temporarily disable your collider so you pass through the sidewalk
+	$CollisionShape2D.disabled = true
+
+	# 2) Find the nearest “floor” (not tagged Sidewalk) **above** you
+	var best_floor: Node2D = null
+	var best_dy = INF
+	for f in get_tree().get_nodes_in_group("Floor"):
+		if not f.is_in_group("Sidewalk") and f is Node2D:
+			var dy = global_position.y - f.global_position.y
+			if dy > 0 and dy < best_dy:
+				best_dy = dy
+				best_floor = f
+
+	# 3) Snap your Y to that floor
+	if best_floor:
+		global_position.y = best_floor.global_position.y
+
+	# 4) Wait a hair, then re-enable collisions
+	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.disabled = false
+
+	# 5) Clear out all the “ignore floor” exceptions we added on drop-through
+	for floor_body in _floor_exceptions:
+		if is_instance_valid(floor_body):
+			remove_collision_exception_with(floor_body)
+	_floor_exceptions.clear()
+
+	# 6) Mark that you’re no longer on the sidewalk
+	_on_sidewalk = false
+	$AnimatedSprite2D.z_index -= 1

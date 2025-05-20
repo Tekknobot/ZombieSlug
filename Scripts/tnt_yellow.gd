@@ -17,6 +17,10 @@ var _fuse_timer:    Timer
 const ExplosionScene = preload("res://Scenes/Effects/Explosion.tscn")
 
 func _ready() -> void:
+	$CollisionShape2D.disabled = true
+	await get_tree().create_timer(0.2).timeout	
+	$CollisionShape2D.disabled = false
+	
 	# only do the “default toss” if nobody else already set velocity
 	if velocity == Vector2.ZERO:
 		velocity = direction.normalized() * initial_speed

@@ -11,6 +11,8 @@ extends Node2D
 var spawn_interval: float
 var _spawn_timer:    Timer
 
+@export var sidewalk_chance := 0.5  # 50/50 with the main floor
+
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
 
@@ -37,10 +39,63 @@ func spawn_zombie() -> void:
 		side = 1
 		
 	var spawn_pos = Vector2(player.global_position.x + side * spawn_distance,
-							global_position.y)
+							global_position.y + 8)
 
 	var z = zombie_scene.instantiate() as CharacterBody2D
 	z.global_position = spawn_pos
+
+	# 1) Decide whether to spawn on the sidewalk or on main floor
+	var spawn_on_sidewalk = false
+	if randf() < sidewalk_chance:
+		spawn_on_sidewalk = true
+	else:
+		spawn_on_sidewalk = false
+
+	# 2) Gather the appropriate surfaces
+	var surfaces: Array = []
+	if spawn_on_sidewalk:
+		# all nodes in "Sidewalk"
+		surfaces = get_tree().get_nodes_in_group("Sidewalk")
+	else:
+		# only nodes in "floor" that are not also in "Sidewalk"
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk"):
+				surfaces.append(f)
+				
+	# 3) Bail if nothing to spawn on
+	if surfaces.is_empty():
+		if spawn_on_sidewalk:
+			push_warning("No Sidewalk surfaces to spawn on")
+		else:
+			push_warning("No Floor surfaces to spawn on")
+		z.queue_free()      # ← make sure to destroy the instance
+		return
+
+	# 4) Pick a surface at random
+	var pick_index = randi() % surfaces.size()
+	var surf = surfaces[pick_index] as Node2D
+
+	# 5) Now that we know we have a surface, adjust z’s Y and X
+	z.global_position.y = surf.global_position.y
+
+	var side_val = 1
+	if randf() < 0.5:
+		side_val = -1
+	else:
+		side_val = 1
+	z.global_position.x = player.global_position.x + side_val * spawn_distance
+
+	# 6) Finally, add z to the scene
+	get_tree().get_current_scene().add_child(z)
+
+	# 7) Add to scene
+	get_tree().get_current_scene().add_child(z)
+
+	# 8) If spawned on the sidewalk, make it fall through pure‐floor bodies
+	if spawn_on_sidewalk:
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+				z.add_collision_exception_with(f)
 
 	# decide archetype *probabilistically*:
 	var lvl  = Playerstats.level
