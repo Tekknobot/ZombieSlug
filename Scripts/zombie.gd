@@ -49,8 +49,8 @@ var _spore_timer: Timer = null
 @export var chain_damage: int   = 2
 var _lightning_fx := preload("res://Scenes/Effects/Chain_Bolt.tscn")
 
-@export var climb_step: float        = 16.0  # how tall a single “step” is
-@export var climb_duration:  float = 0.1    # how long the climb lerp takes
+@export var climb_step: float        = 8.0  # how tall a single “step” is
+@export var climb_duration:  float = 0.25    # how long the climb lerp takes
 @export var max_climb_height: float  = 32.0  # only climb if the other is this high or lower
 @export var climb_cooldown: float    = 0.2   # prevent repeated stepping
 var _climb_timer: float = 0.0
