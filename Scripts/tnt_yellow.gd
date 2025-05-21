@@ -38,7 +38,8 @@ func _ready() -> void:
 	monitoring = true
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
-
+	z_index -= 1
+		
 func _physics_process(delta: float) -> void:
 	if not _has_landed:
 		velocity.y += gravity_force * delta

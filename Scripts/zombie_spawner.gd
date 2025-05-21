@@ -26,6 +26,11 @@ func _ready() -> void:
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
 
 func spawn_zombie() -> void:
+	# Don’t spawn if we already have 250+
+	var current = get_tree().get_nodes_in_group("Zombie").size()
+	if current >= 250:
+		return
+			
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
