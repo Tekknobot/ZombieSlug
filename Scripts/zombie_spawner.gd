@@ -13,6 +13,10 @@ var _spawn_timer:    Timer
 
 @export var sidewalk_chance := 0.5  # 50/50 with the main floor
 
+@export var max_zombies: int = 750
+
+var _zombie_pool: Array[CharacterBody2D] = []
+
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
 
@@ -26,9 +30,9 @@ func _ready() -> void:
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
 
 func spawn_zombie() -> void:
-	# Don’t spawn if we already have 250+
+	# ——— Don’t spawn if we already have ≥ max_zombies ———
 	var current = get_tree().get_nodes_in_group("Zombie").size()
-	if current >= 250:
+	if current >= max_zombies:
 		return
 			
 	var players = get_tree().get_nodes_in_group("Player")

@@ -137,10 +137,11 @@ position = Vector2(98, 94)
 script = ExtResource("4_js2x2")
 base_spawn_interval = 1.0
 min_spawn_factor = 0.1
-spawn_distance = 600.0
+spawn_distance = 500.0
 boss_scene = ExtResource("6_l3jnr")
 zombie_scene = ExtResource("3_rbltb")
 sidewalk_chance = 0.25
+max_zombies = 500
 
 [node name="Point" type="Node2D" parent="Camera2D/ZombieSpawner"]
 position = Vector2(-89, 0)

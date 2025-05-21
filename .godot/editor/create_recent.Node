@@ -1,3 +1,5 @@
+CollisionShape2D
+RigidBody2D
 RayCast2D
 AudioStreamPlayer2D
 Line2D
@@ -9,7 +11,4 @@ Control
 Button
 Panel
 CenterContainer
-CollisionShape2D
 Area2D
-VBoxContainer
-CanvasLayer

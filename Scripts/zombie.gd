@@ -49,6 +49,12 @@ var _spore_timer: Timer = null
 @export var chain_damage: int   = 2
 var _lightning_fx := preload("res://Scenes/Effects/Chain_Bolt.tscn")
 
+@export var climb_step: float        = 16.0  # how tall a single “step” is
+@export var climb_duration:  float = 0.1    # how long the climb lerp takes
+@export var max_climb_height: float  = 32.0  # only climb if the other is this high or lower
+@export var climb_cooldown: float    = 0.2   # prevent repeated stepping
+var _climb_timer: float = 0.0
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -153,6 +159,11 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0
 
 	move_and_slide()
+
+	# handle climb‐over only if timer has expired
+	_climb_timer = max(_climb_timer - delta, 0.0)
+	if _climb_timer == 0.0:
+		_try_climb_over()
 	
 	# ——— NEW: despawn on any collision with “Street” ———
 	for i in range(get_slide_collision_count()):
@@ -160,7 +171,34 @@ func _physics_process(delta: float) -> void:
 		if col and col.is_in_group("Street"):
 			queue_free()
 			return	
-	
+
+func _try_climb_over() -> void:
+	for i in range(get_slide_collision_count()):
+		var coll = get_slide_collision(i)
+		var other = coll.get_collider()
+		if other and other.is_in_group("Zombie") and other is CharacterBody2D:
+			var nx = coll.get_normal().x
+			if abs(nx) > 0.7:
+				var dy = other.global_position.y - global_position.y
+				if abs(dy) <= climb_step:
+					# check there’s free space above
+					var motion = Vector2(0, -climb_step)
+					if not test_move(global_transform, motion):
+						# tween up instead of teleport
+						var from_y = global_position.y
+						var to_y   = from_y - climb_step
+						var tw = create_tween()
+						tw.tween_property(self, "global_position:y", to_y, climb_duration) \
+						  .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+						# reset vertical velocity when the tween starts
+						tw.tween_callback(Callable(self, "_on_climb_start"))
+						# start cooldown
+						_climb_timer = climb_cooldown
+					break
+
+func _on_climb_start() -> void:
+	velocity.y = 0
+						
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p is CharacterBody2D and p.has_method("take_damage"):
