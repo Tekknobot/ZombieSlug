@@ -92,8 +92,6 @@ func spawn_zombie() -> void:
 	# ——— put this right after you pick surf ———
 	# align the zombie’s z_index to the surface’s, +1 so it draws on top
 	z.z_index = layer_map[spawn_type]
-	# ——— then add to scene as normal ———
-	get_tree().get_current_scene().add_child(z)
 	
 	# X = player.x ± spawn_distance (choose side without ternary)
 	var side_val: int

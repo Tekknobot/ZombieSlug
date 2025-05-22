@@ -1,5 +1,4 @@
 # Soldier.gd
-@tool
 extends CharacterBody2D
 
 @export var base_speed:             float = 50.0   # starting speed
@@ -608,15 +607,7 @@ func apply_star(duration: float, damage: int) -> void:
 	anim.material     = _default_material
 					
 # --- New spawn functions ---
-
-### Helper to prevent collisions between all ally summons
-func _add_ally_exceptions(body: PhysicsBody2D) -> void:
-	for grp in ["Dog", "Merc", "Mech", "MechPanther"]:
-		for other in get_tree().get_nodes_in_group(grp):
-			if other is PhysicsBody2D and other != body:
-				body.add_collision_exception_with(other)
-				other.add_collision_exception_with(body)
-				
+			
 # Add this helper at the top of your Soldier.gd (or wherever these lives):
 func _get_spawn_offset_x() -> float:
 	# Dogs and Mechs on the left  => return negative offset
@@ -774,6 +765,19 @@ func _spawn_mech_panther() -> void:
 	var extra_per_level = 2.0
 	var life_time = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(pan, life_time, 1.0)
+
+func _add_ally_exceptions(body: PhysicsBody2D) -> void:
+	# 1) keep it from bumping into your *other* summons
+	for grp in ["Dog","Merc","Mech","MechPanther"]:
+		for other in get_tree().get_nodes_in_group(grp):
+			if other is PhysicsBody2D and other != body:
+				body.add_collision_exception_with(other)
+				other.add_collision_exception_with(body)
+
+	# 2) ***NEW***: ignore the Player so you never treat them as "ground"
+	for p in get_tree().get_nodes_in_group("Player"):
+		if p is PhysicsBody2D:
+			body.add_collision_exception_with(p)
 
 func _add_roof_exceptions(body: PhysicsBody2D) -> void:
 	for roof in get_tree().get_nodes_in_group("Roof"):

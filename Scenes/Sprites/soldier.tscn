@@ -203,24 +203,18 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndhyd"]
 
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
+position = Vector2(0, 2.83758e+07)
+velocity = Vector2(0, 225990)
 script = ExtResource("1_bbe55")
-jump_velocity = -275.0
-max_health = 3
-initial_mine_cooldown = 1.0
-mine_cooldown = 1.0
-initial_grenade_damage = 2
-initial_mine_damage = 2
-dash_speed = 400.0
-dog_damage_per_level = 5
-merc_damage_per_level = 3
-mech_cooldown = 20.0
-mech_panther_cooldown = 20.0
+max_speed = 80.0
+dash_speed = 600.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
-animation = &"attack"
+animation = &"move"
 autoplay = "default"
+frame_progress = 0.573738
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)

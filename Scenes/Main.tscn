@@ -155,7 +155,6 @@ position = Vector2(178, 0)
 position = Vector2(98, 35)
 base_speed = 60.0
 initial_firerate = 1.0
-max_health = 5
 
 [node name="StarryNight" parent="Soldier" instance=ExtResource("10_eeh2b")]
 z_index = -1000

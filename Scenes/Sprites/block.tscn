@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://5r7h532lidgw"]
+[gd_scene load_steps=33 format=3 uid="uid://5r7h532lidgw"]
 
 [ext_resource type="Script" path="res://Scripts/clouds.gd" id="4_mwikq"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="5_6w86t"]
@@ -61,12 +61,6 @@ func _ready() -> void:
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4cnwb"]
 size = Vector2(267, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yh62g"]
-size = Vector2(3, 1)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfnt8"]
-size = Vector2(80, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("5_6w86t")
@@ -198,70 +192,6 @@ script = SubResource("GDScript_yvgv7")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof6"]
 position = Vector2(-107.5, -67)
 shape = SubResource("RectangleShape2D_4cnwb")
-
-[node name="Platforms" type="Node2D" parent="."]
-
-[node name="Platform" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(13, -4)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform"]
-shape = SubResource("RectangleShape2D_yh62g")
-
-[node name="Platform2" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(-51, -4)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform2"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_yh62g")
-
-[node name="Platform3" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(13, -40)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform3"]
-position = Vector2(-32, 11)
-shape = SubResource("RectangleShape2D_lfnt8")
-
-[node name="Platform4" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(13, -39)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform4"]
-position = Vector2(-32, -27)
-shape = SubResource("RectangleShape2D_lfnt8")
-
-[node name="Platform5" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(191, -4)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform5"]
-shape = SubResource("RectangleShape2D_yh62g")
-
-[node name="Platform6" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(127, -4)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform6"]
-position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_yh62g")
-
-[node name="Platform7" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(191, -40)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform7"]
-position = Vector2(-32, 11)
-shape = SubResource("RectangleShape2D_lfnt8")
-
-[node name="Platform8" type="StaticBody2D" parent="Platforms" groups=["Roof"]]
-position = Vector2(191, -39)
-script = ExtResource("9_yn6pc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform8"]
-position = Vector2(-32, -27)
-shape = SubResource("RectangleShape2D_lfnt8")
 
 [node name="Floor" type="Node2D" parent="."]
 position = Vector2(0, -17)
