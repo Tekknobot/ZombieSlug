@@ -180,13 +180,6 @@ func _physics_process(delta: float) -> void:
 	_climb_timer = max(_climb_timer - delta, 0.0)
 	if _climb_timer == 0.0:
 		_try_climb_over()
-	
-	# ——— NEW: despawn on any collision with “Street” ———
-	for i in range(get_slide_collision_count()):
-		var col = get_slide_collision(i).get_collider()
-		if col and col.is_in_group("Street"):
-			queue_free()
-			return	
 
 func _try_climb_over() -> void:
 	for i in range(get_slide_collision_count()):

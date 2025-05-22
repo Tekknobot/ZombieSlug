@@ -16,6 +16,7 @@ var _spawn_timer:    Timer
 @export var max_zombies: int = 750
 
 var _zombie_pool: Array[CharacterBody2D] = []
+@export var street_chance: float = 0.3   # e.g. 30% of the time
 
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
@@ -34,84 +35,83 @@ func spawn_zombie() -> void:
 	var current = get_tree().get_nodes_in_group("Zombie").size()
 	if current >= max_zombies:
 		return
-			
+
+	# ——— Ensure there’s a player to target ———
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
 	var player = players[0] as Node2D
 
-	# spawn position logic…
-	var side: int
-	if (randi() & 1) == 0:
-		side = -1
+	# ——— Determine spawn type: sidewalk, street, or floor ———
+	var r = randf()
+	var spawn_type: String
+	if r < sidewalk_chance:
+		spawn_type = "sidewalk"
+	elif r < sidewalk_chance + street_chance:
+		spawn_type = "street"
 	else:
-		side = 1
-		
-	var spawn_pos = Vector2(player.global_position.x + side * spawn_distance,
-							global_position.y + 8)
+		spawn_type = "floor"
 
-	var z = zombie_scene.instantiate() as CharacterBody2D
-	z.global_position = spawn_pos
-
-	# 1) Decide whether to spawn on the sidewalk or on main floor
-	var spawn_on_sidewalk = false
-	if randf() < sidewalk_chance:
-		spawn_on_sidewalk = true
-	else:
-		spawn_on_sidewalk = false
-
-	# 2) Gather the appropriate surfaces
+	# ——— Gather surfaces based on spawn_type ———
 	var surfaces: Array = []
-	if spawn_on_sidewalk:
-		# all nodes in "Sidewalk"
+	if spawn_type == "sidewalk":
 		surfaces = get_tree().get_nodes_in_group("Sidewalk")
+	elif spawn_type == "street":
+		surfaces = get_tree().get_nodes_in_group("Street")
 	else:
-		# only nodes in "floor" that are not also in "Sidewalk"
 		for f in get_tree().get_nodes_in_group("Floor"):
 			if not f.is_in_group("Sidewalk"):
 				surfaces.append(f)
-				
-	# 3) Bail if nothing to spawn on
+
+	# ——— Bail if no surfaces found ———
 	if surfaces.is_empty():
-		if spawn_on_sidewalk:
+		if spawn_type == "sidewalk":
 			push_warning("No Sidewalk surfaces to spawn on")
+		elif spawn_type == "street":
+			push_warning("No Street surfaces to spawn on")
 		else:
 			push_warning("No Floor surfaces to spawn on")
-		z.queue_free()      # ← make sure to destroy the instance
 		return
 
-	# 4) Pick a surface at random
+	# ——— Pick a random surface ———
 	var pick_index = randi() % surfaces.size()
 	var surf = surfaces[pick_index] as Node2D
 
-	# 5) Now that we know we have a surface, adjust z’s Y and X
+	# ——— Instantiate zombie and position it on the chosen surface ———
+	var z = zombie_scene.instantiate() as CharacterBody2D
+	# Y = surface height
 	z.global_position.y = surf.global_position.y
-
-	var side_val = 1
+	# X = player.x ± spawn_distance (choose side without ternary)
+	var side_val: int
 	if randf() < 0.5:
 		side_val = -1
 	else:
 		side_val = 1
 	z.global_position.x = player.global_position.x + side_val * spawn_distance
 
-	# 6) Finally, add z to the scene
+	# ——— Add to scene ———
 	get_tree().get_current_scene().add_child(z)
 
-	# 7) Add to scene
-	get_tree().get_current_scene().add_child(z)
-
-	# 8) If spawned on the sidewalk, make it fall through pure‐floor bodies
-	if spawn_on_sidewalk:
+	# ——— Collision exceptions so zombie falls onto the correct layer ———
+	if spawn_type == "sidewalk":
 		for f in get_tree().get_nodes_in_group("Floor"):
 			if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
 				z.add_collision_exception_with(f)
+	elif spawn_type == "street":
+		# fall through sidewalks
+		for sw in get_tree().get_nodes_in_group("Sidewalk"):
+			if sw is PhysicsBody2D:
+				z.add_collision_exception_with(sw)
+		# fall through floors that aren’t sidewalks
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+				z.add_collision_exception_with(f)
+	# (floor spawns land directly, no exceptions needed)
 
-	# decide archetype *probabilistically*:
-	var lvl  = Playerstats.level
-	var roll = randf()  # [0,1)
-	
+	# ——— Decide archetype probabilistically ———
+	var lvl = Playerstats.level
+	var roll = randf()
 	if lvl >= 5:
-		# Level 8+: 30% chain, 25% spore, 20% charger, 25% vanilla
 		if roll < 0.30:
 			z.behavior = "chain"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChainEffect.tres")
@@ -121,60 +121,57 @@ func spawn_zombie() -> void:
 		elif roll < 0.75:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
-		if roll < 0.20:
+		elif roll < 0.95:
+			z.behavior = ""
+		else:
 			z.behavior = "shield"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
 			z.add_to_group("Shield")
-		else:
-			z.behavior = ""	
 	elif lvl >= 4:
-		# Level 5–7: 25% spore, 20% charger, 55% vanilla
 		if roll < 0.25:
 			z.behavior = "spore"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/SporeEffect.tres")
 		elif roll < 0.45:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
-		if roll < 0.20:
+		elif roll < 0.65:
+			z.behavior = ""
+		else:
 			z.behavior = "shield"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
 			z.add_to_group("Shield")
-		else:
-			z.behavior = ""	
 	elif lvl >= 3:
-		# Level 3–4: 20% charger, 80% vanilla
 		if roll < 0.20:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
-		if roll < 0.20:
+		elif roll < 0.40:
+			z.behavior = ""
+		else:
 			z.behavior = "shield"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
 			z.add_to_group("Shield")
-		else:
-			z.behavior = ""				
 	elif lvl >= 2:
-		# Level 1–2: 20% charger, 80% vanilla
 		if roll < 0.20:
 			z.behavior = "shield"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
 			z.add_to_group("Shield")
 		else:
-			z.behavior = ""				
+			z.behavior = ""
 	else:
-		# below level 2: always vanilla
 		z.behavior = ""
-		
-	# then your health‐scaling, grouping, etc.
+
+	# ——— Scale health for level and add to group ———
 	if lvl > 1 and z.has_method("take_damage"):
-		var base  = z.max_health
+		var base_health = z.max_health
 		var scale = pow(1.40, lvl - 1)
-		z.max_health = int(base * scale)
-		z.health     = z.max_health
+		z.max_health = int(base_health * scale)
+		z.health = z.max_health
 
 	if not z.is_in_group("Zombie"):
 		z.add_to_group("Zombie")
-	get_tree().get_current_scene().add_child(z)
-	print("Spawned [", z.behavior, "] zombie at ", spawn_pos, " (health=", z.max_health, ")")
+
+	# ——— Debug log ———
+	print("Spawned [", z.behavior, "] zombie at ", z.global_position, " (health=", z.max_health, ")")
 
 func _on_level_changed(new_level: int) -> void:
 	# 10% faster per level, but never below min_spawn_factor

@@ -4,3 +4,7 @@
 
 [resource]
 shader = ExtResource("1_jldpa")
+shader_parameter/indicator_color = Color(0.2, 1, 0.2, 0.7)
+shader_parameter/pulse_speed = 3.0
+shader_parameter/max_radius = 0.5
+shader_parameter/indicator_thickness = 0.05
