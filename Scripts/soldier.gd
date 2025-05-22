@@ -240,7 +240,7 @@ func _ready() -> void:
 	shock_effect.visible = false
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(1)
+	Playerstats.set_level(2)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:

@@ -55,6 +55,9 @@ var _lightning_fx := preload("res://Scenes/Effects/Chain_Bolt.tscn")
 @export var climb_cooldown: float    = 0.2   # prevent repeated stepping
 var _climb_timer: float = 0.0
 
+@export var deflect_speed_multiplier: float = 1.2
+@export var shield_health: int = 8  # maybe tougher
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -87,10 +90,23 @@ func _ready() -> void:
 		add_child(_spore_timer)
 		#_spore_timer.start()
 		_spore_timer.connect("timeout", Callable(self, "_drop_spore"))
-						
+
+	if behavior == "shield":
+		max_health = shield_health
+		health = max_health
+		# apply the outline shader to AnimatedSprite2D
+		anim.material = ShaderMaterial.new()
+		anim.material.shader = preload("res://Shaders/ShieldEffect.tres")
+							
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+
+	# check for bullet collisions
+	for i in range(get_slide_collision_count()):
+		var col = get_slide_collision(i).get_collider()
+		if col and col.is_in_group("Bullet") and col.has_method("get_velocity"):
+			_deflect_bullet(col)
 
 	# find your target first
 	var players_target = get_tree().get_nodes_in_group("Player")
@@ -461,3 +477,17 @@ func _drop_spore() -> void:
 	patch.global_position.y -= 16
 	patch.duration = 5
 	get_tree().get_current_scene().add_child(patch)
+
+func _deflect_bullet(bullet):
+	# 1) grab its incoming velocity
+	var in_vel = bullet.get_velocity()
+	# 2) compute reflection off the zombie’s facing normal
+	var normal = (bullet.global_position - global_position).normalized()
+	var out_vel = in_vel.bounced(normal) * deflect_speed_multiplier
+	# 3) relocate bullet slightly so it doesn’t re-hit immediately
+	bullet.global_position = global_position + normal * (bullet.shape.get_extents().x + 2)
+	# 4) apply new velocity
+	if bullet.has_method("set_velocity"):
+		bullet.set_velocity(out_vel)
+	# 5) optionally play a clang sound
+	$ShieldClangSfx.play()

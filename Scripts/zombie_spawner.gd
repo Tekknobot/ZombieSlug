@@ -121,8 +121,12 @@ func spawn_zombie() -> void:
 		elif roll < 0.75:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+		if roll < 0.20:
+			z.behavior = "shield"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+			z.add_to_group("Shield")
 		else:
-			z.behavior = ""
+			z.behavior = ""	
 	elif lvl >= 4:
 		# Level 5–7: 25% spore, 20% charger, 55% vanilla
 		if roll < 0.25:
@@ -131,17 +135,33 @@ func spawn_zombie() -> void:
 		elif roll < 0.45:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+		if roll < 0.20:
+			z.behavior = "shield"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+			z.add_to_group("Shield")
 		else:
-			z.behavior = ""
+			z.behavior = ""	
 	elif lvl >= 3:
 		# Level 3–4: 20% charger, 80% vanilla
 		if roll < 0.20:
 			z.behavior = "charger"
 			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+		if roll < 0.20:
+			z.behavior = "shield"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+			z.add_to_group("Shield")
 		else:
-			z.behavior = ""
+			z.behavior = ""				
+	elif lvl >= 2:
+		# Level 1–2: 20% charger, 80% vanilla
+		if roll < 0.20:
+			z.behavior = "shield"
+			z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+			z.add_to_group("Shield")
+		else:
+			z.behavior = ""				
 	else:
-		# below level 3: always vanilla
+		# below level 2: always vanilla
 		z.behavior = ""
 		
 	# then your health‐scaling, grouping, etc.

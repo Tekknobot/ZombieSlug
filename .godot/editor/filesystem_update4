@@ -77,3 +77,7 @@ res://Shaders/chain_effect.gdshader
 res://Scenes/Sprites/FirestormPickup.tscn
 res://Scenes/Sprites/tnt_yellow.tscn
 res://Scenes/Sprites/zombie.tscn
+res://Shaders/ShieldEffect.tres
+res://Shaders/shield_effect.gdshader
+res://Scenes/Sprites/bullet.tscn
+res://Scenes/Sprites/zombie_xl.tscn
