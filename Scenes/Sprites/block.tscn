@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://5r7h532lidgw"]
+[gd_scene load_steps=33 format=3 uid="uid://5r7h532lidgw"]
 
 [ext_resource type="Script" path="res://Scripts/clouds.gd" id="4_mwikq"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="5_6w86t"]
@@ -70,6 +70,9 @@ shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kr8lm"]
 size = Vector2(32, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nfyna"]
+size = Vector2(32, 16)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ma1bf"]
 shader = ExtResource("5_6w86t")
@@ -838,8 +841,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile86"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile87" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -850,8 +853,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile87"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile88" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -862,8 +865,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile88"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile89" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -874,8 +877,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile89"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile90" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -886,8 +889,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile90"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile91" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -898,8 +901,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile91"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile92" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -910,8 +913,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile92"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile93" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -922,8 +925,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile93"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile94" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -934,8 +937,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile94"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile95" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -946,8 +949,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile95"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile96" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -958,8 +961,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile96"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile97" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -970,8 +973,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile97"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile98" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -982,8 +985,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile98"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile99" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -994,8 +997,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile99"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile100" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1006,8 +1009,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile100"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile101" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1018,8 +1021,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile101"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile102" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1030,8 +1033,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile102"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile103" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1042,8 +1045,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile103"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile104" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1054,8 +1057,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile104"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile105" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1066,8 +1069,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile105"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile106" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1078,8 +1081,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile106"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile107" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1090,8 +1093,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile107"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile108" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1102,8 +1105,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile108"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile109" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1114,8 +1117,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile109"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile110" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1126,8 +1129,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile110"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="Tile111" type="StaticBody2D" parent="Floor/Street" groups=["Street"]]
 z_index = -100
@@ -1138,8 +1141,8 @@ material = SubResource("ShaderMaterial_v713k")
 texture = ExtResource("11_soryi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/Street/Tile111"]
-position = Vector2(0, 2)
-shape = SubResource("RectangleShape2D_kr8lm")
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="CloudsMover1" type="Node2D" parent="."]
 position = Vector2(-2, -90)

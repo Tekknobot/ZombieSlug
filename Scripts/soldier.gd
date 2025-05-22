@@ -147,6 +147,9 @@ const GrappleScene = preload("res://Scenes/Sprites/grapple_hook.tscn")
 var _on_sidewalk := false
 var _floor_exceptions := []
 
+var _on_street   : bool = false
+var _sidewalk_exceptions := []
+
 func _ready() -> void:	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
@@ -243,6 +246,14 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	# ——— Step-down from Sidewalk to Street ———
+	if _on_sidewalk \
+	   and Input.is_action_pressed("ui_down") \
+	   and Input.is_action_just_pressed("jump"):
+
+		_drop_to_street()
+		return
+
 	# ——— Step-down … ———
 	if is_on_floor() \
 	   and Input.is_action_pressed("ui_down") \
@@ -260,7 +271,14 @@ func _physics_process(delta: float) -> void:
 			_drop_to_sidewalk()
 			return
 
-	# ——— Step-up … ———
+	# ——— Step-up: Street → Sidewalk, or Sidewalk → Floor ———
+	if _on_street \
+	   and Input.is_action_pressed("ui_up") \
+	   and Input.is_action_just_pressed("jump"):
+
+		_climb_up_to_sidewalk()
+		return
+
 	if _on_sidewalk \
 	   and Input.is_action_pressed("ui_up") \
 	   and Input.is_action_just_pressed("jump"):
@@ -287,7 +305,6 @@ func _physics_process(delta: float) -> void:
 			_spawn_dog()
 			dog_cooldown_timer.start()
 			Playerstats.emit_signal("dog_used")
-
 
 	# ——— Summon Merc or Mech Panther ———
 	if Input.is_action_just_pressed("merc"):
@@ -440,6 +457,60 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
+
+func _drop_to_street() -> void:
+	$CollisionShape2D.disabled = true
+
+	# snap down to nearest Street
+	var best_surf: Node2D
+	var best_dy = INF
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is Node2D:
+			var dy = st.global_position.y - global_position.y
+			if dy > 0 and dy < best_dy:
+				best_dy = dy
+				best_surf = st
+	if best_surf:
+		global_position.y = best_surf.global_position.y
+
+	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.disabled = false
+
+	_on_street = true
+	$AnimatedSprite2D.z_index += 2   # draw above Floor+Sidewalk
+	_sidewalk_exceptions.clear()
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is PhysicsBody2D:
+			add_collision_exception_with(sw)
+			_sidewalk_exceptions.append(sw)
+
+func _climb_up_to_sidewalk() -> void:
+	$CollisionShape2D.disabled = true
+
+	# find nearest Sidewalk above
+	var best_surf: Node2D
+	var best_dy = INF
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is Node2D:
+			var dy = global_position.y - sw.global_position.y
+			if dy > 0 and dy < best_dy:
+				best_dy = dy
+				best_surf = sw
+	if best_surf:
+		global_position.y = best_surf.global_position.y
+
+	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.disabled = false
+
+	# remove those sidewalk exceptions
+	for sw in _sidewalk_exceptions:
+		if is_instance_valid(sw):
+			remove_collision_exception_with(sw)
+	_sidewalk_exceptions.clear()
+
+	_on_street   = false
+	_on_sidewalk = true
+	$AnimatedSprite2D.z_index -= 1
 
 func _drop_through_roofs() -> void:
 	$CollisionShape2D.disabled = true
