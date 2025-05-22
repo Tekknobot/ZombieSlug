@@ -21,3 +21,7 @@ res://Shaders/SporeEffect.tres
 res://Shaders/ChargerEffect.tres
 res://Scripts/zombie_spawner.gd
 res://Scripts/zombie.gd
+res://Scripts/merc.gd
+res://Scripts/dog.gd
+res://Scripts/meks/m_1.gd
+res://Scripts/meks/m_2.gd

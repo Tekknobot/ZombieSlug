@@ -1,4 +1,5 @@
 # Soldier.gd
+@tool
 extends CharacterBody2D
 
 @export var base_speed:             float = 50.0   # starting speed
@@ -153,6 +154,13 @@ var _sidewalk_exceptions := []
 const LAYER_Z_FLOOR    := 0
 const LAYER_Z_SIDEWALK := 2
 const LAYER_Z_STREET   := 4
+
+# top of ZombieSpawner.gd, Soldier.gd, Merc.gd, etc.
+const LAYER_MAP := {
+	"Floor":    LAYER_Z_FLOOR,    # 0
+	"Sidewalk": LAYER_Z_SIDEWALK, # 2
+	"Street":   LAYER_Z_STREET    # 4
+}
 
 func _ready() -> void:	
 	z_index = LAYER_Z_FLOOR
@@ -608,6 +616,7 @@ func _add_ally_exceptions(body: PhysicsBody2D) -> void:
 			if other is PhysicsBody2D and other != body:
 				body.add_collision_exception_with(other)
 				other.add_collision_exception_with(body)
+				
 # Add this helper at the top of your Soldier.gd (or wherever these lives):
 func _get_spawn_offset_x() -> float:
 	# Dogs and Mechs on the left  => return negative offset
@@ -615,7 +624,30 @@ func _get_spawn_offset_x() -> float:
 	# We'll pass in a “side” parameter when calling if we need to reverse.
 	return abs(muzzle_point.position.x) + extra_spawn_offset
 
-### Spawn Dog (always left)
+# --- Helpers to query your current platform and find its surface node ---
+
+# 1) Returns "Floor", "Sidewalk" or "Street" based on where the player is.
+func _get_current_surface_group() -> String:
+	if _on_street:
+		return "Street"
+	elif _on_sidewalk:
+		return "Sidewalk"
+	else:
+		return "Floor"
+
+# 2) Finds the nearest Node2D in the given group under the player's X.
+func _get_nearest_surface(group_name: String) -> Node2D:
+	var best_surf: Node2D = null
+	var best_dx  = INF
+	for surf in get_tree().get_nodes_in_group(group_name):
+		if surf is Node2D:
+			var dx = abs(surf.global_position.x - global_position.x)
+			if dx < best_dx:
+				best_dx  = dx
+				best_surf = surf
+	return best_surf
+
+# --- Spawn Dog (always left) ---
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
@@ -629,6 +661,12 @@ func _spawn_dog() -> void:
 		global_position.x - x_off,  # left
 		global_position.y + muzzle_point.position.y
 	)
+	
+	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"
+	# set layer & constrain
+	dog.z_index = LAYER_MAP[surf_group]
+	_constrain_to_current_layer(dog)
+
 	get_tree().get_current_scene().add_child(dog)
 	if on_roof or _left_roof:
 		_add_roof_exceptions(dog)
@@ -639,7 +677,7 @@ func _spawn_dog() -> void:
 	var life_delay = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(dog, life_delay, 1.0)
 
-### Spawn Mech (always left)
+# --- Spawn Mech (always left) ---
 func _spawn_mech() -> void:
 	merc_sfx.play()
 	var mech = MechScene.instantiate() as PhysicsBody2D
@@ -653,6 +691,12 @@ func _spawn_mech() -> void:
 		global_position.x - x_off,  # left
 		global_position.y + muzzle_point.position.y
 	)
+
+	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"
+	# set layer & constrain
+	mech.z_index = LAYER_MAP[surf_group]
+	_constrain_to_current_layer(mech)
+
 	get_tree().get_current_scene().add_child(mech)
 	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
 	sprite.flip_h = not facing_right
@@ -665,7 +709,7 @@ func _spawn_mech() -> void:
 	var life_time = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(mech, life_time, 1.0)
 
-### Spawn Merc (always right)
+# --- Spawn Merc (always right) ---
 func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
@@ -679,6 +723,16 @@ func _spawn_merc() -> void:
 		global_position.x + x_off,  # right
 		global_position.y + muzzle_point.position.y
 	)
+
+	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"
+	# set layer & constrain
+	merc.z_index = LAYER_MAP[surf_group]
+	_constrain_to_current_layer(merc)
+
+	# set layer & constrain
+	merc.z_index = z_index
+	_constrain_to_current_layer(merc)
+
 	get_tree().get_current_scene().add_child(merc)
 	if on_roof or _left_roof:
 		_add_roof_exceptions(merc)
@@ -689,7 +743,7 @@ func _spawn_merc() -> void:
 	var life_delay = base_duration + (lvl - 1) * extra_per_level
 	_fade_and_free(merc, life_delay, 1.0)
 
-### Spawn Mech Panther (always right)
+# --- Spawn Mech Panther (always right) ---
 func _spawn_mech_panther() -> void:
 	panther_sfx.play()
 	var pan = MechScene_Panther.instantiate() as PhysicsBody2D
@@ -703,6 +757,12 @@ func _spawn_mech_panther() -> void:
 		global_position.x + x_off,  # right
 		global_position.y + muzzle_point.position.y
 	)
+
+	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"
+	# set layer & constrain
+	pan.z_index = LAYER_MAP[surf_group]
+	_constrain_to_current_layer(pan)
+
 	get_tree().get_current_scene().add_child(pan)
 	var sprite = pan.get_node("AnimatedSprite2D") as AnimatedSprite2D
 	sprite.flip_h = facing_right == false
@@ -1077,3 +1137,24 @@ func _drop_to_street() -> void:
 		if sw is PhysicsBody2D:
 			add_collision_exception_with(sw)
 			_sidewalk_exceptions.append(sw)
+
+# AllySpawnHelpers.gd (or drop in Soldier.gd next to your other helpers)
+func _constrain_to_current_layer(ally: PhysicsBody2D) -> void:
+	# Determine which ground‐group the player (and thus the ally) is on
+	var current_group := _get_current_surface_group()  # returns "Floor", "Sidewalk" or "Street"
+
+	# 1) Blanket-except every ground surface
+	for grp in ["Floor", "Sidewalk", "Street"]:
+		for surf in get_tree().get_nodes_in_group(grp):
+			if surf is PhysicsBody2D:
+				ally.add_collision_exception_with(surf)
+
+	# 2) Now re-allow collisions only with the surfaces in our current group
+	for surf in get_tree().get_nodes_in_group(current_group):
+		if surf is PhysicsBody2D:
+			ally.remove_collision_exception_with(surf)
+
+	# 3) And make sure we still hit the player
+	for p in get_tree().get_nodes_in_group("Player"):
+		if p is PhysicsBody2D:
+			ally.remove_collision_exception_with(p)

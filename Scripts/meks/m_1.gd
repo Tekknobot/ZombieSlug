@@ -23,10 +23,12 @@ func _ready() -> void:
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
 func _physics_process(delta: float) -> void:
-	# gather real Zombie bodies
+	# only consider live Zombie bodies on _our_ layer
 	var zombies := []
 	for node in get_tree().get_nodes_in_group("Zombie"):
-		if node != self and node is CharacterBody2D and is_instance_valid(node):
+		if node is CharacterBody2D \
+		   and is_instance_valid(node) \
+		   and node.z_index == z_index:      # <-- filter by layer
 			zombies.append(node)
 
 	if zombies.is_empty():
