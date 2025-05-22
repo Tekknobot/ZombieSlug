@@ -23,12 +23,19 @@ func _ready() -> void:
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
 func _physics_process(delta: float) -> void:
-	# gather real Zombie bodies
+	# in _physics_process, gather only same‐layer zombies and ignore collisions with them
 	var zombies := []
 	for node in get_tree().get_nodes_in_group("Zombie"):
-		if node != self and node is CharacterBody2D and is_instance_valid(node):
-			zombies.append(node)
-
+		if node is CharacterBody2D and is_instance_valid(node):
+			if node.z_index == z_index:
+				# only target same-ground zombies
+				zombies.append(node)
+				# and don't physically collide with them
+				add_collision_exception_with(node)
+			else:
+				# re-enable collision against off-ground zombies
+				remove_collision_exception_with(node)
+				
 	if zombies.is_empty():
 		current_target = null
 		if not attack_timer.is_stopped():

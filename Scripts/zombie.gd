@@ -49,18 +49,25 @@ var _spore_timer: Timer = null
 @export var chain_damage: int   = 2
 var _lightning_fx := preload("res://Scenes/Effects/Chain_Bolt.tscn")
 
-@export var climb_step: float        = 8.0  # how tall a single “step” is
-@export var climb_duration:  float = 0.25    # how long the climb lerp takes
-@export var max_climb_height: float  = 32.0  # only climb if the other is this high or lower
-@export var climb_cooldown: float    = 0.2   # prevent repeated stepping
-var _climb_timer: float = 0.0
-
 @export var deflect_speed_multiplier: float = 1.2
 @export var shield_health: int = 8  # maybe tougher
 
 var is_roaming: bool = false
 @export var roam_time: float = 2.0   # seconds to roam before stopping
 var _ignored_surfaces: Array[PhysicsBody2D] = []
+
+const LAYER_Z_FLOOR    := 0
+const LAYER_Z_SIDEWALK := 2
+const LAYER_Z_STREET   := 4
+
+@export var spawn_layer: int = 0
+
+# helper map
+var _layer_map = {
+	"Floor":    LAYER_Z_FLOOR,
+	"Sidewalk": LAYER_Z_SIDEWALK,
+	"Street":   LAYER_Z_STREET
+}
 
 func _ready() -> void:
 	randomize()
@@ -101,7 +108,9 @@ func _ready() -> void:
 		# apply the outline shader to AnimatedSprite2D
 		anim.material = ShaderMaterial.new()
 		anim.material.shader = preload("res://Shaders/ShieldEffect.tres")
-							
+			
+	spawn_layer = z_index
+						
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
@@ -188,37 +197,24 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# handle climb‐over only if timer has expired
-	_climb_timer = max(_climb_timer - delta, 0.0)
-	if _climb_timer == 0.0:
-		_try_climb_over()
-
-func _try_climb_over() -> void:
+	# --- DYNAMIC GROUND LAYER UPDATE ---
+	# look at your floor collisions this frame and pick the highest-priority surface
 	for i in range(get_slide_collision_count()):
-		var coll = get_slide_collision(i)
-		var other = coll.get_collider()
-		if other and other.is_in_group("Zombie") and other is CharacterBody2D:
-			var nx = coll.get_normal().x
-			if abs(nx) > 0.7:
-				var dy = other.global_position.y - global_position.y
-				if abs(dy) <= climb_step:
-					# check there’s free space above
-					var motion = Vector2(0, -climb_step)
-					if not test_move(global_transform, motion):
-						# tween up instead of teleport
-						var from_y = global_position.y
-						var to_y   = from_y - climb_step
-						var tw = create_tween()
-						tw.tween_property(self, "global_position:y", to_y, climb_duration) \
-						  .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-						# reset vertical velocity when the tween starts
-						tw.tween_callback(Callable(self, "_on_climb_start"))
-						# start cooldown
-						_climb_timer = climb_cooldown
-					break
-
-func _on_climb_start() -> void:
-	velocity.y = 0
+		var col = get_slide_collision(i).get_collider()
+		if col is PhysicsBody2D:
+			var new_layer: int = z_index
+			if col.is_in_group("Street"):
+				new_layer = _layer_map["Street"]
+			elif col.is_in_group("Sidewalk"):
+				new_layer = _layer_map["Sidewalk"]
+			elif col.is_in_group("Floor") and not col.is_in_group("Sidewalk"):
+				new_layer = _layer_map["Floor"]
+			# if it actually changed, update z_index & re-ignore non-current grounds
+			if new_layer != z_index:
+				z_index = new_layer
+				_restore_ground_collisions()
+				_ignore_non_target_ground(col.global_position.y)
+			break  # stop after first valid ground collision
 						
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):

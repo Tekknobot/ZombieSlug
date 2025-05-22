@@ -25,3 +25,6 @@ res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scripts/meks/m_1.gd
 res://Scripts/meks/m_2.gd
 res://Scripts/soldier.gd
+res://Scripts/zombie.gd
+res://Scenes/Meks_Scenes/PLAYER/M2.scn
+res://Scenes/Sprites/dog.tscn
