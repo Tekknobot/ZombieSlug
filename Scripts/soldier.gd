@@ -155,7 +155,7 @@ const LAYER_Z_SIDEWALK := 2
 const LAYER_Z_STREET   := 4
 
 func _ready() -> void:	
-	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
+	z_index = LAYER_Z_FLOOR
 	
 	#Place elswhere when needed
 	Playerstats.reset_stats()

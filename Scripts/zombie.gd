@@ -222,16 +222,24 @@ func _on_climb_start() -> void:
 						
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
-		if p is CharacterBody2D and p.has_method("take_damage"):
-			var dist = global_position.distance_to(p.global_position)
-			# same z_index means same platform
-			var same_ground = (p.z_index == self.z_index)
-			if dist <= attack_range and same_ground:
-				p.take_damage(attack_damage)
-				print("Zombie attacked player for ", attack_damage)
-			else:
-				attack_timer.stop()
-				start_roaming()
+		if not (p is CharacterBody2D and p.has_method("take_damage")):
+			continue
+
+		var dist = global_position.distance_to(p.global_position)
+		# grab the player's sprite layer:
+		var player_layer = p.get_node("AnimatedSprite2D").z_index
+		# is that exactly one below this zombie root?
+		var same_ground = (player_layer == self.z_index)
+
+		print("DEBUG melee: player_layer= ", player_layer,"  zombie_root_z = ", self.z_index)
+
+		if dist <= attack_range and same_ground:
+			p.take_damage(attack_damage)
+			print("Zombie attacked player for ", attack_damage)
+		else:
+			attack_timer.stop()
+			start_roaming()
+		return  # only need the first matching Player
 			
 func take_damage(amount: int = 1) -> void:
 	if is_dead:

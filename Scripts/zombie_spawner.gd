@@ -52,6 +52,13 @@ func spawn_zombie() -> void:
 	else:
 		spawn_type = "floor"
 
+	# define the exact layer for each type
+	var layer_map = {
+		"floor":    0,
+		"sidewalk": 2,
+		"street":   4
+	}
+
 	# ——— Gather surfaces based on spawn_type ———
 	var surfaces: Array = []
 	if spawn_type == "sidewalk":
@@ -84,7 +91,7 @@ func spawn_zombie() -> void:
 	
 	# ——— put this right after you pick surf ———
 	# align the zombie’s z_index to the surface’s, +1 so it draws on top
-	z.z_index = surf.z_index + 1
+	z.z_index = layer_map[spawn_type]
 	# ——— then add to scene as normal ———
 	get_tree().get_current_scene().add_child(z)
 	

@@ -83,6 +83,12 @@ shock={
 ]
 }
 
+[layer_names]
+
+2d_render/layer_1="Zombies"
+2d_render/layer_2="Bullets"
+2d_render/layer_3="Shields"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=3
