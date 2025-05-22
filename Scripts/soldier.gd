@@ -115,7 +115,7 @@ var on_ladder: bool   = false
 var is_climbing: bool = false
 
 # how long we disable one-way before re-enabling
-const DROP_THROUGH_TIME := 0.4
+const DROP_THROUGH_TIME := 0.1
 
 @export var extra_spawn_offset: float = 16.0  # tweak-able in the inspector
 

@@ -3,12 +3,12 @@ res://Scenes/Effects/StarNight.tscn::3e27410aba44bf5852db1aede5c3556d::174321803
 res://Scenes/Sprites/bullet.tscn::4dbcac7d7a72ed1ef0ba100ae6f23f08::1747175654::res://.godot/exported/133200997/export-49be4a27fcfa439eed77895dff4b8041-bullet.scn
 res://Scenes/Sprites/dog.tscn::35bd387671ca63264fc3b2fcb25f05a2::1747358527::res://.godot/exported/133200997/export-a0b54ec0b036bec82e9fad41b5280718-dog.scn
 res://Scenes/Sprites/merc.tscn::08607815ba002e99f65bc15b88828728::1747358527::res://.godot/exported/133200997/export-568a7e65a3cab4e1935ec68cc48fb8bd-merc.scn
-res://Scenes/Sprites/soldier.tscn::8f792b4d0ba24a43e5938d7696f1effa::1747854910::res://.godot/exported/133200997/export-82a619c5bcc93646581d0af8b290c8b1-soldier.scn
+res://Scenes/Sprites/soldier.tscn::8f792b4d0ba24a43e5938d7696f1effa::1747888403::res://.godot/exported/133200997/export-82a619c5bcc93646581d0af8b290c8b1-soldier.scn
 res://Scenes/Sprites/tnt.tscn::dbd3d00683b6e07a1a93b7a97129ed92::1747322452::res://.godot/exported/133200997/export-be1887b34d3cf04628bf00868e9a0190-tnt.scn
-res://Scenes/Sprites/zombie.tscn::4f512cf3aca0c3eab0a5744c35ec07a0::1747854966::res://.godot/exported/133200997/export-f574c3c8458db2d1190176aa941d062d-zombie.scn
+res://Scenes/Sprites/zombie.tscn::4f512cf3aca0c3eab0a5744c35ec07a0::1747888403::res://.godot/exported/133200997/export-f574c3c8458db2d1190176aa941d062d-zombie.scn
 res://Scenes/Sprites/zombie_xl.tscn::804edccad2342a0fcb3e31ec078ac9f9::1747455312::res://.godot/exported/133200997/export-c87681bc9764bd9e0d0b1f01741cb0e5-zombie_xl.scn
-res://Scenes/Main.tscn::183612ea44555c8b3cb152e7ea12d4dd::1747854910::res://.godot/exported/133200997/export-a8e1520d83f25710dd4e3da8c6f32601-Main.scn
-res://Scenes/game_over_manager.tscn::46957331a448eb18a659b7ae080ca4a8::1747854910::res://.godot/exported/133200997/export-aff371457668d201a16b025a86277deb-game_over_manager.scn
+res://Scenes/Main.tscn::183612ea44555c8b3cb152e7ea12d4dd::1747888403::res://.godot/exported/133200997/export-a8e1520d83f25710dd4e3da8c6f32601-Main.scn
+res://Scenes/game_over_manager.tscn::46957331a448eb18a659b7ae080ca4a8::1747888403::res://.godot/exported/133200997/export-aff371457668d201a16b025a86277deb-game_over_manager.scn
 res://Scenes/Sprites/mine.tscn::177a2a79ba30f0dd7319d584519a0c54::1746758402::res://.godot/exported/133200997/export-d655732b6579d24cda01b7fda82fd278-mine.scn
 res://Scenes/Sprites/MinePickup.tscn::3029e41aea6e8e5ce171890f34a0415e::1747311987::res://.godot/exported/133200997/export-3691aa800af20a14ca121d162e04cc97-MinePickup.scn
 res://Scenes/Sprites/TNTPickup.tscn::386869a3e428eca4ce2cd8a25375b98e::1747322452::res://.godot/exported/133200997/export-971dfa468fbb4ee3fa348dea292b1991-TNTPickup.scn
@@ -30,7 +30,7 @@ res://Scenes/Sprites/hud.tscn::e2d731f56c2a6176291bb6442517613f::1747358527::res
 res://Scenes/Sprites/helicopter.tscn::0799d1298d9727dfa77392d56e30f9cf::1747113551::res://.godot/exported/133200997/export-eacd6fd4ab4e94c7f2a8c711e043e0e3-helicopter.scn
 res://Scenes/Effects/Lightning_Joint.tscn::b71f744e382c63b701fbe925f9797d64::1747113551::res://.godot/exported/133200997/export-3cf6b231e9a598feefc94017940a0844-Lightning_Joint.scn
 res://Scenes/Sprites/ladder.tscn::1fbe8545569fdb45b14deac687835655::1747175654::res://.godot/exported/133200997/export-ecee1504b7f8a8d13f56d0bf61877f35-ladder.scn
-res://Scenes/Sprites/tnt_yellow.tscn::e012b16c69b9b2c7c6451fbe7882f097::1747854910::res://.godot/exported/133200997/export-4177b18aeb8b4190bafd2023b24740e9-tnt_yellow.scn
+res://Scenes/Sprites/tnt_yellow.tscn::e012b16c69b9b2c7c6451fbe7882f097::1747888403::res://.godot/exported/133200997/export-4177b18aeb8b4190bafd2023b24740e9-tnt_yellow.scn
 res://Scenes/Sprites/TNT_YellowPickup.tscn::b5eb3d825989c3c48d46bcc0dadc1482::1747311987::res://.godot/exported/133200997/export-0aeb8e805b9cc57c490113b91270b603-TNT_YellowPickup.scn
 res://Scenes/Effects/SporePatch.tscn::bcc9a4a0bedf60438ce44c2725c7a62c::1747755697::res://.godot/exported/133200997/export-dba00989b511107143ad5d000630e12f-SporePatch.scn
 res://Scenes/Effects/ToxicSporeController.tscn::b5eeedaceee0daf151d93a02fd70a00b::1747199810::res://.godot/exported/133200997/export-9f0c8d3e8e62b904e46b20b38f809dbb-ToxicSporeController.scn
@@ -41,8 +41,8 @@ res://Scenes/Sprites/GlitchPickup.tscn::ea343c528a5f224902193d3d525d9796::174732
 res://Scenes/Sprites/glitch.tscn::085e2b04b111d9c541004512ed05e447::1747322452::res://.godot/exported/133200997/export-2da14199183cde54e47338f518066368-glitch.scn
 res://Scenes/Sprites/shock_effect.tscn::7a1a56e41c0dba47aa1e2e3912946cf4::1747322452::res://.godot/exported/133200997/export-4cf731ef580d49f774d044415136ec7e-shock_effect.scn
 res://Scenes/Sprites/warpzone.tscn::2e3a8c8eefe7c4fba375da933394dee5::1747309139::res://.godot/exported/133200997/export-46a18533c7b164244ef603e2fc88c40d-warpzone.scn
-res://UI/shop_ui.tscn::533e46c48c61a1feb18eb51f12234d9a::1747854910::res://.godot/exported/133200997/export-aef0873cde919a6190e33e2a485fcb16-shop_ui.scn
-res://Scenes/Sprites/block.tscn::05bc38cd81d96a7f60ea9499f0a7d551::1747854910::res://.godot/exported/133200997/export-3b4f4fdd29a0dda23c07d03d5b2a02b0-block.scn
+res://UI/shop_ui.tscn::533e46c48c61a1feb18eb51f12234d9a::1747888403::res://.godot/exported/133200997/export-aef0873cde919a6190e33e2a485fcb16-shop_ui.scn
+res://Scenes/Sprites/block.tscn::f41c06ea2fef9d07a560a5f13f4dbae1::1747888403::res://.godot/exported/133200997/export-3b4f4fdd29a0dda23c07d03d5b2a02b0-block.scn
 res://Scenes/Effects/Chain_Bolt.tscn::81f348d895948a3b3c31c23d361e2c85::1747755697::res://.godot/exported/133200997/export-7ff951b49fb7183ea1b504ff0da452a0-Chain_Bolt.scn
 res://Shaders/ChainEffect.tres::d1a505f64d0fa2266a90221aa60d2159::1747634835::res://.godot/exported/133200997/export-7622de47f1439aa9aec161329c06993c-ChainEffect.res
 res://Shaders/ChargerEffect.tres::a99bf23b822271b6571e9af55156c801::1747630393::res://.godot/exported/133200997/export-c5bdbf3e06fb4332935aeb96ce514e00-ChargerEffect.res
