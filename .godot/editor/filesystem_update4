@@ -28,3 +28,4 @@ res://Scripts/soldier.gd
 res://Scripts/zombie.gd
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
 res://Scenes/Sprites/dog.tscn
+res://Shaders/LevelUpEffect.tres

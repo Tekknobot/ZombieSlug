@@ -103,7 +103,6 @@ func _ready() -> void:
 		_spore_timer.connect("timeout", Callable(self, "_drop_spore"))
 
 	if behavior == "shield":
-		max_health = shield_health
 		health = max_health
 		# apply the outline shader to AnimatedSprite2D
 		anim.material = ShaderMaterial.new()
