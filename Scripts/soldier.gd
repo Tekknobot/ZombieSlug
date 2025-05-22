@@ -150,7 +150,13 @@ var _floor_exceptions := []
 var _on_street   : bool = false
 var _sidewalk_exceptions := []
 
+const LAYER_Z_FLOOR    := 0
+const LAYER_Z_SIDEWALK := 2
+const LAYER_Z_STREET   := 4
+
 func _ready() -> void:	
+	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
+	
 	#Place elswhere when needed
 	Playerstats.reset_stats()
 	
@@ -224,7 +230,6 @@ func _ready() -> void:
 	mech_panther_cooldown_timer.one_shot  = true
 	add_child(mech_panther_cooldown_timer)
 
-
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
 	
 	grenade_damage = initial_grenade_damage
@@ -242,9 +247,22 @@ func _ready() -> void:
 	await get_tree().create_timer(1).timeout
 	Playerstats.set_level(1)
 	
+	# start on floor by default:
+	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
+	
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+
+	# ——— ignore collisions with any zombie off our layer ———
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if not (z is PhysicsBody2D):
+			continue
+		# if the zombie’s layer (z_index) differs from ours, skip collision
+		if z.z_index != $AnimatedSprite2D.z_index:
+			add_collision_exception_with(z)
+		else:
+			remove_collision_exception_with(z)
 
 	# ——— Step-down from Sidewalk to Street ———
 	if _on_sidewalk \
@@ -458,32 +476,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			anim.play("default")
 
-func _drop_to_street() -> void:
-	$CollisionShape2D.disabled = true
-
-	# snap down to nearest Street
-	var best_surf: Node2D
-	var best_dy = INF
-	for st in get_tree().get_nodes_in_group("Street"):
-		if st is Node2D:
-			var dy = st.global_position.y - global_position.y
-			if dy > 0 and dy < best_dy:
-				best_dy = dy
-				best_surf = st
-	if best_surf:
-		global_position.y = best_surf.global_position.y
-
-	await get_tree().create_timer(0.1).timeout
-	$CollisionShape2D.disabled = false
-
-	_on_street = true
-	$AnimatedSprite2D.z_index += 2   # draw above Floor+Sidewalk
-	_sidewalk_exceptions.clear()
-	for sw in get_tree().get_nodes_in_group("Sidewalk"):
-		if sw is PhysicsBody2D:
-			add_collision_exception_with(sw)
-			_sidewalk_exceptions.append(sw)
-
 func _climb_up_to_sidewalk() -> void:
 	$CollisionShape2D.disabled = true
 
@@ -510,7 +502,7 @@ func _climb_up_to_sidewalk() -> void:
 
 	_on_street   = false
 	_on_sidewalk = true
-	$AnimatedSprite2D.z_index -= 1
+	$AnimatedSprite2D.z_index = LAYER_Z_SIDEWALK
 
 func _drop_through_roofs() -> void:
 	$CollisionShape2D.disabled = true
@@ -820,7 +812,6 @@ func _on_level_changed(new_level: int) -> void:
 	# fire at the player's position (damage=0 since it's just FX)
 	bolt.fire(global_position, 0)
 	
-
 func _await_landing() -> void:
 	while not is_on_floor():
 		await get_tree().physics_frame
@@ -1021,7 +1012,7 @@ func _drop_to_sidewalk() -> void:
 
 	# and tell the player to ignore all pure‐floor bodies
 	_on_sidewalk = true
-	$AnimatedSprite2D.z_index += 1
+	$AnimatedSprite2D.z_index = 2
 	_floor_exceptions.clear()
 	for f in get_tree().get_nodes_in_group("Floor"):
 		if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
@@ -1059,4 +1050,30 @@ func _climb_up_to_floor() -> void:
 
 	# 6) Mark that you’re no longer on the sidewalk
 	_on_sidewalk = false
-	$AnimatedSprite2D.z_index -= 1
+	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
+
+func _drop_to_street() -> void:
+	$CollisionShape2D.disabled = true
+
+	# snap down to nearest Street
+	var best_surf: Node2D
+	var best_dy = INF
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is Node2D:
+			var dy = st.global_position.y - global_position.y
+			if dy > 0 and dy < best_dy:
+				best_dy = dy
+				best_surf = st
+	if best_surf:
+		global_position.y = best_surf.global_position.y
+
+	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.disabled = false
+
+	_on_street = true
+	$AnimatedSprite2D.z_index = LAYER_Z_STREET   # draw above Floor+Sidewalk
+	_sidewalk_exceptions.clear()
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is PhysicsBody2D:
+			add_collision_exception_with(sw)
+			_sidewalk_exceptions.append(sw)

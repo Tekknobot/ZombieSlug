@@ -16,7 +16,7 @@ var _spawn_timer:    Timer
 @export var max_zombies: int = 750
 
 var _zombie_pool: Array[CharacterBody2D] = []
-@export var street_chance: float = 0.3   # e.g. 30% of the time
+@export var street_chance: float = 0.4   # e.g. 40% of the time
 
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
@@ -81,6 +81,13 @@ func spawn_zombie() -> void:
 	var z = zombie_scene.instantiate() as CharacterBody2D
 	# Y = surface height
 	z.global_position.y = surf.global_position.y
+	
+	# ——— put this right after you pick surf ———
+	# align the zombie’s z_index to the surface’s, +1 so it draws on top
+	z.z_index = surf.z_index + 1
+	# ——— then add to scene as normal ———
+	get_tree().get_current_scene().add_child(z)
+	
 	# X = player.x ± spawn_distance (choose side without ternary)
 	var side_val: int
 	if randf() < 0.5:

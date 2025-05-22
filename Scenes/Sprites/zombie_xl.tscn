@@ -210,6 +210,8 @@ radius = 11.0
 [node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 material = SubResource("ShaderMaterial_uvie5")
 script = ExtResource("1_roq74")
+max_speed = 70.0
+attack_cooldown = 0.05
 max_health = 15
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -206,6 +206,8 @@ shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [node name="Zombie" type="CharacterBody2D" groups=["Zombie"]]
 script = ExtResource("1_75npq")
+max_speed = 70.0
+attack_cooldown = 0.05
 max_health = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

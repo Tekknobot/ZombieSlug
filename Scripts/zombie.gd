@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var max_speed: float      = 75.0
 @export var attack_range: float   = 24.0
 @export var attack_damage: int    = 1
-@export var attack_cooldown: float= 0.2
+@export var attack_cooldown: float= 0.1
 @export var max_health: int       = 5
 @export var gravity: float        = 900.0
 
@@ -58,6 +58,10 @@ var _climb_timer: float = 0.0
 @export var deflect_speed_multiplier: float = 1.2
 @export var shield_health: int = 8  # maybe tougher
 
+var is_roaming: bool = false
+@export var roam_time: float = 2.0   # seconds to roam before stopping
+var _ignored_surfaces: Array[PhysicsBody2D] = []
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -102,6 +106,15 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	# find player
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty(): return
+	var p = players[0] as CharacterBody2D
+
+	var same_ground: bool = (p.z_index == self.z_index)
+	if same_ground and _ignored_surfaces.size() > 0:
+		_restore_ground_collisions()
+		
 	# check for bullet collisions
 	for i in range(get_slide_collision_count()):
 		var col = get_slide_collision(i).get_collider()
@@ -134,7 +147,6 @@ func _physics_process(delta: float) -> void:
 				target    = g
 	else:
 		# fall back to the player
-		var players = get_tree().get_nodes_in_group("Player")
 		if players.is_empty():
 			if not attack_timer.is_stopped():
 				attack_timer.stop()
@@ -212,10 +224,15 @@ func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p is CharacterBody2D and p.has_method("take_damage"):
 			var dist = global_position.distance_to(p.global_position)
-			if dist <= attack_range:
+			# same z_index means same platform
+			var same_ground = (p.z_index == self.z_index)
+			if dist <= attack_range and same_ground:
 				p.take_damage(attack_damage)
 				print("Zombie attacked player for ", attack_damage)
-
+			else:
+				attack_timer.stop()
+				start_roaming()
+			
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
@@ -484,3 +501,53 @@ func _deflect_bullet(bullet):
 		bullet.set_velocity(out_vel)
 	# 5) optionally play a clang sound
 	$ShieldClangSfx.play()
+
+func start_roaming() -> void:
+	if is_roaming:
+		return
+	is_roaming = true
+
+	# pick a random horizontal direction
+	var dir: int
+	if randf() < 0.5:
+		dir = -1
+	else:
+		dir = 1
+
+	# move and play "move" anim
+	velocity.x = dir * speed
+	anim.play("move")
+	anim.flip_h = dir > 0
+
+	# after roam_time seconds, stop
+	await get_tree().create_timer(roam_time).timeout
+
+	velocity.x = 0
+	anim.play("default")
+	is_roaming = false
+
+# helper: ignore any ground whose Y ≠ target_y
+func _ignore_non_target_ground(target_y: float) -> void:
+	# floor (excluding sidewalks)
+	for f in get_tree().get_nodes_in_group("Floor"):
+		if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+			if abs(f.global_position.y - target_y) > 1.0:
+				add_collision_exception_with(f)
+				_ignored_surfaces.append(f)
+	# sidewalks
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is PhysicsBody2D and abs(sw.global_position.y - target_y) > 1.0:
+			add_collision_exception_with(sw)
+			_ignored_surfaces.append(sw)
+	# streets
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is PhysicsBody2D and abs(st.global_position.y - target_y) > 1.0:
+			add_collision_exception_with(st)
+			_ignored_surfaces.append(st)
+
+# helper: restore all previously ignored surfaces
+func _restore_ground_collisions() -> void:
+	for s in _ignored_surfaces:
+		if is_instance_valid(s):
+			remove_collision_exception_with(s)
+	_ignored_surfaces.clear()
