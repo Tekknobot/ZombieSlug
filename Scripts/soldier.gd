@@ -514,6 +514,22 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor() and abs(velocity.y) < 1.0:
 		_snap_to_nearest_ground()
 
+	# ——— respawn if you fall below the lowest Street collider ———
+	var streets = get_tree().get_nodes_in_group("Street")
+	var max_street_y = -INF
+	for st in streets:
+		if st is Node2D:
+			max_street_y = max(max_street_y, st.global_position.y)
+	if max_street_y > -INF and global_position.y > max_street_y + 16:
+		# teleport to center of viewport
+		var vp = get_viewport().get_visible_rect()
+		global_position = vp.position + vp.size * 0.5
+		# transparent flash
+		anim.modulate = Color(1, 1, 1, 0)
+		var tw = create_tween()
+		tw.tween_property(anim, "modulate:a", 1.0, 0.2)
+
+
 func _climb_up_to_sidewalk() -> void:
 	$CollisionShape2D.disabled = true
 
