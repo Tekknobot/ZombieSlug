@@ -239,7 +239,7 @@ func _on_attack_timeout() -> void:
 			
 func _die_cleanup() -> void:
 	# 1) prevent any further _physics_process/attack logic
-	is_dead = true
+	self.is_dead = true
 
 	# if this was a spore zombie, drop one last patch on death
 	if behavior == "spore" and is_instance_valid(self):
@@ -462,7 +462,7 @@ func _restore_ground_collisions() -> void:
 func _die() -> void:
 	if is_dead:
 		return
-	is_dead = true
+	self.is_dead = true
 
 	# show “0 HP”, hide the label
 	update_health_label()
@@ -519,7 +519,7 @@ func _die() -> void:
 
 	# 7) play death animation, wait, then free
 	anim.play("death")
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(1).timeout
 	queue_free()
 
 func take_damage(amount: int = 1) -> void:
@@ -535,9 +535,9 @@ func take_damage(amount: int = 1) -> void:
 
 	if health <= 0:
 		match behavior.to_lower():
-			"shield", "charger":
+			"charger":
 				_explode()
-			_:
+			"shield", "":
 				_die()
 
 # —————————————————————————————————————————————————————
@@ -549,7 +549,7 @@ func _explode() -> void:
 		return
 	has_exploded = true
 		
-	if is_dead:
+	if self.is_dead:
 		return
 	# play explosion VFX
 	var FX = preload("res://Scenes/Effects/Explosion.tscn").instantiate()

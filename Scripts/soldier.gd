@@ -252,7 +252,7 @@ func _ready() -> void:
 	shock_effect.visible = false
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(3)
+	Playerstats.set_level(1)
 	
 	# start on floor by default:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
@@ -482,6 +482,10 @@ func _physics_process(delta: float) -> void:
 			anim.play("move")
 		else:
 			anim.play("default")
+
+	# auto-snap down to the nearest ground once.
+	if not is_on_floor() and abs(velocity.y) < 1.0:
+		_snap_to_nearest_ground()
 
 func _climb_up_to_sidewalk() -> void:
 	$CollisionShape2D.disabled = true
@@ -1162,3 +1166,25 @@ func _constrain_to_current_layer(ally: PhysicsBody2D) -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p is PhysicsBody2D:
 			ally.remove_collision_exception_with(p)
+
+# Finds the closest ground surface (Floor, Sidewalk or Street) under or near the player's X,
+# then snaps the player’s Y and z_index to it.
+func _snap_to_nearest_ground(max_horizontal_dist: float = 32.0, max_vertical_dist: float = 64.0) -> void:
+	var best_surf: Node2D = null
+	var best_dy = INF
+	var best_group = ""
+	for group_name in ["Floor", "Sidewalk", "Street"]:
+		for surf in get_tree().get_nodes_in_group(group_name):
+			if surf is Node2D:
+				var dx = abs(global_position.x - surf.global_position.x)
+				var dy = surf.global_position.y - global_position.y
+				# Only consider surfaces roughly below or near you
+				if dx <= max_horizontal_dist and dy >= -max_vertical_dist and abs(dy) < best_dy:
+					best_dy = abs(dy)
+					best_surf = surf
+					best_group = group_name
+	if best_surf:
+		global_position.y = best_surf.global_position.y
+		$AnimatedSprite2D.z_index = LAYER_MAP[best_group]
+		# re-build your layer collision exceptions so you collide only with that layer
+		_constrain_to_current_layer(self)
