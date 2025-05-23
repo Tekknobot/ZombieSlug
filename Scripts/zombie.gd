@@ -537,7 +537,7 @@ func take_damage(amount: int = 1) -> void:
 		match behavior.to_lower():
 			"charger":
 				_explode()
-			"shield", "":
+			"spore", "shield", "chain", "":
 				_die()
 
 # —————————————————————————————————————————————————————
@@ -564,5 +564,4 @@ func _explode() -> void:
 		if z != self and z is CharacterBody2D:
 			if global_position.distance_to(z.global_position) <= explosion_radius:
 				z.take_damage(explosion_damage)
-
 	_die()
