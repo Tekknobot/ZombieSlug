@@ -117,7 +117,8 @@ func _physics_process(delta: float) -> void:
 
 	# find player
 	var players = get_tree().get_nodes_in_group("Player")
-	if players.is_empty(): return
+	if players.is_empty():
+		return
 	var p = players[0] as CharacterBody2D
 
 	var same_ground: bool = (p.z_index == self.z_index)
@@ -134,13 +135,14 @@ func _physics_process(delta: float) -> void:
 	var players_target = get_tree().get_nodes_in_group("Player")
 	if players_target.is_empty():
 		return
-	var player_pos 			= players_target[0].global_position
-	var to_player_target  	= player_pos - global_position
-	var player_dist       			= to_player_target.length()
+	var player_pos        = players_target[0].global_position
+	var to_player_target  = player_pos - global_position
+	var player_dist       = to_player_target.length()
 
-	if behavior == "charger":
-		if player_dist <= 32:
-			_explode()
+	# initial charger explode (will be skipped here now)
+	if behavior == "charger" and player_dist <= 32 and same_ground:
+		# don't explode here anymore
+		pass
 
 	# 1) If any homing grenades exist, chase the nearest one instead of the player:
 	var grenades = get_tree().get_nodes_in_group("TNT_yellow")
@@ -149,7 +151,8 @@ func _physics_process(delta: float) -> void:
 		# find closest grenade
 		var best_dist = INF
 		for g in grenades:
-			if not (g is Node2D): continue
+			if not (g is Node2D):
+				continue
 			var d = global_position.distance_to(g.global_position)
 			if d < best_dist:
 				best_dist = d
@@ -163,10 +166,10 @@ func _physics_process(delta: float) -> void:
 		target = players[0] as CharacterBody2D
 
 	# 2) move/tackle exactly as before, but using `target`:
-	var to_target = target.global_position - global_position
-	var dist = to_target.length()
-	var dx = to_target.x
-	var DEADZONE := 1.0
+	var to_target  = target.global_position - global_position
+	var dist       = to_target.length()
+	var dx         = to_target.x
+	var DEADZONE   := 1.0
 	
 	if dist > attack_range:
 		velocity.x = sign(to_target.x) * speed
@@ -174,7 +177,7 @@ func _physics_process(delta: float) -> void:
 			attack_timer.stop()
 		if anim.animation != "move":
 			anim.play("move")
-		 # only re-flip if target is well to one side
+		# only re-flip if target is well to one side
 		if abs(dx) > DEADZONE:
 			anim.flip_h = velocity.x > 0
 	else:
@@ -215,6 +218,14 @@ func _physics_process(delta: float) -> void:
 				_restore_ground_collisions()
 				_ignore_non_target_ground(col.global_position.y)
 			break  # stop after first valid ground collision
+
+	# 4) recompute same_ground now that z_index is correct
+	same_ground = (p.get_child(0).z_index == self.z_index)
+	player_dist = p.global_position.distance_to(global_position)
+
+	# 5) final charger explode check
+	if behavior == "charger" and player_dist <= 24 and same_ground:
+		_explode()
 						
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
