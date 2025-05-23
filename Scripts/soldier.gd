@@ -252,7 +252,7 @@ func _ready() -> void:
 	shock_effect.visible = false
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(3)
+	Playerstats.set_level(1)
 	
 	# start on floor by default:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
@@ -456,6 +456,33 @@ func _physics_process(delta: float) -> void:
 
 	self.velocity = velocity
 	move_and_slide()
+
+	# —————————————————— DYNAMIC GROUND DETECTION ——————————————————
+	var found_ground := false
+	for i in range(get_slide_collision_count()):
+		var col = get_slide_collision(i).get_collider()
+		if not (col is PhysicsBody2D):
+			continue
+
+		# pick highest-priority group
+		if col.is_in_group("Street"):
+			anim.z_index = LAYER_Z_STREET
+			_on_street = true
+			_on_sidewalk = false
+			found_ground = true
+			break
+		elif col.is_in_group("Sidewalk"):
+			anim.z_index = LAYER_Z_SIDEWALK
+			_on_sidewalk = true
+			_on_street = false
+			found_ground = true
+			break
+		elif col.is_in_group("Floor"):
+			anim.z_index = LAYER_Z_FLOOR
+			_on_sidewalk = false
+			_on_street = false
+			found_ground = true
+			break
 
 	# While in the air.
 	_left_roof = true	
@@ -1075,7 +1102,7 @@ func _drop_to_sidewalk() -> void:
 		global_position.y = best_sw.global_position.y
 
 	# now re-enable collision…
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.01).timeout
 	$CollisionShape2D.disabled = false
 
 	# and tell the player to ignore all pure‐floor bodies
@@ -1135,7 +1162,7 @@ func _drop_to_street() -> void:
 	if best_surf:
 		global_position.y = best_surf.global_position.y
 
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.01).timeout
 	$CollisionShape2D.disabled = false
 
 	_on_street = true

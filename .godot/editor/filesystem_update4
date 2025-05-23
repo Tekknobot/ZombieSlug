@@ -1,4 +1,4 @@
-res://Scenes/Main.tscn
+res://Scenes/Sprites/soldier.tscn
 res://Shaders/level_up_pulse.gdshader
 res://Shaders/distort_effect.gdshader
 res://Scripts/meks/m_1.gd
@@ -12,8 +12,8 @@ res://Shaders/spore_effect.gdshader
 res://Shaders/SporeEffect.tres
 res://Shaders/charger_effect.gdshader
 res://Shaders/ChargerEffect.tres
-res://Scripts/zombie.gd
-res://Scenes/Sprites/soldier.tscn
+res://Scripts/soldier.gd
+res://Scenes/Main.tscn
 res://Scenes/Sprites/zombie.tscn
 res://Scenes/Sprites/zombie_xl.tscn
 res://Scenes/Sprites/block.tscn
@@ -21,4 +21,3 @@ res://Scenes/Sprites/merc.tscn
 res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
 res://Scenes/Sprites/dog.tscn
-res://Scripts/soldier.gd
