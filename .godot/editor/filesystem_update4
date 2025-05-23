@@ -21,3 +21,6 @@ res://Scenes/Sprites/merc.tscn
 res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
 res://Scenes/Sprites/dog.tscn
+res://Scripts/dog.gd
+res://Scripts/merc.gd
+res://Scripts/meks/m_2.gd

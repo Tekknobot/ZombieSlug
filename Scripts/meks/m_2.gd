@@ -23,30 +23,38 @@ func _ready() -> void:
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
 func _physics_process(delta: float) -> void:
-	# in _physics_process, gather only same‐layer zombies and ignore collisions with them
-	var zombies := []
-	for node in get_tree().get_nodes_in_group("Zombie"):
-		if node is CharacterBody2D and is_instance_valid(node):
-			if node.z_index == z_index:
-				# only target same-ground zombies
-				zombies.append(node)
-				# and don't physically collide with them
-				add_collision_exception_with(node)
-			else:
-				# re-enable collision against off-ground zombies
-				remove_collision_exception_with(node)
-				
-	if zombies.is_empty():
+	# 1) Get the player
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var player = players[0] as CharacterBody2D
+
+	# 2) Gather same‐layer zombies and ignore collisions with every OTHER zombie
+	var same_layer_zombies: Array[CharacterBody2D] = []
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if not is_instance_valid(z) or not (z is CharacterBody2D):
+			continue
+		# only target and collide with zombies on your layer
+		if z.z_index == player.get_child(0).z_index:
+			same_layer_zombies.append(z)
+			remove_collision_exception_with(z)
+		else:
+			# ignore collisions with off‐layer zombies
+			add_collision_exception_with(z)
+
+	# 3) if no same-ground zombies, idle/reset attack
+	if same_layer_zombies.is_empty():
 		current_target = null
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		velocity.x = 0
 		anim.play("idle")
+		return
 	else:
 		# pick nearest
-		current_target = zombies[0]
+		current_target = same_layer_zombies[0]
 		var best_dist = current_target.global_position.distance_to(global_position)
-		for z in zombies:
+		for z in same_layer_zombies:
 			var d = z.global_position.distance_to(global_position)
 			if d < best_dist:
 				best_dist = d
