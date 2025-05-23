@@ -207,8 +207,6 @@ position = Vector2(0, 2.83758e+07)
 velocity = Vector2(0, 225990)
 script = ExtResource("1_bbe55")
 max_speed = 80.0
-knockback_speed = 100.0
-knockback_upward = -100.0
 dash_speed = 600.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -236,75 +236,6 @@ func _on_attack_timeout() -> void:
 			start_roaming()
 		return  # only need the first matching Player
 			
-func take_damage(amount: int = 1) -> void:
-	if is_dead:
-		return
-
-	hit_sfx.play()
-	flash()  # your red‐flash helper
-
-	health -= amount
-	update_health_label()
-
-	print("Zombie took", amount, "damage; remaining=", health)
-
-	if health <= 0:
-		is_dead = true
-		update_health_label()   # will show “0 HP” in red
-		health_label.hide()
-		
-		# 1) award kill + XP
-		Playerstats.add_kill(xp_award)
-
-		death_sfx.play()
-
-		# 2) Define your pickups and their relative weights (including a “nothing” entry)
-		var drops = [
-			{ "scene": null,                                                   "weight": 40.0 },  # 40% nothing
-			{ "scene": preload("res://Scenes/Sprites/TNTPickup.tscn"),          "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/TNT_YellowPickup.tscn"),   "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/MinePickup.tscn"),         "weight": 1  },
-			{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 1  },			
-			{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 0.75 },			
-			{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 0.5  },
-			{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 0.5  },
-			{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 0.5  },			
-			{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 0.5  },
-			{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 0.0  },
-			{ "scene": preload("res://Scenes/Sprites/GlitchPickup.tscn"),       "weight": 0.5  },			
-			{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 0.25  },
-			{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 0.25  },			
-		]
-
-		# 3) Sum weights
-		var total_weight = 0.0
-		for drop in drops:
-			total_weight += drop.weight
-
-		# 4) Pick one based on weights
-		var r = randf() * total_weight
-		for drop in drops:
-			r -= drop.weight
-			if r <= 0:
-				if drop.scene != null:
-					var instance = drop.scene.instantiate()
-					instance.global_position = global_position
-					instance.global_position.y -= 8
-					get_tree().get_current_scene().add_child(instance)
-				break
-
-		# 5) cleanup and death effects
-		_die_cleanup()
-		$Blood.emitting = true
-		Playerstats.add_kill(xp_award)
-		death_sfx.play()
-
-		emit_signal("died", global_position)
-
-		anim.play("death")
-		await get_tree().create_timer(3).timeout
-		queue_free()
-
 func _die_cleanup() -> void:
 	# 1) prevent any further _physics_process/attack logic
 	is_dead = true
@@ -443,7 +374,7 @@ func update_health_label() -> void:
 		return
 			
 	# Show “X HP”
-	health_label.text = "%dHP" % health
+	health_label.text = "%d" % health
 	# Choose a color tier: >66% green, >33% yellow, else red
 	var pct := float(health) / float(max_health)
 	var tint := Color(1, 1, 1)
@@ -454,34 +385,6 @@ func update_health_label() -> void:
 	else:
 		tint = Color(1, 0, 0)
 	health_label.modulate = tint
-
-func _explode() -> void:
-	is_charging = false
-	is_dead     = true
-
-	# 1) play your explosion effect
-	var FX = preload("res://Scenes/Effects/Explosion.tscn").instantiate()
-	FX.global_position = global_position
-	FX.global_position.y -= 8
-	get_tree().get_current_scene().add_child(FX)
-
-	# 2) deal area damage to player(s)
-	for p in get_tree().get_nodes_in_group("Player"):
-		if p.global_position.distance_to(global_position) <= 32:
-			p.take_damage(p.max_health/2)
-
-	# 3) deal area damage to other zombies
-	for z in get_tree().get_nodes_in_group("Zombie"):
-		if z == self:
-			continue  # don’t hit yourself
-		if z is CharacterBody2D and z.has_method("take_damage"):
-			if z.global_position.distance_to(global_position) <= explosion_radius:
-				z.take_damage(explosion_damage)
-
-	# 4) clean up this zombie
-	death_sfx.play()
-	emit_signal("died", global_position)
-	queue_free()
 
 func _drop_spore() -> void:
 	# spawn the patch at the zombie's feet
@@ -554,3 +457,104 @@ func _restore_ground_collisions() -> void:
 		if is_instance_valid(s):
 			remove_collision_exception_with(s)
 	_ignored_surfaces.clear()
+
+# —————————————————————————————————————————————————————
+# 2) New central death method, containing every bit of your old logic
+# —————————————————————————————————————————————————————
+func _die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+
+	# show “0 HP”, hide the label
+	update_health_label()
+	health_label.hide()
+
+	# 1) award kill + XP
+	Playerstats.add_kill(xp_award)
+
+	# 2) play death SFX
+	death_sfx.play()
+
+	# 3) Define your pickups and their relative weights (including “nothing”)
+	var drops = [
+		{ "scene": null,                                                   "weight": 40.0 },  # nothing
+		{ "scene": preload("res://Scenes/Sprites/TNTPickup.tscn"),          "weight": 1  },
+		{ "scene": preload("res://Scenes/Sprites/TNT_YellowPickup.tscn"),   "weight": 1  },
+		{ "scene": preload("res://Scenes/Sprites/MinePickup.tscn"),         "weight": 1  },
+		{ "scene": preload("res://Scenes/Sprites/FreezePickup.tscn"),       "weight": 1  },
+		{ "scene": preload("res://Scenes/Sprites/HealthPickup.tscn"),       "weight": 0.75 },
+		{ "scene": preload("res://Scenes/Sprites/BulletPickup.tscn"),       "weight": 0.5  },
+		{ "scene": preload("res://Scenes/Sprites/LightningPickup.tscn"),    "weight": 0.5  },
+		{ "scene": preload("res://Scenes/Sprites/FirestormPickup.tscn"),    "weight": 0.5  },
+		{ "scene": preload("res://Scenes/Sprites/SporePickup.tscn"),        "weight": 0.5  },
+		{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 0.0  },
+		{ "scene": preload("res://Scenes/Sprites/GlitchPickup.tscn"),       "weight": 0.5  },
+		{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 0.25 },
+		{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 0.25 },
+	]
+
+	# 4) pick one based on weights
+	var total_weight = 0.0
+	for drop in drops:
+		total_weight += drop.weight
+	var r = randf() * total_weight
+	for drop in drops:
+		r -= drop.weight
+		if r <= 0:
+			if drop.scene != null:
+				var instance = drop.scene.instantiate()
+				instance.global_position = global_position
+				instance.global_position.y -= 8
+				get_tree().get_current_scene().add_child(instance)
+			break
+
+	# 5) any extra “on‐death” behavior
+	_die_cleanup()           # your existing timer-stop & collision teardown
+	$Blood.emitting = true   # blood particle burst
+
+	# (you were adding XP twice—if that was intentional leave it, otherwise drop one)
+	Playerstats.add_kill(xp_award)
+
+	# 6) single died signal for your spawner
+	emit_signal("died", global_position)
+
+	# 7) play death animation, wait, then free
+	anim.play("death")
+	await get_tree().create_timer(3.0).timeout
+	queue_free()
+
+func take_damage(amount: int = 1) -> void:
+	if is_dead:
+		return
+
+	hit_sfx.play()
+	flash()  # your red‐flash helper
+
+	health -= amount
+	update_health_label()
+	print("Zombie took", amount, "damage; remaining=", health)
+
+	if health <= 0:
+		_die()
+
+# —————————————————————————————————————————————————————
+# 3) In `_explode`, remove any direct `emit_signal("died",…)`, `queue_free()` or sfx calls,
+#    and just call `_die()` after your explosion effect and area-damage:
+# —————————————————————————————————————————————————————
+func _explode() -> void:
+	if is_dead:
+		return
+	# play explosion VFX
+	var FX = preload("res://Scenes/Effects/Explosion.tscn").instantiate()
+	FX.global_position = global_position + Vector2(0, -8)
+	get_tree().get_current_scene().add_child(FX)
+
+	# area-damage to player(s) and other zombies…
+	for p in get_tree().get_nodes_in_group("Player"):
+		if p.global_position.distance_to(global_position) <= 32:
+			p.take_damage(p.max_health/2)
+	for z in get_tree().get_nodes_in_group("Zombie"):
+		if z != self and z is CharacterBody2D:
+			if global_position.distance_to(z.global_position) <= explosion_radius:
+				z.take_damage(explosion_damage)
