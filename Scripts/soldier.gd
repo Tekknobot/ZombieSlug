@@ -252,7 +252,7 @@ func _ready() -> void:
 	shock_effect.visible = false
 
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(1)
+	Playerstats.set_level(3)
 	
 	# start on floor by default:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR

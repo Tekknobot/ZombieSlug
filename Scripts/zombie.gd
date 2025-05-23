@@ -61,6 +61,7 @@ const LAYER_Z_SIDEWALK := 2
 const LAYER_Z_STREET   := 4
 
 @export var spawn_layer: int = 0
+var has_exploded: bool = false
 
 # helper map
 var _layer_map = {
@@ -239,9 +240,6 @@ func _on_attack_timeout() -> void:
 func _die_cleanup() -> void:
 	# 1) prevent any further _physics_process/attack logic
 	is_dead = true
-
-	if behavior == "charger" and is_instance_valid(self):
-		_explode()
 
 	# if this was a spore zombie, drop one last patch on death
 	if behavior == "spore" and is_instance_valid(self):
@@ -529,20 +527,28 @@ func take_damage(amount: int = 1) -> void:
 		return
 
 	hit_sfx.play()
-	flash()  # your red‐flash helper
+	flash()
 
 	health -= amount
 	update_health_label()
-	print("Zombie took", amount, "damage; remaining=", health)
+	print("Zombie took %d damage; remaining=%d" % [amount, health])
 
 	if health <= 0:
-		_die()
+		match behavior.to_lower():
+			"shield", "charger":
+				_explode()
+			_:
+				_die()
 
 # —————————————————————————————————————————————————————
 # 3) In `_explode`, remove any direct `emit_signal("died",…)`, `queue_free()` or sfx calls,
 #    and just call `_die()` after your explosion effect and area-damage:
 # —————————————————————————————————————————————————————
 func _explode() -> void:
+	if has_exploded:
+		return
+	has_exploded = true
+		
 	if is_dead:
 		return
 	# play explosion VFX
@@ -558,3 +564,5 @@ func _explode() -> void:
 		if z != self and z is CharacterBody2D:
 			if global_position.distance_to(z.global_position) <= explosion_radius:
 				z.take_damage(explosion_damage)
+
+	_die()
