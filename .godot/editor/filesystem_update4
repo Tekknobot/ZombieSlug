@@ -24,3 +24,4 @@ res://Scenes/Sprites/dog.tscn
 res://Scripts/dog.gd
 res://Scripts/merc.gd
 res://Scripts/meks/m_2.gd
+res://UI/shop_trigger.gd

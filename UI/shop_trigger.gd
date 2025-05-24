@@ -17,7 +17,7 @@ func _ready() -> void:
 # no more _process() watching ui_up()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_zone:
+	if not _player_in_zone or shop_ui.is_visible() or get_tree().paused:
 		return
 
 	# Only open on gamepad D-pad Up
@@ -35,3 +35,9 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("Player"):
 		_player_in_zone = true
 		print("  → Player entered shop zone")
+
+func _on_body_exited(body: Node) -> void:
+	if body.is_in_group("Player"):
+		_player_in_zone = false
+		print("  → Player exited shop zone")
+	# optionally hide your prompt UI here
