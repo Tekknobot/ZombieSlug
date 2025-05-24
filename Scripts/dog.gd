@@ -22,6 +22,12 @@ func _ready() -> void:
 	add_child(attack_timer)
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
 
+	# ← new: match the player’s sprite z_index
+	var players = get_tree().get_nodes_in_group("Player")
+	if not players.is_empty():
+		var player_sprite := (players[0] as Node2D).get_node("AnimatedSprite2D") as AnimatedSprite2D
+		z_index = player_sprite.z_index
+		
 func _physics_process(delta: float) -> void:
 	# 1) Get the player
 	var players = get_tree().get_nodes_in_group("Player")
