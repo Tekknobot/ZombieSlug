@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cak4x0o4vvfhd"]
+
+[ext_resource type="Script" path="res://Scripts/blackhole_pickup.gd" id="1_tll8g"]
+[ext_resource type="Texture2D" uid="uid://r0hpykjrhjyq" path="res://Assets/Items/blackhole_drop.png" id="2_75lbw"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_ft6ud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Aread2D" type="Area2D" groups=["Pickup"]]
+script = ExtResource("1_tll8g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_75lbw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_ft6ud")

@@ -25,3 +25,8 @@ res://Scripts/dog.gd
 res://Scripts/merc.gd
 res://Scripts/meks/m_2.gd
 res://UI/shop_trigger.gd
+res://Scripts/blackhole_pickup.gd
+res://Scenes/Sprites/BlackHolePickup.tscn
+res://Scripts/zombie.gd
+res://Scenes/Sprites/GlitchPickup.tscn
+res://Scenes/Sprites/warpzone.tscn
