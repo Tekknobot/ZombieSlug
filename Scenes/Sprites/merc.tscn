@@ -189,6 +189,7 @@ animations = [{
 
 [node name="Merc" type="CharacterBody2D" groups=["Merc"]]
 script = ExtResource("1_qdyaa")
+speed = 160.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_4d2hf")

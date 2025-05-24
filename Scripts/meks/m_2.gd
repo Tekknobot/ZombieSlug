@@ -34,8 +34,8 @@ func _physics_process(delta: float) -> void:
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if not is_instance_valid(z) or not (z is CharacterBody2D):
 			continue
-		# only target and collide with zombies on your layer
-		if z.z_index == player.get_child(0).z_index:
+		# only target & collide with zombies on *this* node’s layer
+		if z.z_index == self.z_index:
 			same_layer_zombies.append(z)
 			remove_collision_exception_with(z)
 		else:

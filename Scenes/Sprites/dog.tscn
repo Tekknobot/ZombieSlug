@@ -161,6 +161,7 @@ animations = [{
 
 [node name="Dog" type="CharacterBody2D" groups=["Dog"]]
 script = ExtResource("1_tqjya")
+speed = 160.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_k41ol")
