@@ -1,6 +1,7 @@
-[gd_scene load_steps=56 format=3 uid="uid://cq1bf8ydk1lde"]
+[gd_scene load_steps=57 format=3 uid="uid://cq1bf8ydk1lde"]
 
 [ext_resource type="Script" path="res://Scripts/soldier.gd" id="1_bbe55"]
+[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="2_1ri8o"]
 [ext_resource type="Texture2D" uid="uid://x6j463vt26bt" path="res://Scenes/Sprites/soldier/idle/soldier_idle1.png" id="2_drl16"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="2_mb8vu"]
 [ext_resource type="Texture2D" uid="uid://dqpk7esw80vhx" path="res://Scenes/Sprites/soldier/attack/soldier_atk1.png" id="2_qkboi"]
@@ -44,8 +45,8 @@
 [ext_resource type="AudioStream" uid="uid://b11umg6nnmd3t" path="res://Audio/SFX/dog-bark-179915.mp3" id="41_04mpd"]
 [ext_resource type="AudioStream" uid="uid://cueor08orhc0k" path="res://Audio/SFX/shouting-yeah-7043.mp3" id="42_mgngc"]
 [ext_resource type="AudioStream" uid="uid://soum2ofbsnx0" path="res://Audio/SFX/jumps-65494.wav" id="43_ac7py"]
-[ext_resource type="AudioStream" uid="uid://c8iscv7pk8u8f" path="res://Audio/SFX/panther_growl.wav" id="44_i77wk"]
 [ext_resource type="AudioStream" uid="uid://dpslt5sraa3ko" path="res://Audio/Zombie/zombie_massacre_vocal_impact_pain_hurt_01.wav" id="44_m2gep"]
+[ext_resource type="AudioStream" uid="uid://cq8c6qma6tur5" path="res://Audio/SFX/mech_step_002-87150.mp3" id="45_x8h1p"]
 [ext_resource type="AudioStream" uid="uid://dsawtr8wn3bm6" path="res://Audio/SFX/empty-gun-shot-6209.mp3" id="47_bp0as"]
 [ext_resource type="AudioStream" uid="uid://bgkvdq1565t6n" path="res://Audio/SFX/levelup_sfx.wav" id="47_vhed8"]
 [ext_resource type="AudioStream" uid="uid://dhbu11geql6tk" path="res://Audio/SFX/i-have-the-power.mp3" id="48_ones0"]
@@ -209,12 +210,29 @@ script = ExtResource("1_bbe55")
 max_speed = 80.0
 dash_speed = 600.0
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+z_index = 4096
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -48.0
+offset_right = 180.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_1ri8o")
+theme_override_font_sizes/normal_font_size = 16
+text = "Hello"
+fit_content = true
+scroll_following = true
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
-animation = &"move"
 autoplay = "default"
-frame_progress = 0.573738
+frame_progress = 0.545131
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
@@ -232,7 +250,7 @@ stream = ExtResource("42_mgngc")
 volume_db = 6.0
 
 [node name="PantherSfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("44_i77wk")
+stream = ExtResource("45_x8h1p")
 volume_db = 6.0
 
 [node name="JumpSfx" type="AudioStreamPlayer2D" parent="."]

@@ -161,12 +161,26 @@ const LAYER_MAP := {
 	"Street":   LAYER_Z_STREET    # 4
 }
 
+# — at the top of your Soldier.gd (or wherever you manage UI/dialogue) —  
+@onready var dialogue_label: RichTextLabel = $RichTextLabel
+var dialogue_lines: Array[String] = [
+	"Level %d unlocked!",
+]
+
+var dialogue_index:          int   = 0
+var last_zombie_milestone:   int   = -1
+var typing:                  bool  = false
+var typing_speed:            float = 0.05
+
 func _ready() -> void:	
 	z_index = LAYER_Z_FLOOR
 	
-	#Place elswhere when needed
-	Playerstats.reset_stats()
+	set_process(true)
+	dialogue_label.clear()
+	dialogue_label.hide()
 	
+	#Place elswhere when needed
+	Playerstats.reset_stats()	
 	speed = base_speed
 
 	# remember whether it was enabled
@@ -260,7 +274,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
+		
 	# ——— ignore collisions with any zombie off our layer ———
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if not (z is PhysicsBody2D):
@@ -529,6 +543,34 @@ func _physics_process(delta: float) -> void:
 		var tw = create_tween()
 		tw.tween_property(anim, "modulate:a", 1.0, 0.2)
 
+func _show_levelup_dialogue(new_level: int) -> void:
+	if typing:
+		return
+	typing = true
+
+	# pick & format a random line
+	var tmpl = dialogue_lines[randi() % dialogue_lines.size()]
+	var line = tmpl.replace("%d", str(new_level))
+
+	# measure & resize to fit exactly
+	dialogue_label.text           = line
+	
+	# clear and reveal for typewriter
+	dialogue_label.clear()
+	dialogue_label.show()
+
+	_typewriter(line)
+
+func _typewriter(text: String) -> void:
+	for c in text:
+		dialogue_label.append_text(c)
+		await get_tree().create_timer(typing_speed).timeout
+
+	# hold on screen a bit, then hide
+	await get_tree().create_timer(2.0).timeout
+	dialogue_label.clear()
+	dialogue_label.hide()
+	typing = false
 
 func _climb_up_to_sidewalk() -> void:
 	$CollisionShape2D.disabled = true
@@ -717,7 +759,7 @@ func _spawn_dog() -> void:
 
 # --- Spawn Mech (always left) ---
 func _spawn_mech() -> void:
-	merc_sfx.play()
+	panther_sfx.play()
 	var mech = MechScene.instantiate() as PhysicsBody2D
 	mech.add_to_group("Mech")
 	var lvl = Playerstats.level
@@ -922,6 +964,8 @@ func _on_level_changed(new_level: int) -> void:
 	get_tree().get_current_scene().add_child(bolt)
 	# fire at the player's position (damage=0 since it's just FX)
 	bolt.fire(global_position, 0)
+	
+	_show_levelup_dialogue(new_level)
 	
 func _await_landing() -> void:
 	while not is_on_floor():

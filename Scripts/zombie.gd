@@ -112,6 +112,17 @@ func _ready() -> void:
 	spawn_layer = z_index
 						
 func _physics_process(delta: float) -> void:
+	# ——————————————————————————————
+	# 1) Only collide with zombies in the same lane
+	for other in get_tree().get_nodes_in_group("Zombie"):
+		if other == self or not (other is PhysicsBody2D):
+			continue
+		if other.z_index != z_index:
+			add_collision_exception_with(other)
+		else:
+			remove_collision_exception_with(other)
+	# ——————————————————————————————
+		
 	if is_dead:
 		return
 

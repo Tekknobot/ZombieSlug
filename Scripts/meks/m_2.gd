@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		velocity.x = 0
-		anim.play("idle")
+		anim.play("default")
 		return
 	else:
 		# pick nearest

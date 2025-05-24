@@ -54,8 +54,8 @@ func _physics_process(delta: float) -> void:
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
 		velocity.x = 0
-		anim.play("idle")
-		return
+		anim.play("default")
+		#return
 	else:
 		# pick nearest
 		current_target = same_layer_zombies[0]
