@@ -18,9 +18,9 @@
 [ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
 [ext_resource type="Texture2D" uid="uid://d2mtq3d5joemr" path="res://Portraits/Zombies/Rambo_portrait.png" id="17_7laas"]
 [ext_resource type="Texture2D" uid="uid://cle37oiwj581m" path="res://Portraits/Zombies/Dog_portrait.png" id="18_p40qc"]
-[ext_resource type="Texture2D" uid="uid://bedrjpys37gnq" path="res://Assets/Meks/M1/m1idle_1.png" id="19_k767o"]
+[ext_resource type="Texture2D" uid="uid://cjn84xnix5xvv" path="res://Assets/Bots/Orange/robo1-export1.png" id="19_7ehei"]
 [ext_resource type="PackedScene" uid="uid://5r7h532lidgw" path="res://Scenes/Sprites/block.tscn" id="20_5cnqw"]
-[ext_resource type="Texture2D" uid="uid://dfrankfy0q8v1" path="res://Assets/Meks/M2/m2idle_1.png" id="20_5u86s"]
+[ext_resource type="Texture2D" uid="uid://bdm515rcm1kf3" path="res://Assets/Bots/Blue/robo2-export1.png" id="20_o5iqp"]
 [ext_resource type="Script" path="res://Scripts/block_manager.gd" id="20_omn77"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
@@ -272,11 +272,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_b7tma")
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Mech"]
 material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
-offset_left = 4.0
-offset_top = -4.0
-offset_right = 68.0
-offset_bottom = 76.0
-texture = ExtResource("19_k767o")
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 65.0
+offset_bottom = 89.0
+texture = ExtResource("19_7ehei")
 stretch_mode = 4
 
 [node name="Panther" type="Panel" parent="HUD/TopLeft"]
@@ -292,10 +292,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_x6xn7")
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Panther"]
 material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
-offset_left = 1.5
-offset_right = 65.5
-offset_bottom = 65.0
-texture = ExtResource("20_5u86s")
+offset_left = 2.0
+offset_top = -1.0
+offset_right = 66.0
+offset_bottom = 79.0
+texture = ExtResource("20_o5iqp")
 stretch_mode = 4
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]

@@ -217,14 +217,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -48.0
+offset_top = -54.0
 offset_right = 180.0
-offset_bottom = -8.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/normal_font = ExtResource("2_1ri8o")
 theme_override_font_sizes/normal_font_size = 16
-text = "Hello"
 fit_content = true
 scroll_following = true
 
@@ -232,7 +231,7 @@ scroll_following = true
 material = SubResource("ShaderMaterial_jd2l6")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
 autoplay = "default"
-frame_progress = 0.545131
+frame_progress = 0.184243
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
