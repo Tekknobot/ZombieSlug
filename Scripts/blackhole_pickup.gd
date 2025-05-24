@@ -2,7 +2,7 @@
 
 extends Area2D
 
-@export var radius:            float = 256.0  # how far the black hole reaches
+@export var radius:            float = 128.0  # how far the black hole reaches
 @export var pull_speed:        float = 200.0  # how fast zombies are pulled in (px/sec)
 @export var damage:            int   = 9999      # damage dealt when a zombie reaches the center
 @export var effect_duration:   float = 3.0    # how long the black hole remains active
@@ -41,6 +41,8 @@ func _process(delta: float) -> void:
 			if z is CharacterBody2D and is_instance_valid(z):
 				var d = global_position.distance_to(z.global_position)
 				if d <= radius:
+					z.get_child(1).disabled = true
+					z.gravity = 0
 					# pull them in
 					z.global_position = z.global_position.move_toward(
 						global_position, pull_speed * delta
@@ -51,25 +53,29 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("Player") and not _active:
-		# spawn a warp-zone effect at pickup
+		# 0) snap the black hole to the player's feet (so it's on the same layer)
+		var player = body as CharacterBody2D
+		global_position = player.global_position
+		global_position.y -= 16
+		
+		# 1) spawn a warp-zone effect at pickup
 		var wz = warpzone_scene.instantiate()
 		wz.global_position = global_position
 		wz.get_child(0).emitting = true
 		get_tree().get_current_scene().add_child(wz)
 
-		# play collect sound
+		# 2) play collect sound
 		remove_child(collect_sfx)
 		get_tree().get_current_scene().add_child(collect_sfx)
 		collect_sfx.global_position = global_position
 		collect_sfx.play()
 
-		# activate the black hole effect
+		# 3) activate the black hole effect
 		_active = true
 		$CollisionShape2D.disabled = true
 		visible = false
 		
-		# after effect_duration, destroy this node
+		# 4) after effect_duration, tear everything down
 		await get_tree().create_timer(effect_duration).timeout
-		wz.get_child(0).emitting = true
 		wz.queue_free()
 		queue_free()
