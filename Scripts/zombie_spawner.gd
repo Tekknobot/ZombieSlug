@@ -236,7 +236,8 @@ func _spawn_boss() -> void:
 		boss.max_health = int(base * scale)
 		boss.health     = boss.max_health
 
-	if not boss.is_in_group("Zombie"):
+	if not boss.is_in_group("Boss") or not boss.is_in_group("Zombie"):
+		boss.add_to_group("Boss")
 		boss.add_to_group("Zombie")
 	get_tree().get_current_scene().add_child(boss)
 	print("Boss spawned for level ", lvl, " with max_health=", boss.max_health)

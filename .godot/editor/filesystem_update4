@@ -23,3 +23,7 @@ res://Scripts/soldier.gd
 res://Scripts/merc.gd
 res://Scripts/dog.gd
 res://Scripts/meks/m_2.gd
+res://Scenes/Sprites/zombie_xl.tscn
+res://Scripts/Boss.gd
+res://Scripts/zombie.gd
+res://Scripts/zombie_spawner.gd
