@@ -275,8 +275,8 @@ layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
 offset_right = 65.0
-offset_bottom = 89.0
-texture = ExtResource("19_7ehei")
+offset_bottom = 79.0
+texture = ExtResource("20_o5iqp")
 stretch_mode = 4
 
 [node name="Panther" type="Panel" parent="HUD/TopLeft"]
@@ -295,8 +295,8 @@ layout_mode = 0
 offset_left = 2.0
 offset_top = -1.0
 offset_right = 66.0
-offset_bottom = 79.0
-texture = ExtResource("20_o5iqp")
+offset_bottom = 89.0
+texture = ExtResource("19_7ehei")
 stretch_mode = 4
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]

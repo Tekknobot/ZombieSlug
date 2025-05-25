@@ -350,6 +350,8 @@ func _lightning_nova() -> void:
 	# fire up to lightning_targets bolts
 	for i in range(min(lightning_targets, candidates.size())):
 		var tgt = candidates[i]
+		if not is_instance_valid(tgt):
+			return		
 		_spawn_lightning(global_position, tgt.global_position)
 
 		# deal damage

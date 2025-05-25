@@ -24,6 +24,8 @@ extends CanvasLayer
 @export var mech_cooldown_time:     float = 20.0
 @export var panther_cooldown_time:  float = 20.0
 
+var _cooldown_tweens := {}
+
 var level_names := [
 	"Ghoul Gunner","Cadaver Crusher","Undead Eradicator","Corpse Conqueror",
 	"Plague Purifier","Decay Destroyer","Rot Ranger","Necro Nemesis",
@@ -120,12 +122,33 @@ func _on_panther_used() -> void:
 	_start_cooldown(panther_portrait, panther_cooldown_time)
 
 # Helper to tween a panel’s alpha from fully opaque→transparent over `duration`.
+# Helper to tween a panel’s alpha from fully transparent → opaque over `duration`.
 func _start_cooldown(panel: Panel, duration: float) -> void:
-	# Ensure it’s visible & fully opaque at start
-	panel.modulate.a = 0.0
+	# 1) Cancel any existing tween on this panel
+	if _cooldown_tweens.has(panel):
+		_cooldown_tweens[panel].kill()
+		_cooldown_tweens.erase(panel)
 
-	# Create a tween on the panel
+	# 2) Reset it to fully transparent & visible
+	panel.visible = true
+	var m = panel.modulate
+	m.a = 0.0
+	panel.modulate = m
+
+	# 3) Create a new Tween and fade alpha → 1
 	var tw = panel.create_tween()
-	# Over `duration`, animate its alpha down to 0
 	tw.tween_property(panel, "modulate:a", 1.0, duration)
-	tw.play()
+
+	# 4) When finished, just cap at opaque (don’t hide), and remove our record
+	var cb = Callable(self, "_on_cooldown_finished").bind(panel)
+	tw.tween_callback(cb)
+
+	_cooldown_tweens[panel] = tw
+
+func _on_cooldown_finished(panel: Panel) -> void:
+	# ensure fully visible
+	var m = panel.modulate
+	m.a = 1.0
+	panel.modulate = m
+
+	_cooldown_tweens.erase(panel)
