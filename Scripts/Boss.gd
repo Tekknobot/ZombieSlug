@@ -250,6 +250,8 @@ func take_damage(amount: int = 1) -> void:
 		_shake(0.2, 4.0)
 
 func _shake(duration: float, magnitude: float) -> void:
+	if is_dead:
+		return
 	var orig = position
 	var t = Timer.new()
 	t.wait_time = duration
@@ -276,7 +278,9 @@ func _die() -> void:
 	$Blood.emitting = true
 	attack_sfx.play()
 	# wait until the animation actually finishes
-	await anim.animation_finished
+	remove_from_group("Zombie")
+	$CollisionShape2D.disabled = true
+	await get_tree().create_timer(3).timeout
 	visible = false
 	# then free
 	queue_free()
@@ -297,6 +301,9 @@ func update_health_label() -> void:
 
 # Spawns the "hands" effect at the player's position, up to 3 times with a short delay.
 func _spawn_hands_at_player() -> void:
+	if is_dead:
+		return
+			
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
@@ -315,6 +322,8 @@ func _spawn_hands_at_player() -> void:
 			await get_tree().create_timer(0.1).timeout
 
 func _zombie_grab() -> void:
+	if is_dead:
+		return	
 	_start_attack()
 	# Wait for your "wind-up" anim (adjust name/duration as needed)
 	await get_tree().create_timer(0.5).timeout
@@ -323,6 +332,8 @@ func _zombie_grab() -> void:
 
 # ——— damaging chain-lightning nova ———
 func _lightning_nova() -> void:
+	if is_dead:
+		return	
 	_start_attack() 
 	await get_tree().create_timer(0.3).timeout
 
@@ -349,6 +360,9 @@ func _lightning_nova() -> void:
 
 
 func _spawn_lightning(from_pos: Vector2, to_pos: Vector2) -> void:
+	if is_dead:
+		return
+		
 	var bolt = lightning_fx.instantiate()
 	bolt.global_position = from_pos
 	bolt.global_position.y -= 32
