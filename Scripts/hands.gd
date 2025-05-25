@@ -53,6 +53,7 @@ func _freeze_player(player: Node) -> void:
 
 	# resume animation
 	$AnimatedSprite2D.play("retract")
+	await get_tree().create_timer(1).timeout
 
 func _explode() -> void:
 	# kept around if you still want a blast effect later
