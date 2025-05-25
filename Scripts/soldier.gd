@@ -264,12 +264,12 @@ func _ready() -> void:
 	shocks = initial_shocks
 	add_child(shock_effect)
 	shock_effect.visible = false
-
-	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(1)
 	
 	# start on floor by default:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
+	
+	await get_tree().create_timer(1).timeout
+	#Playerstats.set_level(1)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -538,7 +538,7 @@ func _show_levelup_dialogue(new_level: int) -> void:
 	var line = tmpl.replace("%d", str(new_level))
 
 	# measure & resize to fit exactly
-	dialogue_label.text           = line
+	dialogue_label.text = line
 	
 	# clear and reveal for typewriter
 	dialogue_label.clear()

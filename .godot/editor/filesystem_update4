@@ -27,3 +27,10 @@ res://Scenes/Sprites/zombie_xl.tscn
 res://Scripts/Boss.gd
 res://Scripts/zombie.gd
 res://Scripts/zombie_spawner.gd
+res://Scripts/playerstats.gd
+res://Scripts/bullet.gd
+res://Scenes/Sprites/zombie_bullet.tscn
+res://Scripts/zombie_bullet.gd
+res://Scenes/Sprites/mine.tscn
+res://Scenes/Sprites/hands.tscn
+res://Scripts/hands.gd

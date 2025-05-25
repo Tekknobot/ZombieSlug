@@ -211,17 +211,13 @@ radius = 11.0
 material = SubResource("ShaderMaterial_uvie5")
 script = ExtResource("2_12158")
 base_max_health = 15
-shock_radius = 128.0
-volley_count = 16
-volley_interval = 0.1
 slam_radius = 128.0
-blast_damage = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_a5ste")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_yp3ch")
-animation = &"death"
+animation = &"attack"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Zombie"]]

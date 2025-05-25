@@ -23,17 +23,25 @@ var pattern_timer: Timer
 var pattern_index: int = 0  # cycles through patterns
 
 # --- Attack pattern settings ---
-@export var shock_radius: float = 150.0
-@export var volley_count: int = 5
-@export var volley_interval: float = 0.2
 @export var slam_radius: float = 200.0
-@export var blast_damage: int = 15
+@export var blast_damage: int = 1
 @export var jump_strength: float = -400.0    # upward force for ground slam
 @export var fear_radius: float = 100.0       # new radius for fear field
 @export var fear_knockback: float = 300.0    # how hard to push them
 
 @onready var health_label: Label = $HealthLabel
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+
+# At the top of Boss.gd, add:
+@export var slam_height: float = 64.0          # how high the boss jumps
+@export var slam_time:   float = 0.2            # total time for rise+fall
+@export var slam_effect_scene: PackedScene = preload("res://Scenes/Effects/Explosion.tscn")
+
+@export var volley_count: int = 16
+@export var volley_interval: float = 0.1
+@export var bullet_scene: PackedScene = preload("res://Scenes/Sprites/zombie_bullet.tscn")
+
+@export var hands_scene: PackedScene = preload("res://Scenes/Sprites/hands.tscn")
 
 func _ready():
 	randomize()
@@ -64,7 +72,7 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
+		
 	# — lane-based collisions: only collide with zombies on same z_index —
 	for other in get_tree().get_nodes_in_group("Zombie"):
 		if other == self or not (other is PhysicsBody2D):
@@ -84,7 +92,7 @@ func _physics_process(delta: float) -> void:
 		if abs(to_player.x) <= detection_radius:
 			# close enough → stop and start patterns
 			velocity.x = 0
-			anim.play("default")
+			anim.play("attack")
 			if pattern_timer.is_stopped():
 				pattern_timer.start()
 		else:
@@ -95,6 +103,26 @@ func _physics_process(delta: float) -> void:
 			if anim.animation != "move":
 				anim.play("move")
 				anim.flip_h = to_player.x > 0
+
+	# find the player
+	if players.is_empty():
+		return
+	var p = players[0] as CharacterBody2D
+	var to_player = p.global_position - global_position
+	var dist_to_player = to_player.length()
+	
+	# ——————— MELEE OVERRIDE ———————
+	# if the player is inside 32px, do a quick melee and skip the slam/fear patterns
+	if dist_to_player <= 32.0 and is_on_floor():
+		velocity = Vector2.ZERO
+		# stop any pending pattern
+		if not pattern_timer.is_stopped():
+			pattern_timer.stop()
+		# only trigger once per entry
+		if anim.animation != "attack":
+			anim.play("attack")
+			if p.has_method("take_damage"):
+				p.take_damage(attack_damage)
 
 	# gravity
 	if not is_on_floor():
@@ -109,8 +137,12 @@ func _on_level_changed(new_level: int) -> void:
 	health = max_health
 	update_health_label()
 
-func _next_pattern():
-	# only fire if player still within detection radius
+# make _next_pattern async by introducing an await inside
+func _next_pattern() -> void:
+	# stop the timer so it won’t fire again mid‐animation
+	pattern_timer.stop()
+
+	# bail if player is gone or out of range
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
@@ -118,37 +150,34 @@ func _next_pattern():
 	if dist > detection_radius:
 		return
 
+	# run exactly one pattern, waiting for its animation to finish
 	match pattern_index:
 		0:
-			_do_shockwave()
-			anim.play("default")
+			await _zombie_grab()
 		1:
-			_ground_slam()
-			anim.play("attack")
-			$DeathSfx.play()
+			await _ground_slam()	
 		2:
-			_fear_field()
-			anim.play("attack")
-			$DeathSfx.play()
+			await _projectile_volley()						
 	pattern_index = (pattern_index + 1) % 3
 
-func _do_shockwave():
-	for body in get_tree().get_nodes_in_group("Player") + get_tree().get_nodes_in_group("Zombie"):
-		if body is CharacterBody2D and body.global_position.distance_to(global_position) <= shock_radius:
-			if body.has_method("take_damage"):
-				body.take_damage(blast_damage)
-
-# At the top of Boss.gd, add:
-@export var slam_height: float = 64.0          # how high the boss jumps
-@export var slam_time:   float = 0.2            # total time for rise+fall
-@export var slam_effect_scene: PackedScene = preload("res://Scenes/Effects/Explosion.tscn")
+	# once the pattern (and its anim) is done, restart the timer
+	if dist <= detection_radius:
+		pattern_timer.start()
 
 func _ground_slam() -> void:
+	if is_dead:
+		return
+
+	anim.play("attack")
+			
 	# 1) Precompute
 	var origin = global_position
 	var apex   = origin + Vector2(0, -slam_height)
 	var half   = slam_time * 0.5
 
+	if is_dead:
+		return
+		
 	# 2) Rise
 	anim.play("jump")
 	var t = 0.0
@@ -157,6 +186,9 @@ func _ground_slam() -> void:
 		global_position.y = lerp(origin.y, apex.y, t/half)
 		await get_tree().physics_frame
 
+	if is_dead:
+		return
+		
 	# 3) Fall
 	t = 0.0
 	while t < half:
@@ -165,8 +197,11 @@ func _ground_slam() -> void:
 		await get_tree().physics_frame
 	global_position = origin
 
+	if is_dead:
+		return
+		
 	# 4) Slam effect & camera shake
-	anim.play("slam")
+	anim.play("attack")
 	# instantiate your explosion VFX and stick it in group "Explosion" 
 	# so SmoothShakeCamera sees it and shakes
 	var fx = slam_effect_scene.instantiate()
@@ -178,22 +213,26 @@ func _ground_slam() -> void:
 	# 5) Damage & knockback
 	for body in get_tree().get_nodes_in_group("Player") + get_tree().get_nodes_in_group("Zombie"):
 		if body is CharacterBody2D and body.global_position.distance_to(origin) <= slam_radius:
+			if !body.is_on_floor():
+				return
 			if body.has_method("take_damage"):
 				body.take_damage(blast_damage)
 			if body.has_method("apply_knockback"):
 				var dir = (body.global_position - origin).normalized()
 				body.apply_knockback(dir * blast_damage)
 
-func _fear_field():
-	# terrifying roar pushes zombies back
-	anim.play("roar")
-	await get_tree().create_timer(0.5).timeout
-	for z in get_tree().get_nodes_in_group("Zombie"):
-		if z is CharacterBody2D and z.global_position.distance_to(global_position) <= fear_radius:
-			if z.has_method("apply_knockback"):
-				var dir = (z.global_position - global_position).normalized()
-				z.apply_knockback(dir * fear_knockback)
-
+func _projectile_volley() -> void:
+	anim.play("attack")
+	for i in range(volley_count):
+		var angle = (TAU / volley_count) * i
+		var dir = Vector2(cos(angle), sin(angle))
+		var b = bullet_scene.instantiate()
+		b.global_position = global_position
+		b.global_position.y -= 48
+		b.direction = dir
+		get_tree().get_current_scene().add_child(b)
+		await get_tree().create_timer(volley_interval).timeout
+		
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
@@ -220,14 +259,21 @@ func _shake(duration: float, magnitude: float) -> void:
 	position = orig
 	t.queue_free()
 
-func _die():
+func _die() -> void:
 	is_dead = true
 	update_health_label()
 	health_label.hide()
+	
+	# play the death anim
 	anim.play("death")
-	await get_tree().create_timer(1).timeout
+	$Blood.emitting = true
+	$DeathSfx.play()
+	# wait until the animation actually finishes
+	await anim.animation_finished
+	visible = false
+	# then free
 	queue_free()
-
+	
 func update_health_label() -> void:
 	if not is_instance_valid(health_label):
 		return
@@ -241,3 +287,29 @@ func update_health_label() -> void:
 	else:
 		tint = Color(1,0,0)
 	health_label.modulate = tint
+
+# Spawns the "hands" effect at the player's position, up to 3 times with a short delay.
+func _spawn_hands_at_player() -> void:
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var player = players[0] as Node2D
+
+	if player.is_on_floor():		
+		# Try 3 times
+		for i in range(1):
+			# instantiate and position
+			var hands = hands_scene.instantiate() as Node2D
+			hands.global_position = player.global_position
+			hands.global_position.y -= 8
+			get_tree().get_current_scene().add_child(hands)
+
+			# optional: small delay between attempts
+			await get_tree().create_timer(0.1).timeout
+
+func _zombie_grab() -> void:
+	anim.play("attack")
+	# Wait for your "wind-up" anim (adjust name/duration as needed)
+	await get_tree().create_timer(0.5).timeout
+	# Spawn the hands
+	await _spawn_hands_at_player()

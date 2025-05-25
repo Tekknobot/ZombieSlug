@@ -29,7 +29,9 @@ func _ready() -> void:
 	_spawn_timer.timeout.connect(spawn_zombie)
 
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
-
+	await get_tree().create_timer(1).timeout
+	_spawn_boss()
+	
 func spawn_zombie() -> void:
 	# ——— Don’t spawn if we already have ≥ max_zombies ———
 	var current = get_tree().get_nodes_in_group("Zombie").size()

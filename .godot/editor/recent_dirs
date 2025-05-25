@@ -1,4 +1,8 @@
 res://Scripts
+res://Assets/hands
+res://Assets/Mines
+res://Projectiles/zombie_bullets/heart
+res://Projectiles/zombie_bullets
 /Users/machome/Godot/_Builds/Zombie Heaven
 /Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
 res://Assets/Bots/Orange
@@ -16,7 +20,3 @@ res://Scenes/Sprites/zombie/death
 res://Scenes/Titlescreen/Logotype
 res://Scenes
 res://Shaders/
-res://Assets/Mines
-res://Assets/Backgrounds
-res://Icon
-res://Shaders

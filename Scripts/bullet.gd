@@ -33,6 +33,26 @@ func _physics_process(delta: float) -> void:
 			_on_zombie_hit(body)
 			return
 
+func _on_player_hit(player: Node) -> void:
+	monitoring = false
+	colshape.disabled = true
+
+	# Play a hit sound if you have one on the bullet
+	if has_node("HitSfx"):
+		$HitSfx.play()
+
+	# Damage the player ▼
+	var dmg = stats.level  # or a dedicated bullet_damage property
+	if player.has_method("take_damage"):
+		player.take_damage(dmg)
+
+	# Knock them back ▼
+	if player is CharacterBody2D and player.has_method("apply_knockback"):
+		var kb_dir = direction.normalized()
+		player.apply_knockback(kb_dir * knockback_force)
+
+	queue_free()
+
 func _on_screen_exited() -> void:
 	queue_free()
 

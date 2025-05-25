@@ -1,18 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://nrsau1va6046"]
+[gd_scene load_steps=6 format=3 uid="uid://nrsau1va6046"]
 
 [ext_resource type="Script" path="res://Scripts/mine.gd" id="1_dyjfp"]
-[ext_resource type="Texture2D" uid="uid://uj6g582icxx2" path="res://Assets/Mines/mine1.png" id="2_cdieo"]
-[ext_resource type="Texture2D" uid="uid://omsvtypdvd4q" path="res://Assets/Mines/mine2.png" id="3_dlfwv"]
 [ext_resource type="AudioStream" uid="uid://dq06om8u54xyw" path="res://Audio/SFX/beep-329314.mp3" id="4_q65yp"]
+[ext_resource type="Texture2D" uid="uid://bkhyhn7ltgme2" path="res://Assets/hands/arms15.png" id="16_yx316"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_113ie"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_cdieo")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_dlfwv")
+"texture": ExtResource("16_yx316")
 }],
 "loop": true,
 "name": &"default",
