@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://doows11eb21ri" path="res://Assets/hands/arms1.png" id="2_skmdb"]
 [ext_resource type="Texture2D" uid="uid://d3a6d184xa2sq" path="res://Assets/hands/arms2.png" id="3_owmwk"]
 [ext_resource type="Texture2D" uid="uid://cyql7ajca08m5" path="res://Assets/hands/arms3.png" id="4_81dfo"]
-[ext_resource type="AudioStream" uid="uid://dq06om8u54xyw" path="res://Audio/SFX/beep-329314.mp3" id="4_f5mot"]
 [ext_resource type="Texture2D" uid="uid://cw40lgblf0ek2" path="res://Assets/hands/arms4.png" id="5_4dn7v"]
 [ext_resource type="Texture2D" uid="uid://bc3nkhxv2w4hw" path="res://Assets/hands/arms5.png" id="6_vsh1h"]
 [ext_resource type="Texture2D" uid="uid://58jdpn8ghp6t" path="res://Assets/hands/arms6.png" id="7_56lgi"]
@@ -17,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://tvjd02411n20" path="res://Assets/hands/arms13.png" id="14_cqvll"]
 [ext_resource type="Texture2D" uid="uid://dcd7y88huhm67" path="res://Assets/hands/arms14.png" id="15_lrpdy"]
 [ext_resource type="Texture2D" uid="uid://bkhyhn7ltgme2" path="res://Assets/hands/arms15.png" id="16_rxqks"]
+[ext_resource type="AudioStream" uid="uid://dpslt5sraa3ko" path="res://Audio/Zombie/zombie_massacre_vocal_impact_pain_hurt_01.wav" id="17_c8lti"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_113ie"]
 animations = [{
@@ -66,9 +66,52 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("16_rxqks")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_56lgi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_jf1us")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_hwden")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_p2h5u")
+}],
+"loop": true,
+"name": &"hold",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_p2h5u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_oyu0g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_0die8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_h67nb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_cqvll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_lrpdy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_rxqks")
+}],
+"loop": true,
+"name": &"retract",
+"speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2tum8"]
@@ -80,13 +123,14 @@ script = ExtResource("1_rrpw5")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_113ie")
+animation = &"retract"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2tum8")
 
-[node name="BeepSfx" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_f5mot")
+[node name="HandSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("17_c8lti")
 volume_db = -12.0
 autoplay = true
 
