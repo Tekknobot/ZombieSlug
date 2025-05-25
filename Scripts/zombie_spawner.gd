@@ -212,34 +212,71 @@ func _spawn_boss() -> void:
 		return
 	var player = players[0] as Node2D
 
+	# ——— Determine spawn type: sidewalk, street, or floor ———
+	var r = randf()
+	var spawn_type: String
+	if r < sidewalk_chance:
+		spawn_type = "sidewalk"
+	elif r < sidewalk_chance + street_chance:
+		spawn_type = "street"
+	else:
+		spawn_type = "floor"
+
+	# map to z_index
+	var layer_map = {
+		"floor":    0,
+		"sidewalk": 2,
+		"street":   4
+	}
+
+	# ——— Gather surfaces for boss to spawn on ———
+	var surfaces: Array = []
+	if spawn_type == "sidewalk":
+		surfaces = get_tree().get_nodes_in_group("Sidewalk")
+	elif spawn_type == "street":
+		surfaces = get_tree().get_nodes_in_group("Street")
+	else:
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk"):
+				surfaces.append(f)
+
+	if surfaces.is_empty():
+		push_warning("No %s surfaces for boss spawn!" % spawn_type)
+		return
+
+	# pick a random surface
+	var surf = surfaces[randi() % surfaces.size()] as Node2D
+
+	# ——— Instantiate boss & position it ———
+	var boss = boss_scene.instantiate() as CharacterBody2D
+
+	# align z and Y to surface
+	boss.z_index = layer_map[spawn_type]
+	boss.global_position.y = surf.global_position.y
+
+	# X = player.x ± spawn_distance (same side logic)
 	var side: int
-	if (randi() & 1) == 0:
+	if randf() < 0.5:
 		side = -1
 	else:
 		side = 1
-		
-	var spawn_pos = Vector2(
-		player.global_position.x + side * spawn_distance,
-		global_position.y
-	)
+	boss.global_position.x = player.global_position.x + side * spawn_distance * 1.5
 
-	# instantiate the boss
-	var boss = boss_scene.instantiate() as CharacterBody2D
-	boss.global_position = Vector2(
-		player.global_position.x + side * spawn_distance * 1.5,
-		global_position.y
-	)
+	# add to groups
+	if not boss.is_in_group("Boss"):
+		boss.add_to_group("Boss")
+	if not boss.is_in_group("Zombie"):
+		boss.add_to_group("Zombie")
 
-	# scale boss health by level (e.g. +50% per level)
+	# scale boss health by level
 	var lvl = Playerstats.level
 	if lvl > 1 and boss.has_method("take_damage"):
 		var base = boss.max_health
-		var scale = pow(1.50, lvl - 1)     # 1.50 == +50% per level
+		var scale = pow(1.50, lvl - 1)
 		boss.max_health = int(base * scale)
 		boss.health     = boss.max_health
 
-	if not boss.is_in_group("Boss") or not boss.is_in_group("Zombie"):
-		boss.add_to_group("Boss")
-		boss.add_to_group("Zombie")
+	# add to scene
 	get_tree().get_current_scene().add_child(boss)
-	print("Boss spawned for level ", lvl, " with max_health=", boss.max_health)
+	print("Boss spawned on %s at %s with max_health=%d" %
+		  [spawn_type, boss.global_position, boss.max_health])

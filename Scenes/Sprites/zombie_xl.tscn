@@ -207,10 +207,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5t24"]
 radius = 11.0
 
-[node name="Zombie" type="CharacterBody2D" groups=["Boss", "Zombie"]]
+[node name="Boss" type="CharacterBody2D" groups=["Boss", "Zombie"]]
 material = SubResource("ShaderMaterial_uvie5")
 script = ExtResource("2_12158")
-base_max_health = 15
 slam_radius = 128.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

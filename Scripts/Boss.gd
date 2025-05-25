@@ -69,7 +69,7 @@ func _ready():
 
 	# prepare (but don’t start) attack pattern timer
 	pattern_timer = Timer.new()
-	pattern_timer.wait_time = 1.0
+	pattern_timer.wait_time = 1
 	pattern_timer.one_shot = false
 	add_child(pattern_timer)
 	pattern_timer.timeout.connect(Callable(self, "_next_pattern"))
@@ -80,8 +80,44 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-		
-	# — lane-based collisions: only collide with zombies on same z_index —
+
+	# ——— get the player & vector to them ———
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var p = players[0] as CharacterBody2D
+	var to_player = p.global_position - global_position
+	var dist_to_player = to_player.length()
+
+	# ——— always face the player ———
+	anim.flip_h = to_player.x > 0
+
+	# ——— MELEE OVERRIDE ———
+	if dist_to_player <= attack_range and is_on_floor():
+		velocity = Vector2.ZERO
+		if not pattern_timer.is_stopped():
+			pattern_timer.stop()
+		attack_sfx.play()
+		if anim.animation != "default":
+			_start_attack()
+			if p.has_method("take_damage"):
+				p.take_damage(attack_damage)
+		return   # skip the rest this frame
+
+	# ——— detection & pattern logic ———
+	if abs(to_player.x) <= detection_radius:
+		velocity.x = 0
+		_start_attack()
+		if pattern_timer.is_stopped():
+			pattern_timer.start()
+	else:
+		if not pattern_timer.is_stopped():
+			pattern_timer.stop()
+		velocity.x = sign(to_player.x) * speed
+		if anim.animation != "move":
+			anim.play("move")
+
+	# ——— lane‐based collision exceptions ———
 	for other in get_tree().get_nodes_in_group("Zombie"):
 		if other == self or not (other is PhysicsBody2D):
 			continue
@@ -89,55 +125,12 @@ func _physics_process(delta: float) -> void:
 			add_collision_exception_with(other)
 		else:
 			remove_collision_exception_with(other)
-	# —————————————————————————————————————————————————————————————
 
-	# follow player on X until within detection_radius
-	var players = get_tree().get_nodes_in_group("Player")
-	if not players.is_empty():
-		var p = players[0] as CharacterBody2D
-		var to_player = p.global_position - global_position
-		attack_sfx.play()
-		if abs(to_player.x) <= detection_radius:
-			# close enough → stop and start patterns
-			velocity.x = 0
-			_start_attack()
-			if pattern_timer.is_stopped():
-				pattern_timer.start()
-		else:
-			# too far → patrol toward
-			if not pattern_timer.is_stopped():
-				pattern_timer.stop()
-			velocity.x = sign(to_player.x) * speed
-			if anim.animation != "move":
-				anim.play("move")
-				anim.flip_h = to_player.x > 0
-
-	# find the player
-	if players.is_empty():
-		return
-	var p = players[0] as CharacterBody2D
-	var to_player = p.global_position - global_position
-	var dist_to_player = to_player.length()
-	
-	# ——————— MELEE OVERRIDE ———————
-	# if the player is inside 32px, do a quick melee and skip the slam/fear patterns
-	if dist_to_player <= 32.0 and is_on_floor():
-		velocity = Vector2.ZERO
-		# stop any pending pattern
-		if not pattern_timer.is_stopped():
-			pattern_timer.stop()
-		attack_sfx.play()
-		# only trigger once per entry
-		if anim.animation != "attack":
-			_start_attack()
-			if p.has_method("take_damage"):
-				p.take_damage(attack_damage)
-
-	# gravity
-	if not is_on_floor():
-		velocity.y += gravity * delta
-	else:
+	# ——— gravity & motion ———
+	if is_on_floor():
 		velocity.y = 0
+	else:
+		velocity.y += gravity * delta
 
 	move_and_slide()
 
@@ -148,6 +141,8 @@ func _on_level_changed(new_level: int) -> void:
 
 # make _next_pattern async by introducing an await inside
 func _next_pattern() -> void:
+	if is_dead:
+		return		
 	pattern_timer.stop()
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty(): return
@@ -165,6 +160,8 @@ func _next_pattern() -> void:
 		pattern_timer.start()
 
 func _start_attack():
+	if is_dead:
+		return		
 	if anim.animation != "attack":
 		anim.play("attack")
 		attack_sfx.play()
@@ -227,6 +224,8 @@ func _ground_slam() -> void:
 				body.apply_knockback(dir * blast_damage)
 
 func _projectile_volley() -> void:
+	if is_dead:
+		return		
 	_start_attack()
 	for i in range(volley_count):
 		var angle = (TAU / volley_count) * i
@@ -326,7 +325,7 @@ func _zombie_grab() -> void:
 		return	
 	_start_attack()
 	# Wait for your "wind-up" anim (adjust name/duration as needed)
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.1).timeout
 	# Spawn the hands
 	await _spawn_hands_at_player()
 
@@ -367,7 +366,7 @@ func _spawn_lightning(from_pos: Vector2, to_pos: Vector2) -> void:
 		
 	var bolt = lightning_fx.instantiate()
 	bolt.global_position = from_pos
-	bolt.global_position.y -= 32
+	bolt.global_position.y -= 64
 	get_tree().get_current_scene().add_child(bolt)
 	if bolt.has_method("play"):
 		bolt.play(to_pos)
