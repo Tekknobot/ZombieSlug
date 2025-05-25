@@ -267,20 +267,22 @@ func _shake(duration: float, magnitude: float) -> void:
 	if is_dead:
 		return
 	var orig = position
-	var t = Timer.new()
-	t.wait_time = duration
-	t.one_shot = true
-	add_child(t)
-	t.start()
+	var timer = Timer.new()
+	timer.wait_time = duration
+	timer.one_shot = true
+	add_child(timer)
+	timer.start()
 	$AttackSfx.play()
-	while t.time_left > 0:
+	# loop until the timer runs out, yielding one idle frame per iteration
+	while timer.time_left > 0:
 		position = orig + Vector2(
 			randf_range(-magnitude, magnitude),
 			randf_range(-magnitude, magnitude)
 		)
-		await get_tree().physics_frame
+		await get_tree().create_timer(0.0).timeout
+	# restore exact position and clean up
 	position = orig
-	t.queue_free()
+	timer.queue_free()
 
 func _die() -> void:
 	is_dead = true

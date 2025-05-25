@@ -527,6 +527,8 @@ func _physics_process(delta: float) -> void:
 	# auto-snap down to the nearest ground once.
 	if not is_on_floor() and abs(velocity.y) < 1.0:
 		_snap_to_nearest_ground()
+		
+	_ensure_on_street()	
 
 func _show_levelup_dialogue(new_level: int) -> void:
 	if typing:
@@ -1260,3 +1262,35 @@ func _snap_to_nearest_ground(max_horizontal_dist: float = 32.0, max_vertical_dis
 		$AnimatedSprite2D.z_index = LAYER_MAP[best_group]
 		# re-build your layer collision exceptions so you collide only with that layer
 		_constrain_to_current_layer(self)
+
+func _ensure_on_street():
+	# If our y is already at or above the street, nothing to do
+	# (you may adjust the threshold if you want a buffer)
+	if global_position.y <= _get_street_y() + 16:
+		return
+
+	# Find the nearest Street surface beneath us
+	var best_surf: Node2D = null
+	var smallest_dy = INF
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is Node2D:
+			var dy = global_position.y - st.global_position.y
+			if dy > 0 and dy < smallest_dy:
+				smallest_dy = dy
+				best_surf = st
+
+	if best_surf:
+		# Snap back
+		global_position.y = best_surf.global_position.y
+		$AnimatedSprite2D.z_index = LAYER_Z_STREET
+		_on_street = true
+		_on_sidewalk = false
+		on_roof = false
+
+func _get_street_y() -> float:
+	# Returns the y‐coordinate of the first Street node found.
+	# If you have multiple different heights, you can average them or pick one.
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is Node2D:
+			return st.global_position.y
+	return global_position.y  # fallback to current y
