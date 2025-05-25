@@ -286,7 +286,7 @@ func _physics_process(delta: float) -> void:
 			remove_collision_exception_with(z)
 
 	# ——— Step-down from Sidewalk to Street ———
-	if _on_sidewalk \
+	if  not is_dashing and _on_sidewalk \
 	   and Input.is_action_pressed("ui_down") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -294,7 +294,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	# ——— Step-down … ———
-	if is_on_floor() \
+	if not is_dashing and is_on_floor() \
 	   and Input.is_action_pressed("ui_down") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -311,14 +311,14 @@ func _physics_process(delta: float) -> void:
 			return
 
 	# ——— Step-up: Street → Sidewalk, or Sidewalk → Floor ———
-	if _on_street \
+	if not is_dashing and _on_street \
 	   and Input.is_action_pressed("ui_up") \
 	   and Input.is_action_just_pressed("jump"):
 
 		_climb_up_to_sidewalk()
 		return
 
-	if _on_sidewalk \
+	if not is_dashing and _on_sidewalk \
 	   and Input.is_action_pressed("ui_up") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -366,7 +366,7 @@ func _physics_process(delta: float) -> void:
 			return
 			
 	# ——— Drop-through when pressing Down+Jump on a roof ———
-	if is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down") and on_roof:
+	if not is_dashing and is_on_floor() and Input.is_action_just_pressed("jump") and Input.is_action_pressed("ui_down") and on_roof:
 		_drop_through_roofs()
 		return
 
