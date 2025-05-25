@@ -43,6 +43,14 @@ var pattern_index: int = 0  # cycles through patterns
 
 @export var hands_scene: PackedScene = preload("res://Scenes/Sprites/hands.tscn")
 
+# ——— at the top of Boss.gd ———
+@export var lightning_fx: PackedScene    = preload("res://Scenes/Effects/Chain_Bolt.tscn")
+@export var lightning_radius: float     = 256.0
+@export var lightning_targets: int      = 16
+@export var lightning_damage: int         = 3    # how much each bolt deals
+
+@onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
+
 func _ready():
 	randomize()
 	# initialize and scale health for current player level
@@ -88,11 +96,11 @@ func _physics_process(delta: float) -> void:
 	if not players.is_empty():
 		var p = players[0] as CharacterBody2D
 		var to_player = p.global_position - global_position
-
+		attack_sfx.play()
 		if abs(to_player.x) <= detection_radius:
 			# close enough → stop and start patterns
 			velocity.x = 0
-			anim.play("attack")
+			_start_attack()
 			if pattern_timer.is_stopped():
 				pattern_timer.start()
 		else:
@@ -118,9 +126,10 @@ func _physics_process(delta: float) -> void:
 		# stop any pending pattern
 		if not pattern_timer.is_stopped():
 			pattern_timer.stop()
+		attack_sfx.play()
 		# only trigger once per entry
 		if anim.animation != "attack":
-			anim.play("attack")
+			_start_attack()
 			if p.has_method("take_damage"):
 				p.take_damage(attack_damage)
 
@@ -139,30 +148,26 @@ func _on_level_changed(new_level: int) -> void:
 
 # make _next_pattern async by introducing an await inside
 func _next_pattern() -> void:
-	# stop the timer so it won’t fire again mid‐animation
 	pattern_timer.stop()
-
-	# bail if player is gone or out of range
 	var players = get_tree().get_nodes_in_group("Player")
-	if players.is_empty():
-		return
+	if players.is_empty(): return
 	var dist = players[0].global_position.distance_to(global_position)
-	if dist > detection_radius:
-		return
+	if dist > detection_radius: return
 
-	# run exactly one pattern, waiting for its animation to finish
 	match pattern_index:
-		0:
-			await _zombie_grab()
-		1:
-			await _ground_slam()	
-		2:
-			await _projectile_volley()						
-	pattern_index = (pattern_index + 1) % 3
+		0:   await _zombie_grab()
+		1:   await _ground_slam()
+		2:   await _projectile_volley()
+		3:   await _lightning_nova()   # ← new pattern
+	pattern_index = (pattern_index + 1) % 4
 
-	# once the pattern (and its anim) is done, restart the timer
 	if dist <= detection_radius:
 		pattern_timer.start()
+
+func _start_attack():
+	if anim.animation != "attack":
+		anim.play("attack")
+		attack_sfx.play()
 
 func _ground_slam() -> void:
 	if is_dead:
@@ -201,7 +206,7 @@ func _ground_slam() -> void:
 		return
 		
 	# 4) Slam effect & camera shake
-	anim.play("attack")
+	_start_attack()
 	# instantiate your explosion VFX and stick it in group "Explosion" 
 	# so SmoothShakeCamera sees it and shakes
 	var fx = slam_effect_scene.instantiate()
@@ -222,7 +227,7 @@ func _ground_slam() -> void:
 				body.apply_knockback(dir * blast_damage)
 
 func _projectile_volley() -> void:
-	anim.play("attack")
+	_start_attack()
 	for i in range(volley_count):
 		var angle = (TAU / volley_count) * i
 		var dir = Vector2(cos(angle), sin(angle))
@@ -238,6 +243,7 @@ func take_damage(amount: int = 1) -> void:
 		return
 	health -= amount
 	update_health_label()
+	$HitSfx.play()
 	if health <= 0:
 		_die()
 	else:
@@ -250,6 +256,7 @@ func _shake(duration: float, magnitude: float) -> void:
 	t.one_shot = true
 	add_child(t)
 	t.start()
+	$AttackSfx.play()
 	while t.time_left > 0:
 		position = orig + Vector2(
 			randf_range(-magnitude, magnitude),
@@ -267,7 +274,7 @@ func _die() -> void:
 	# play the death anim
 	anim.play("death")
 	$Blood.emitting = true
-	$DeathSfx.play()
+	attack_sfx.play()
 	# wait until the animation actually finishes
 	await anim.animation_finished
 	visible = false
@@ -308,8 +315,50 @@ func _spawn_hands_at_player() -> void:
 			await get_tree().create_timer(0.1).timeout
 
 func _zombie_grab() -> void:
-	anim.play("attack")
+	_start_attack()
 	# Wait for your "wind-up" anim (adjust name/duration as needed)
 	await get_tree().create_timer(0.5).timeout
 	# Spawn the hands
 	await _spawn_hands_at_player()
+
+# ——— damaging chain-lightning nova ———
+func _lightning_nova() -> void:
+	_start_attack() 
+	await get_tree().create_timer(0.3).timeout
+
+	# gather all valid targets (player + zombies, excluding self)
+	var all_bodies = get_tree().get_nodes_in_group("Player") + get_tree().get_nodes_in_group("Zombie")
+	var candidates := []
+	for b in all_bodies:
+		if b is CharacterBody2D and b != self and b.global_position.distance_to(global_position) <= lightning_radius:
+			candidates.append(b)
+
+	# sort by distance (closest first)
+	candidates.sort_custom(Callable(self, "_compare_distance"))
+
+	# fire up to lightning_targets bolts
+	for i in range(min(lightning_targets, candidates.size())):
+		var tgt = candidates[i]
+		_spawn_lightning(global_position, tgt.global_position)
+
+		# deal damage
+		if tgt.has_method("take_damage"):
+			tgt.take_damage(lightning_damage)
+
+		await get_tree().create_timer(0.1).timeout
+
+
+func _spawn_lightning(from_pos: Vector2, to_pos: Vector2) -> void:
+	var bolt = lightning_fx.instantiate()
+	bolt.global_position = from_pos
+	bolt.global_position.y -= 32
+	get_tree().get_current_scene().add_child(bolt)
+	if bolt.has_method("play"):
+		bolt.play(to_pos)
+
+
+func _compare_distance(a: CharacterBody2D, b: CharacterBody2D) -> int:
+	return int(
+		a.global_position.distance_to(global_position)
+		- b.global_position.distance_to(global_position)
+	)

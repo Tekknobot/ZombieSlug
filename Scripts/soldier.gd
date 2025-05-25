@@ -269,7 +269,7 @@ func _ready() -> void:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
 	
 	await get_tree().create_timer(1).timeout
-	#Playerstats.set_level(1)
+	Playerstats.set_level(1)
 	
 func _physics_process(delta: float) -> void:
 	if is_dead:
