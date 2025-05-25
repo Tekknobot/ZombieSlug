@@ -112,16 +112,20 @@ func _ready() -> void:
 	spawn_layer = z_index
 						
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
+			
 	# ————————————————————————
-	# 0) Boss‐avoidance override:
-	# If any boss is within 128 px, stop all targeting and go idle
+	# 0) Boss‐synchronization override:
+	# If any boss is within 64 px, match its movement so you move in unison
 	for boss in get_tree().get_nodes_in_group("Boss"):
-		if boss is Node2D and boss.global_position.distance_to(global_position) <= 128.0:
-			velocity = Vector2.ZERO
-			if anim.animation != "default":
-				anim.play("default")
+		if boss is CharacterBody2D and boss.global_position.distance_to(global_position) <= 64.0:
+			# Copy the boss’s velocity and animation state
+			velocity = boss.velocity
+			if anim.animation != "move":
+				anim.play("move")
+			anim.flip_h = boss.velocity.x > 0
 			return
-	# ————————————————————————
 		
 	# ——————————————————————————————
 	# 1) Only collide with zombies in the same lane
@@ -133,9 +137,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			remove_collision_exception_with(other)
 	# ——————————————————————————————
-		
-	if is_dead:
-		return
 
 	# find player
 	var players = get_tree().get_nodes_in_group("Player")

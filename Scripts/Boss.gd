@@ -32,22 +32,24 @@ var pattern_index: int = 0  # cycles through patterns
 @onready var health_label: Label = $HealthLabel
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
-# At the top of Boss.gd, add:
-@export var slam_height: float = 64.0          # how high the boss jumps
-@export var slam_time:   float = 0.2            # total time for rise+fall
+# Slam settings
+@export var slam_height: float = 64.0        
+@export var slam_time:   float = 0.2         
 @export var slam_effect_scene: PackedScene = preload("res://Scenes/Effects/Explosion.tscn")
 
+# Volley settings
 @export var volley_count: int = 16
 @export var volley_interval: float = 0.1
 @export var bullet_scene: PackedScene = preload("res://Scenes/Sprites/zombie_bullet.tscn")
 
+# Hands grab
 @export var hands_scene: PackedScene = preload("res://Scenes/Sprites/hands.tscn")
 
-# ——— at the top of Boss.gd ———
+# Lightning nova
 @export var lightning_fx: PackedScene    = preload("res://Scenes/Effects/Chain_Bolt.tscn")
 @export var lightning_radius: float     = 256.0
 @export var lightning_targets: int      = 16
-@export var lightning_damage: int         = 3    # how much each bolt deals
+@export var lightning_damage: int       = 3
 
 @onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
 
@@ -57,15 +59,22 @@ func _ready():
 	max_health = int(base_max_health * pow(1.2, Playerstats.level - 1))
 	health = max_health
 
-	# connect to level changes so health scales on the fly
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
 
-	# add to Zombie group for collisions & targeting
+	# add to Zombie group
 	if not is_in_group("Zombie"):
 		add_to_group("Zombie")
 
-	# ensure boss draws on the floor layer
+	# always draw on the floor layer
 	z_index = LAYER_Z_FLOOR
+
+	# ignore any sidewalks & streets so we never leave the floor
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is PhysicsBody2D:
+			add_collision_exception_with(sw)
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is PhysicsBody2D:
+			add_collision_exception_with(st)
 
 	# prepare (but don’t start) attack pattern timer
 	pattern_timer = Timer.new()
@@ -81,31 +90,34 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
-	# ——— get the player & vector to them ———
+	# 1) find the player
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
 	var p = players[0] as CharacterBody2D
-	var to_player = p.global_position - global_position
-	var dist_to_player = to_player.length()
 
-	# ——— always face the player ———
+	# 2) treat the player as if at our Y-level
+	var player_floor_pos = Vector2(p.global_position.x, global_position.y)
+	var to_player = player_floor_pos - global_position
+	var horz_dist = abs(to_player.x)
+
+	# 3) always face horizontally
 	anim.flip_h = to_player.x > 0
 
-	# ——— MELEE OVERRIDE ———
-	if dist_to_player <= attack_range and is_on_floor():
+	# 4) melee override (horizontal only!)
+	if horz_dist <= attack_range and is_on_floor():
 		velocity = Vector2.ZERO
 		if not pattern_timer.is_stopped():
 			pattern_timer.stop()
 		attack_sfx.play()
-		if anim.animation != "default":
+		if anim.animation != "attack":
 			_start_attack()
 			if p.has_method("take_damage"):
 				p.take_damage(attack_damage)
-		return   # skip the rest this frame
+		return
 
-	# ——— detection & pattern logic ———
-	if abs(to_player.x) <= detection_radius:
+	# 5) detection & pattern start/stop
+	if horz_dist <= detection_radius:
 		velocity.x = 0
 		_start_attack()
 		if pattern_timer.is_stopped():
@@ -117,7 +129,7 @@ func _physics_process(delta: float) -> void:
 		if anim.animation != "move":
 			anim.play("move")
 
-	# ——— lane‐based collision exceptions ———
+	# 6) lane‐based collisions with other zombies
 	for other in get_tree().get_nodes_in_group("Zombie"):
 		if other == self or not (other is PhysicsBody2D):
 			continue
@@ -126,7 +138,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			remove_collision_exception_with(other)
 
-	# ——— gravity & motion ———
+	# 7) gravity & slide
 	if is_on_floor():
 		velocity.y = 0
 	else:
@@ -240,6 +252,9 @@ func _projectile_volley() -> void:
 func take_damage(amount: int = 1) -> void:
 	if is_dead:
 		return
+	
+	flash()
+		
 	health -= amount
 	update_health_label()
 	$HitSfx.play()
@@ -377,3 +392,10 @@ func _compare_distance(a: CharacterBody2D, b: CharacterBody2D) -> int:
 		a.global_position.distance_to(global_position)
 		- b.global_position.distance_to(global_position)
 	)
+
+# Briefly tint the sprite red, then restore
+func flash() -> void:
+	var orig = anim.modulate
+	anim.modulate = Color(1, 0, 0, 1)
+	await get_tree().create_timer(0.1).timeout
+	anim.modulate = orig

@@ -1,6 +1,6 @@
-# res://Scenes/Items/hands.gd
 extends Area2D
 
+# --- damage & visuals ---
 @export var damage: int = 3      # same damage as grenade
 
 const ExplosionScene = preload("res://Scenes/Effects/Explosion.tscn")
@@ -18,6 +18,8 @@ func _on_body_entered(body: Node) -> void:
 
 	# only affect the player
 	if body.is_in_group("Player"):
+		z_index = body.get_node("AnimatedSprite2D").z_index + 1
+
 		_exploded = true
 		beep_sfx.play()
 		# freeze the player, then free ourselves
@@ -29,10 +31,10 @@ func _freeze_player(player: Node) -> void:
 	if not is_instance_valid(player):
 		return
 
-	# grab the player's AnimatedSprite2D (adjust path if yours is named differently)
+	# play your “hold” anim on the hands
 	$AnimatedSprite2D.play("hold")
 
-	# disable the player's movement & processing
+	# disable the player's processing
 	if player.has_method("set_physics_process"):
 		player.set_physics_process(false)
 	if player.has_method("set_process"):
@@ -51,12 +53,12 @@ func _freeze_player(player: Node) -> void:
 	if player.has_method("set_process"):
 		player.set_process(true)
 
-	# resume animation
+	# resume hands retract animation
 	$AnimatedSprite2D.play("retract")
 	await get_tree().create_timer(1).timeout
 
 func _explode() -> void:
-	# kept around if you still want a blast effect later
+	# optional later blast effect
 	_exploded = true
 	beep_sfx.play()
 

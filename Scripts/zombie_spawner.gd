@@ -205,7 +205,6 @@ func _on_level_changed(new_level: int) -> void:
 			z.health = min(z.health + 1, z.max_health)
 	print("All zombies gained +1 max health (level ", new_level, ")")
 
-
 func _spawn_boss() -> void:
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
@@ -222,14 +221,9 @@ func _spawn_boss() -> void:
 	else:
 		spawn_type = "floor"
 
-	# map to z_index
-	var layer_map = {
-		"floor":    0,
-		"sidewalk": 2,
-		"street":   4
-	}
+	var layer_map = { "floor":0, "sidewalk":2, "street":4 }
 
-	# ——— Gather surfaces for boss to spawn on ———
+	# ——— Gather surfaces ———
 	var surfaces: Array = []
 	if spawn_type == "sidewalk":
 		surfaces = get_tree().get_nodes_in_group("Sidewalk")
@@ -244,31 +238,49 @@ func _spawn_boss() -> void:
 		push_warning("No %s surfaces for boss spawn!" % spawn_type)
 		return
 
-	# pick a random surface
+	# ——— Pick a random surface & instantiate ———
 	var surf = surfaces[randi() % surfaces.size()] as Node2D
-
-	# ——— Instantiate boss & position it ———
 	var boss = boss_scene.instantiate() as CharacterBody2D
 
-	# align z and Y to surface
-	boss.z_index = layer_map[spawn_type]
-	boss.global_position.y = surf.global_position.y
+	# ——— Prevent landing on any Roof surfaces ———
+	for roof in get_tree().get_nodes_in_group("Roof"):
+		if roof is PhysicsBody2D:
+			boss.add_collision_exception_with(roof)
 
-	# X = player.x ± spawn_distance (same side logic)
+	# choose side without ternary
 	var side: int
 	if randf() < 0.5:
 		side = -1
 	else:
 		side = 1
-	boss.global_position.x = player.global_position.x + side * spawn_distance * 1.5
 
-	# add to groups
+	boss.z_index = layer_map[spawn_type]
+	boss.global_position = Vector2(
+		player.global_position.x + side * spawn_distance * 1.5,
+		surf.global_position.y
+	)
+
+	# ——— Add to scene before ray-casting! ———
+	get_tree().get_current_scene().add_child(boss)
+
+	# ——— Now snap to ground using Godot 4 API ———
+	var space = boss.get_world_2d().direct_space_state
+	var ray = PhysicsRayQueryParameters2D.new()
+	ray.from = boss.global_position + Vector2(0, -1000)
+	ray.to = boss.global_position + Vector2(0, +1000)
+	ray.exclude = [boss]
+	ray.collision_mask = boss.collision_mask
+	var hit = space.intersect_ray(ray)
+	if hit and hit.has("position"):
+		boss.global_position.y = hit["position"].y
+
+	# ——— Add to groups ———
 	if not boss.is_in_group("Boss"):
 		boss.add_to_group("Boss")
 	if not boss.is_in_group("Zombie"):
 		boss.add_to_group("Zombie")
 
-	# scale boss health by level
+	# ——— Scale health by level ———
 	var lvl = Playerstats.level
 	if lvl > 1 and boss.has_method("take_damage"):
 		var base = boss.max_health
@@ -276,7 +288,5 @@ func _spawn_boss() -> void:
 		boss.max_health = int(base * scale)
 		boss.health     = boss.max_health
 
-	# add to scene
-	get_tree().get_current_scene().add_child(boss)
 	print("Boss spawned on %s at %s with max_health=%d" %
 		  [spawn_type, boss.global_position, boss.max_health])
