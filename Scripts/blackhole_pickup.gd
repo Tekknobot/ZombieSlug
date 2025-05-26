@@ -72,10 +72,32 @@ func _on_body_entered(body: Node) -> void:
 
 		# 3) activate the black hole effect
 		_active = true
-		$CollisionShape2D.disabled = true
+		#$CollisionShape2D.disabled = true
 		visible = false
 		
 		# 4) after effect_duration, tear everything down
 		await get_tree().create_timer(effect_duration).timeout
+
+		# 4a) put any stragglers back to “normal” physics so they'll take hits again:
+		for z in get_tree().get_nodes_in_group("Zombie"):
+			if z is CharacterBody2D and is_instance_valid(z):
+				# restore their collision shape
+				var shape = z.get_child(1)
+				if shape and shape is CollisionShape2D:
+					shape.disabled = false
+				# restore their gravity so they fall back down
+				z.gravity = 900.0  # whatever your normal zombie gravity is
+
+				# (optional) snap them to the nearest ground so they land in the right layer
+				if z.has_method("_snap_to_nearest_ground"):
+					z._snap_to_nearest_ground()
+
+				# then kill them if still within radius
+				if global_position.distance_to(z.global_position) <= radius:
+					if z.has_method("take_damage"):
+						z.take_damage(damage)
+					else:
+						z.queue_free()
+
 		wz.queue_free()
 		queue_free()

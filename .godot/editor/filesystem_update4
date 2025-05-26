@@ -28,3 +28,5 @@ res://Shaders/LevelUpEffect.tres
 res://UI/shop_ui.gd
 res://Scripts/playerstats.gd
 res://Scripts/soldier.gd
+res://Scripts/blackhole_pickup.gd
+res://Scripts/zombie.gd
