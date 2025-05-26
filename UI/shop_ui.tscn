@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://mmhaqmvnwmyf"]
 
 [ext_resource type="Script" path="res://UI/shop_ui.gd" id="1_hfpgg"]
-[ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="2_w8yy6"]
+[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="2_8wsog"]
 [ext_resource type="AudioStream" uid="uid://dd3fvdqcwatv3" path="res://Audio/SFX/pickupCoin.wav" id="3_283g3"]
 [ext_resource type="AudioStream" uid="uid://cht60ugafwdyx" path="res://Audio/Tracks/Enter Da Zombie (Demo).mp3" id="4_m1b2u"]
 
@@ -14,7 +14,7 @@ border_width_bottom = 1
 
 [node name="ShopUI" type="CanvasLayer" groups=["Shop"]]
 script = ExtResource("1_hfpgg")
-font = ExtResource("2_w8yy6")
+font = ExtResource("2_8wsog")
 font_size = 64
 
 [node name="Panel" type="Panel" parent="."]

@@ -30,3 +30,4 @@ res://Scripts/playerstats.gd
 res://Scripts/soldier.gd
 res://Scripts/blackhole_pickup.gd
 res://Scripts/zombie.gd
+res://Scenes/Sprites/bullet.tscn

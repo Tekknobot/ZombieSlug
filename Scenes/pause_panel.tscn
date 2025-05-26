@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://c07bukksnlkf8"]
+[gd_scene load_steps=8 format=3 uid="uid://c07bukksnlkf8"]
 
 [ext_resource type="Script" path="res://Scripts/pause_manager.gd" id="1_s06q8"]
-[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_dcnxp"]
 [ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="3_dfys3"]
 [ext_resource type="Texture2D" uid="uid://e3ikiqo2c2r" path="res://Portraits/Main_Hover/soldier_port-export.png" id="3_dtwlc"]
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="4_bfw65"]
@@ -106,24 +105,24 @@ layout_mode = 2
 [node name="ResumeButton" type="Button" parent="Panel/VBoxContainer/VBox"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_dcnxp")
-theme_override_font_sizes/font_size = 32
-text = "RESUME"
+theme_override_fonts/font = ExtResource("4_bfw65")
+theme_override_font_sizes/font_size = 16
+text = "Resume"
 
 [node name="OptionsButton" type="Button" parent="Panel/VBoxContainer/VBox"]
 visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_dcnxp")
-theme_override_font_sizes/font_size = 32
-text = "OPTIONS"
+theme_override_fonts/font = ExtResource("4_bfw65")
+theme_override_font_sizes/font_size = 16
+text = "Options"
 
 [node name="QuitButton" type="Button" parent="Panel/VBoxContainer/VBox"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_dcnxp")
-theme_override_font_sizes/font_size = 32
-text = "QUIT"
+theme_override_fonts/font = ExtResource("4_bfw65")
+theme_override_font_sizes/font_size = 16
+text = "Quit"
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_m8kmb")
