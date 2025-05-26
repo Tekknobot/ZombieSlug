@@ -177,6 +177,23 @@ func _physics_process(delta: float) -> void:
 			return
 		target = players[0] as CharacterBody2D
 
+	# 1.25) recompute same_ground now that z_index is correct
+	var player_sprite = p.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	var player_layer  = player_sprite.z_index
+	same_ground = (player_layer == z_index)
+
+	# DEBUG log
+	print("DEBUG same_ground?  player_layer=", player_layer,
+		  " zombie_layer=", z_index,
+		  " → ", same_ground)
+
+	player_dist = p.global_position.distance_to(global_position)
+
+	# 1.5) final charger explode check
+	if behavior == "charger" and player_dist <= 24 and same_ground:
+		_explode()
+		return
+
 	# 2) move/tackle exactly as before, but using `target`:
 	var to_target  = target.global_position - global_position
 	var dist       = to_target.length()
@@ -230,14 +247,6 @@ func _physics_process(delta: float) -> void:
 				_restore_ground_collisions()
 				_ignore_non_target_ground(col.global_position.y)
 			break  # stop after first valid ground collision
-
-	# 4) recompute same_ground now that z_index is correct
-	same_ground = (p.get_child(0).z_index == self.z_index)
-	player_dist = p.global_position.distance_to(global_position)
-
-	# 5) final charger explode check
-	if behavior == "charger" and player_dist <= 24 and same_ground:
-		_explode()
 						
 func _on_attack_timeout() -> void:
 	for p in get_tree().get_nodes_in_group("Player"):
@@ -577,7 +586,7 @@ func _explode() -> void:
 		return
 	# play explosion VFX
 	var FX = preload("res://Scenes/Effects/Explosion.tscn").instantiate()
-	FX.global_position = global_position + Vector2(0, -8)
+	FX.global_position = global_position + Vector2(0, -16)
 	get_tree().get_current_scene().add_child(FX)
 
 	# area-damage to player(s) and other zombies…

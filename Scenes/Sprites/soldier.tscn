@@ -231,7 +231,7 @@ scroll_following = true
 material = SubResource("ShaderMaterial_jd2l6")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
 autoplay = "default"
-frame_progress = 0.465196
+frame_progress = 0.116905
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
