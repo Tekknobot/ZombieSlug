@@ -88,6 +88,7 @@ func spawn_zombie() -> void:
 
 	# ——— Instantiate zombie and position it on the chosen surface ———
 	var z = zombie_scene.instantiate() as CharacterBody2D
+	
 	# Y = surface height
 	z.global_position.y = surf.global_position.y
 	
@@ -180,6 +181,7 @@ func spawn_zombie() -> void:
 		var scale = pow(1.40, lvl - 1)
 		z.max_health = int(base_health * scale)
 		z.health = z.max_health
+		z.update_health_label()
 
 	if not z.is_in_group("Zombie"):
 		z.add_to_group("Zombie")

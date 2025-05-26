@@ -74,7 +74,6 @@ func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
 	health = max_health
-	update_health_label()
 	print("Zombie speed=", speed, "health=", health)
 
 	attack_timer = Timer.new()
@@ -110,6 +109,8 @@ func _ready() -> void:
 		anim.material.shader = preload("res://Shaders/ShieldEffect.tres")
 			
 	spawn_layer = z_index
+	
+	update_health_label()
 						
 func _physics_process(delta: float) -> void:
 	if is_dead:
