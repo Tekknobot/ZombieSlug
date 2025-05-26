@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://c07bukksnlkf8"]
+[gd_scene load_steps=9 format=3 uid="uid://c07bukksnlkf8"]
 
 [ext_resource type="Script" path="res://Scripts/pause_manager.gd" id="1_s06q8"]
 [ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="2_dcnxp"]
-[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="2_e0njh"]
 [ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="3_dfys3"]
 [ext_resource type="Texture2D" uid="uid://e3ikiqo2c2r" path="res://Portraits/Main_Hover/soldier_port-export.png" id="3_dtwlc"]
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="4_bfw65"]
@@ -15,12 +14,6 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(1, 1, 1, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v12rx"]
-shader = ExtResource("2_e0njh")
-shader_parameter/active = false
-shader_parameter/pulse_speed = 6.0
-shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5t06"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -54,7 +47,7 @@ offset_bottom = 40.0
 layout_mode = 2
 
 [node name="Portrait" type="TextureRect" parent="Panel/VBoxContainer/Stats"]
-material = SubResource("ShaderMaterial_v12rx")
+modulate = Color(0.332881, 0.332881, 0.332881, 1)
 layout_mode = 2
 texture = ExtResource("3_dtwlc")
 stretch_mode = 4
