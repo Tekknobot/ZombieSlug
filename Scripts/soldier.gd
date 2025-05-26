@@ -714,161 +714,139 @@ func _get_nearest_surface(group_name: String) -> Node2D:
 				best_surf = surf
 	return best_surf
 
-# --- Spawn Dog (always left) ---
+# Spawn Dog (always left)
 func _spawn_dog() -> void:
 	dog_sfx.play()
 	var dog = DogScene.instantiate() as PhysicsBody2D
 	dog.add_to_group("Dog")
+
+	# Calculate upgraded damage
 	var lvl = Playerstats.level
-	# calculate and assign upgraded damage unconditionally
 	var total_damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
 	if dog.has_meta("attack_damage"):
 		dog.attack_damage = total_damage
 	else:
 		dog.set("attack_damage", total_damage)
-	# debug
-	print("⮞ [Spawn Dog] base=", dog_base_damage,
-		  " lvl=", lvl,
-		  " per_lvl=", dog_damage_per_level,
-		  " → total=", total_damage)
+	print("⮞ [Spawn Dog] total_damage=", total_damage)
 
-	# positioning
+	# Determine spawn position relative to muzzle point
 	var x_off = _get_spawn_offset_x()
-	dog.global_position = Vector2(
-		global_position.x - x_off,
-		global_position.y + muzzle_point.position.y
-	)
+	var direction = -1  # left
+	var spawn_pos = muzzle_point.global_position + Vector2(direction * x_off, 0)
+	dog.global_position = spawn_pos
 
-	# layer & collisions
+	# Layer & collisions
 	var surf_group = _get_current_surface_group()
 	dog.z_index = LAYER_MAP[surf_group]
 	_constrain_to_current_layer(dog)
 
-	add_child(dog)
+	get_tree().get_current_scene().add_child(dog)
 	if on_roof or _left_roof:
 		_add_roof_exceptions(dog)
 	_add_ally_exceptions(dog)
 
-	# lifetime
-	var base_duration = 5.0
-	var extra_per_level = 1.0
-	var life_delay = base_duration + (lvl - 1) * extra_per_level
+	# Lifetime
+	var life_delay = 5.0 + (lvl - 1) * 1.0
 	_fade_and_free(dog, life_delay, 1.0)
 
-
-# --- Spawn Mech (always left) ---
+# Spawn Mech (always left)
 func _spawn_mech() -> void:
 	panther_sfx.play()
 	var mech = MechScene.instantiate() as PhysicsBody2D
 	mech.add_to_group("Mech")
+
 	var lvl = Playerstats.level
 	var total_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
 	if mech.has_meta("attack_damage"):
 		mech.attack_damage = total_damage
 	else:
 		mech.set("attack_damage", total_damage)
-	print("⮞ [Spawn Mech] base=", mech_base_damage,
-		  " lvl=", lvl,
-		  " per_lvl=", mech_damage_per_level,
-		  " → total=", total_damage)
+	print("⮞ [Spawn Mech] total_damage=", total_damage)
 
 	var x_off = _get_spawn_offset_x()
-	mech.global_position = Vector2(
-		global_position.x - x_off,
-		global_position.y + muzzle_point.position.y
-	)
+	var direction = -1  # left
+	var spawn_pos = muzzle_point.global_position + Vector2(direction * x_off, 0)
+	mech.global_position = spawn_pos
 
 	var surf_group = _get_current_surface_group()
 	mech.z_index = LAYER_MAP[surf_group]
 	_constrain_to_current_layer(mech)
 
-	add_child(mech)
+	get_tree().get_current_scene().add_child(mech)
 	var sprite = mech.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	sprite.flip_h = not facing_right
+	sprite.flip_h = true
 	if on_roof or _left_roof:
 		_add_roof_exceptions(mech)
 	_add_ally_exceptions(mech)
 
-	var base_duration = 8.0
-	var extra_per_level = 2.0
-	var life_time = base_duration + (lvl - 1) * extra_per_level
-	_fade_and_free(mech, life_time, 1.0)
+	var life_delay = 8.0 + (lvl - 1) * 2.0
+	_fade_and_free(mech, life_delay, 1.0)
 
 
-# --- Spawn Merc (always right) ---
+# Spawn Merc (always right)
 func _spawn_merc() -> void:
 	merc_sfx.play()
 	var merc = MercScene.instantiate() as PhysicsBody2D
 	merc.add_to_group("Merc")
+
 	var lvl = Playerstats.level
 	var total_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
 	if merc.has_meta("attack_damage"):
 		merc.attack_damage = total_damage
 	else:
 		merc.set("attack_damage", total_damage)
-	print("⮞ [Spawn Merc] base=", merc_base_damage,
-		  " lvl=", lvl,
-		  " per_lvl=", merc_damage_per_level,
-		  " → total=", total_damage)
+	print("⮞ [Spawn Merc] total_damage=", total_damage)
 
 	var x_off = _get_spawn_offset_x()
-	merc.global_position = Vector2(
-		global_position.x + x_off,
-		global_position.y + muzzle_point.position.y
-	)
+	var direction = 1  # right
+	var spawn_pos = muzzle_point.global_position + Vector2(direction * x_off, 0)
+	merc.global_position = spawn_pos
 
 	var surf_group = _get_current_surface_group()
 	merc.z_index = LAYER_MAP[surf_group]
 	_constrain_to_current_layer(merc)
 
-	add_child(merc)
+	get_tree().get_current_scene().add_child(merc)
 	if on_roof or _left_roof:
 		_add_roof_exceptions(merc)
 	_add_ally_exceptions(merc)
 
-	var base_duration = 5.0
-	var extra_per_level = 1.0
-	var life_delay = base_duration + (lvl - 1) * extra_per_level
+	var life_delay = 5.0 + (lvl - 1) * 1.0
 	_fade_and_free(merc, life_delay, 1.0)
 
 
-# --- Spawn Mech Panther (always right) ---
+# Spawn Mech Panther (always right)
 func _spawn_mech_panther() -> void:
 	panther_sfx.play()
 	var pan = MechScene_Panther.instantiate() as PhysicsBody2D
 	pan.add_to_group("MechPanther")
+
 	var lvl = Playerstats.level
 	var total_damage = mech_panther_base_damage + (lvl - 1) * mech_panther_damage_per_level
 	if pan.has_meta("attack_damage"):
 		pan.attack_damage = total_damage
 	else:
 		pan.set("attack_damage", total_damage)
-	print("⮞ [Spawn Panther] base=", mech_panther_base_damage,
-		  " lvl=", lvl,
-		  " per_lvl=", mech_panther_damage_per_level,
-		  " → total=", total_damage)
+	print("⮞ [Spawn Panther] total_damage=", total_damage)
 
 	var x_off = _get_spawn_offset_x()
-	pan.global_position = Vector2(
-		global_position.x + x_off,
-		global_position.y + muzzle_point.position.y
-	)
+	var direction = 1  # right
+	var spawn_pos = muzzle_point.global_position + Vector2(direction * x_off, 0)
+	pan.global_position = spawn_pos
 
 	var surf_group = _get_current_surface_group()
 	pan.z_index = LAYER_MAP[surf_group]
 	_constrain_to_current_layer(pan)
 
-	add_child(pan)
+	get_tree().get_current_scene().add_child(pan)
 	var sprite = pan.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	sprite.flip_h = not facing_right
+	sprite.flip_h = false
 	if on_roof or _left_roof:
 		_add_roof_exceptions(pan)
 	_add_ally_exceptions(pan)
 
-	var base_duration = 8.0
-	var extra_per_level = 2.0
-	var life_time = base_duration + (lvl - 1) * extra_per_level
-	_fade_and_free(pan, life_time, 1.0)
+	var life_delay = 8.0 + (lvl - 1) * 2.0
+	_fade_and_free(pan, life_delay, 1.0)
 
 func _add_ally_exceptions(body: PhysicsBody2D) -> void:
 	# 1) keep it from bumping into your *other* summons
