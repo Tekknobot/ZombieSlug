@@ -32,13 +32,13 @@ var upgrades = [
 		"amount":   1
 	},
 	{
-		"name":   "Mech Damage +5",
+		"name":   "Crawler Damage +5",
 		"cost":    200,
 		"stat":   "mech_base_damage",
 		"amount":   5
 	},
 	{
-		"name":   "Panther Damage +5",
+		"name":   "Roller Damage +5",
 		"cost":    200,
 		"stat":   "mech_panther_base_damage",
 		"amount":   5

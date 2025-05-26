@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c1d32u7878jo2"]
+
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="1_thd5t"]
+
+[resource]
+shader = ExtResource("1_thd5t")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)

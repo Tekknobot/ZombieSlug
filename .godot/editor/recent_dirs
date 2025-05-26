@@ -1,8 +1,9 @@
+res://Scenes
+res://Scripts
 /Users/machome/Godot/_Builds/Zombie Heaven
 /Users/machome/Godot/_Builds/Zombie Heaven/Zombie_Heaven_WEB
 res://Assets/Mines
 res://Assets/hands
-res://Scripts
 res://Projectiles/zombie_bullets/heart
 res://Projectiles/zombie_bullets
 res://Assets/Bots/Orange
@@ -18,5 +19,4 @@ res://Scenes/Sprites/soldier
 /Users/machome/Godot/ZombieSlug
 res://Scenes/Sprites/zombie/death
 res://Scenes/Titlescreen/Logotype
-res://Scenes
 res://Shaders/

@@ -28,7 +28,7 @@ signal grenades_changed(new_grenades: int)
 signal mines_changed(new_mines: int)
 signal shocks_changed(new_shocks: int)
 
-var currency = 0
+var currency = 10000
 
 signal merc_used
 signal dog_used

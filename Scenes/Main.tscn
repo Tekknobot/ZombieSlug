@@ -1,8 +1,9 @@
-[gd_scene load_steps=41 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=42 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
 [ext_resource type="Script" path="res://Scripts/fade_in.gd" id="2_5s4qg"]
+[ext_resource type="PackedScene" uid="uid://c07bukksnlkf8" path="res://Scenes/pause_panel.tscn" id="2_vwi17"]
 [ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
 [ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="3_xltqf"]
 [ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
@@ -125,6 +126,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="PausePanel" parent="." instance=ExtResource("2_vwi17")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -79)
