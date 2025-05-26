@@ -35,3 +35,4 @@ res://Scenes/Sprites/mine.tscn
 res://Scenes/Sprites/hands.tscn
 res://Scripts/hands.gd
 res://Scripts/hud.gd
+res://Scripts/mine.gd

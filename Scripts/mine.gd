@@ -17,12 +17,14 @@ func _on_body_entered(body: Node) -> void:
 	if _exploded:
 		return
 
-	# explode on any real zombie
+	# only explode if the collider is on the same lane (same z_index)
 	if body.is_in_group("Zombie"):
-		_explode()
+		if body.z_index == z_index:
+			_explode()
+		return
 
-	# OR if it’s the player *and* they’re currently invincible
-	elif body.is_in_group("Player") and body.is_invincible:
+	# OR if it’s the player and they’re invincible, but still on same lane
+	if body.is_in_group("Player") and body.is_invincible and body.z_index == z_index:
 		_explode()
 
 func _explode() -> void:

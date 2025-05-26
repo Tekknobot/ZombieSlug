@@ -1079,21 +1079,26 @@ func play_level_up_effect():
 	Engine.time_scale = 1.0
 
 func _drop_mine() -> void:
-	# determine direction without ternary
+	# 1) Choose left/right without a ternary
 	var dir: int
 	if facing_right:
 		dir = 1
 	else:
 		dir = -1
 
-	# instantiate and position the mine
-	var m = MineScene.instantiate()
-	m.global_position = global_position + Vector2(dir * mine_offset, 0)
-	m.global_position.y -= 8
+	# 2) Instantiate & position
+	var m = MineScene.instantiate() as Area2D
+	m.global_position = global_position + Vector2(dir * mine_offset, -8)
 	m.damage = mine_damage
-	get_tree().get_current_scene().add_child(m)
-	print("💣 Dropped mine at", m.global_position)
 
+	# 3) Match the mine’s z_index to your current ground
+	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"
+	m.z_index = LAYER_MAP[surf_group]
+
+	# 4) Add it to the scene
+	get_tree().get_current_scene().add_child(m)
+	print("💣 Dropped mine on %s at %s" % [surf_group, m.global_position])
+	
 func _shoot_grapple() -> void:
 	var hook = GrappleScene.instantiate()
 	hook.global_position = muzzle_point.global_position
@@ -1221,24 +1226,21 @@ func _drop_to_street() -> void:
 			_sidewalk_exceptions.append(sw)
 
 # AllySpawnHelpers.gd (or drop in Soldier.gd next to your other helpers)
-func _constrain_to_current_layer(ally: PhysicsBody2D) -> void:
-	# Determine which ground‐group the player (and thus the ally) is on
-	var current_group := _get_current_surface_group()  # returns "Floor", "Sidewalk" or "Street"
-
+# Change this helper’s signature to CollisionObject2D instead of PhysicsBody2D:
+func _constrain_to_current_layer(ally: CollisionObject2D) -> void:
 	# 1) Blanket-except every ground surface
-	for grp in ["Floor", "Sidewalk", "Street"]:
+	for grp in ["Floor","Sidewalk","Street"]:
 		for surf in get_tree().get_nodes_in_group(grp):
 			if surf is PhysicsBody2D:
 				ally.add_collision_exception_with(surf)
-
-	# 2) Now re-allow collisions only with the surfaces in our current group
-	for surf in get_tree().get_nodes_in_group(current_group):
+	# 2) Re-allow only your current layer’s surfaces
+	var current = _get_current_surface_group()
+	for surf in get_tree().get_nodes_in_group(current):
 		if surf is PhysicsBody2D:
 			ally.remove_collision_exception_with(surf)
-
-	# 3) And make sure we still hit the player
+	# 3) Make sure you still collide with the Player
 	for p in get_tree().get_nodes_in_group("Player"):
-		if p is PhysicsBody2D:
+		if p is CollisionObject2D:
 			ally.remove_collision_exception_with(p)
 
 # Finds the closest ground surface (Floor, Sidewalk or Street) under or near the player's X,
