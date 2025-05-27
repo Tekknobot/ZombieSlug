@@ -12,12 +12,12 @@ class_name PauseManager
 @onready var quit_button    := $Panel/VBoxContainer/VBox/QuitButton
 
 # Stats labels (damage-related from shop)
-@onready var grenade_damage_label = $Panel/VBoxContainer/Stats/GrenadeDamageLabel
-@onready var mine_damage_label    = $Panel/VBoxContainer/Stats/MineDamageLabel
-@onready var dog_damage_label     = $Panel/VBoxContainer/Stats/DogDamageLabel
-@onready var merc_damage_label    = $Panel/VBoxContainer/Stats/MercDamageLabel
-@onready var mech_damage_label    = $Panel/VBoxContainer/Stats/MechDamageLabel
-@onready var panther_damage_label = $Panel/VBoxContainer/Stats/PantherDamageLabel
+@onready var grenade_damage_label = $Panel/VBoxContainer/Stats/Grenade/GrenadeDamageLabel
+@onready var mine_damage_label    = $Panel/VBoxContainer/Stats/Mine/MineDamageLabel
+@onready var dog_damage_label     = $Panel/VBoxContainer/Stats/Dog/DogDamageLabel
+@onready var merc_damage_label    = $Panel/VBoxContainer/Stats/Merc/MercDamageLabel
+@onready var mech_damage_label    = $Panel/VBoxContainer/Stats/Crawler/MechDamageLabel
+@onready var panther_damage_label = $Panel/VBoxContainer/Stats/Roller/PantherDamageLabel
 @onready var currency_label       = $Panel/VBoxContainer/Stats/CurrencyLabel
 
 # Navigation

@@ -1,10 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://c07bukksnlkf8"]
+[gd_scene load_steps=14 format=3 uid="uid://c07bukksnlkf8"]
 
 [ext_resource type="Script" path="res://Scripts/pause_manager.gd" id="1_s06q8"]
+[ext_resource type="Texture2D" uid="uid://ccgdyewtm4xa4" path="res://Assets/Mines/mine_drop.png" id="2_edij1"]
 [ext_resource type="FontFile" uid="uid://dgugahs6bc7so" path="res://Fonts/magofonts/mago3.ttf" id="3_dfys3"]
 [ext_resource type="Texture2D" uid="uid://e3ikiqo2c2r" path="res://Portraits/Main_Hover/soldier_port-export.png" id="3_dtwlc"]
+[ext_resource type="Texture2D" uid="uid://bb1clht4a0c67" path="res://Projectiles/tnt/tnt_drop.png" id="3_iekom"]
 [ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="4_bfw65"]
+[ext_resource type="Texture2D" uid="uid://bgxj0awka2v73" path="res://Assets/Items/dog_drop.png" id="6_6uqy4"]
 [ext_resource type="AudioStream" uid="uid://cht60ugafwdyx" path="res://Audio/Tracks/Enter Da Zombie (Demo).mp3" id="7_m8kmb"]
+[ext_resource type="Texture2D" uid="uid://bp2sl8lcb8hxq" path="res://Assets/Items/merc_drop.png" id="7_wg5sh"]
+[ext_resource type="Texture2D" uid="uid://c4xjmvumv2cwl" path="res://Assets/Items/crawler_drop.png" id="8_c8ote"]
+[ext_resource type="Texture2D" uid="uid://bg2mb2h6xdyv7" path="res://Assets/Items/roller_drop.png" id="9_cl06t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e5kfq"]
 bg_color = Color(0.051971, 0.051971, 0.051971, 1)
@@ -46,44 +52,105 @@ offset_bottom = 40.0
 layout_mode = 2
 
 [node name="Portrait" type="TextureRect" parent="Panel/VBoxContainer/Stats"]
-modulate = Color(0.332881, 0.332881, 0.332881, 1)
+visible = false
 layout_mode = 2
 texture = ExtResource("3_dtwlc")
 stretch_mode = 4
 
-[node name="GrenadeDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="BlankA" type="Label" parent="Panel/VBoxContainer/Stats"]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_dfys3")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+
+[node name="Grenade" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Grenade"]
+layout_mode = 2
+texture = ExtResource("3_iekom")
+
+[node name="GrenadeDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Grenade"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Grenade Damage: ?"
 
-[node name="MineDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="Mine" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Mine"]
+layout_mode = 2
+texture = ExtResource("2_edij1")
+
+[node name="MineDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Mine"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Mine Damage: ?"
 
-[node name="DogDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="Dog" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Dog"]
+layout_mode = 2
+texture = ExtResource("6_6uqy4")
+
+[node name="DogDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Dog"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Dog Damage: ?"
 
-[node name="MercDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="Merc" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Merc"]
+layout_mode = 2
+texture = ExtResource("7_wg5sh")
+
+[node name="MercDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Merc"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Merc Damage: ?"
 
-[node name="MechDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="Crawler" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Crawler"]
+layout_mode = 2
+texture = ExtResource("8_c8ote")
+
+[node name="MechDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Crawler"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Crawler Damage: ?"
 
-[node name="PantherDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="Roller" type="HBoxContainer" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VBoxContainer/Stats/Roller"]
+layout_mode = 2
+texture = ExtResource("9_cl06t")
+
+[node name="PantherDamageLabel" type="Label" parent="Panel/VBoxContainer/Stats/Roller"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_bfw65")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
+text = "Roller Damage: ?"
+
+[node name="BlankB" type="Label" parent="Panel/VBoxContainer/Stats"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_dfys3")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
 
@@ -93,7 +160,7 @@ theme_override_fonts/font = ExtResource("4_bfw65")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_f5t06")
 
-[node name="Blank" type="Label" parent="Panel/VBoxContainer/Stats"]
+[node name="BlankC" type="Label" parent="Panel/VBoxContainer/Stats"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_dfys3")
 theme_override_font_sizes/font_size = 16
