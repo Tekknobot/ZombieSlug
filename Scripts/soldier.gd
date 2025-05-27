@@ -287,6 +287,7 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Step-down from Sidewalk to Street ———
 	if  not is_dashing and _on_sidewalk \
+	   and is_on_floor() \
 	   and Input.is_action_pressed("ui_down") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -295,6 +296,7 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Step-down … ———
 	if not is_dashing and is_on_floor() \
+	   and is_on_floor() \
 	   and Input.is_action_pressed("ui_down") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -312,6 +314,7 @@ func _physics_process(delta: float) -> void:
 
 	# ——— Step-up: Street → Sidewalk, or Sidewalk → Floor ———
 	if not is_dashing and _on_street \
+	   and is_on_floor() \
 	   and Input.is_action_pressed("ui_up") \
 	   and Input.is_action_just_pressed("jump"):
 
@@ -319,6 +322,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if not is_dashing and _on_sidewalk \
+	   and is_on_floor() \
 	   and Input.is_action_pressed("ui_up") \
 	   and Input.is_action_just_pressed("jump"):
 
