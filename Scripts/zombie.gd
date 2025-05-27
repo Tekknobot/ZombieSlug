@@ -522,7 +522,7 @@ func _die() -> void:
 		{ "scene": preload("res://Scenes/Sprites/BlackHolePickup.tscn"),    "weight": 0.5  },
 		{ "scene": preload("res://Scenes/Sprites/OrbitalPickup.tscn"),      "weight": 0.25 },
 		{ "scene": preload("res://Scenes/Sprites/StarPickup.tscn"),         "weight": 0.25 },
-		{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 50.25  },		
+		{ "scene": preload("res://Scenes/Sprites/TimeWarpPickup.tscn"),     "weight": 0.25  },		
 	]
 
 	# 4) pick one based on weights
