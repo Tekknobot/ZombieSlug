@@ -148,7 +148,7 @@ position = Vector2(-178, 40)
 position = Vector2(392, 40)
 
 [node name="Roof3" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
-position = Vector2(-88, 30)
+position = Vector2(-88, 33)
 script = ExtResource("9_yn6pc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof3"]
@@ -156,7 +156,7 @@ position = Vector2(-241.75, -89.2188)
 shape = SubResource("RectangleShape2D_b2ff3")
 
 [node name="Roof4" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
-position = Vector2(88, 7)
+position = Vector2(88, 10)
 script = ExtResource("9_yn6pc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof4"]
@@ -164,7 +164,7 @@ position = Vector2(-249.5, -102)
 shape = SubResource("RectangleShape2D_nthry")
 
 [node name="Roof5" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
-position = Vector2(124, -23)
+position = Vector2(124, -20)
 script = ExtResource("9_yn6pc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof5"]
@@ -172,7 +172,7 @@ position = Vector2(55, -35)
 shape = SubResource("RectangleShape2D_bv03j")
 
 [node name="Roof6" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
-position = Vector2(444, 7)
+position = Vector2(444, 10)
 script = SubResource("GDScript_yvgv7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof6"]
@@ -180,7 +180,7 @@ position = Vector2(-35.25, -102)
 shape = SubResource("RectangleShape2D_4cnwb")
 
 [node name="Roof7" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
-position = Vector2(268, 30)
+position = Vector2(268, 33)
 script = SubResource("GDScript_05l5u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Roofs/Roof7"]
