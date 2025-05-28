@@ -11,37 +11,43 @@ var upgrades = [
 		"name":   "Grenade Damage +1",
 		"cost":    100,
 		"stat":   "initial_grenade_damage",
-		"amount":   1
+		"amount":   1,
+		"icon":    preload("res://Projectiles/tnt/tnt_drop.png")
 	},
 	{
 		"name":   "Mine Damage +1",
 		"cost":    125,
 		"stat":   "initial_mine_damage",
-		"amount":   1
+		"amount":   1,
+		"icon":    preload("res://Assets/Mines/mine_drop.png")		
 	},
 	{
 		"name":   "Dog Damage +1",
 		"cost":    150,
 		"stat":   "dog_base_damage",
-		"amount":   1
+		"amount":   1,
+		"icon":    preload("res://Assets/Items/dog_drop.png")		
 	},
 	{
 		"name":   "Merc Damage +1",
 		"cost":    175,
 		"stat":   "merc_base_damage",
-		"amount":   1
+		"amount":   1,
+		"icon":    preload("res://Assets/Items/merc_drop.png")		
 	},
 	{
 		"name":   "Crawler Damage +5",
 		"cost":    200,
 		"stat":   "mech_base_damage",
-		"amount":   5
+		"amount":   5,
+		"icon":    preload("res://Assets/Items/crawler_drop.png")		
 	},
 	{
 		"name":   "Roller Damage +5",
 		"cost":    200,
 		"stat":   "mech_panther_base_damage",
-		"amount":   5
+		"amount":   5,
+		"icon":    preload("res://Assets/Items/roller_drop.png")		
 	},
 ]
 
@@ -99,28 +105,36 @@ func populate_upgrades():
 	for child in upgrades_container.get_children():
 		child.free()
 
-	# one HBox entry per upgrade with label and buy button side by side
+	# one HBox entry per upgrade with icon, label and buy button
 	for data in upgrades:
 		# duplicate and scale amount by current player level
 		var payload = data.duplicate()
 		payload.amount = data.amount * Playerstats.level
 
+		# create row
 		var row = HBoxContainer.new()
-		# row itself doesn’t need to grab focus—buttons will
 		if font:
 			row.add_theme_font_override("font", font)
 			row.add_theme_constant_override("font_size", font_size)
 
-		# description label (show scaled amount)
+		# 1) icon / TextureRect in front
+		var icon = TextureRect.new()
+		icon.texture = data.icon      # ← uses each-entry texture
+		icon.size = Vector2(24,24)
+		icon.stretch_mode  = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(icon)
+
+		# 2) description label
 		var desc = Label.new()
-		desc.text = "%s +%d (Cost: %d)" % [data.name.split(" +")[0], payload.amount, data.cost]
+		desc.text = "%s +%d (Cost: %d)" % [ data.name.split(" +")[0], payload.amount, data.cost ]
 		desc.focus_mode = Control.FOCUS_NONE
 		if font:
 			desc.add_theme_font_override("font", font)
 			desc.add_theme_constant_override("font_size", font_size)
 		row.add_child(desc)
 
-		# buy button next to label
+		# 3) buy button
 		var btn = Button.new()
 		btn.text = "Buy"
 		btn.disabled = Playerstats.currency < data.cost
@@ -133,7 +147,7 @@ func populate_upgrades():
 
 		upgrades_container.add_child(row)
 
-	# separator and leave button
+	# separator and leave button (unchanged)…
 	upgrades_container.add_child(HSeparator.new())
 	var leave_btn = Button.new()
 	leave_btn.text = "Leave"
