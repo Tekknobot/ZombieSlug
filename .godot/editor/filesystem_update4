@@ -20,3 +20,4 @@ res://UI/shop_ui.tscn
 res://Scenes/Sprites/bullet.tscn
 res://Scenes/Sprites/block.tscn
 res://Scripts/zombie.gd
+res://Scenes/Sprites/dog.tscn

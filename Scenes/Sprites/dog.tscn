@@ -57,6 +57,12 @@ animations = [{
 "texture": ExtResource("5_qffyx")
 }, {
 "duration": 1.0,
+"texture": ExtResource("5_qffyx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_qffyx")
+}, {
+"duration": 1.0,
 "texture": ExtResource("6_x2y1a")
 }, {
 "duration": 1.0,
@@ -73,7 +79,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"attack",
-"speed": 24.0
+"speed": 12.0
 }, {
 "frames": [],
 "loop": false,
