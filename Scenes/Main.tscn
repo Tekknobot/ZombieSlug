@@ -422,4 +422,4 @@ text = "GLITCH: 5"
 [node name="BlockManager" type="Node2D" parent="."]
 script = ExtResource("20_omn77")
 block_scene = ExtResource("20_5cnqw")
-block_width = 800.0
+block_width = 910.0
