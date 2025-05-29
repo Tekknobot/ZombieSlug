@@ -68,9 +68,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_hd8xh")
 
 [node name="Label" type="Label" parent="Menu"]
 layout_mode = 2
-offset_left = 17.0
+offset_left = 19.0
 offset_top = 24.0
-offset_right = 445.0
+offset_right = 447.0
 offset_bottom = 75.0
 theme_override_fonts/font = ExtResource("2_tiy0f")
 theme_override_font_sizes/font_size = 64

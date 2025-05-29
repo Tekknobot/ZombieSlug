@@ -18,11 +18,16 @@ extends CanvasLayer
 @onready var dog_portrait     = $TopLeft/Dog     as Panel
 @onready var mech_portrait    = $TopLeft/Mech    as Panel
 @onready var panther_portrait = $TopLeft/Panther as Panel
+@onready var mine_portrait    = $TopLeft/Mine    as Panel
+@onready var bullet_portrait  = $TopLeft/Bullet   as Panel
 
 @export var merc_cooldown_time:     float = 20.0
 @export var dog_cooldown_time:      float = 20.0
 @export var mech_cooldown_time:     float = 20.0
 @export var panther_cooldown_time:  float = 20.0
+
+@export var mine_cooldown_time:     float = 2.0
+@export var bullet_cooldown_time:  float = 1.0
 
 var _cooldown_tweens := {}
 
@@ -44,6 +49,8 @@ func _ready() -> void:
 	stats.connect("dog_used",     Callable(self, "_on_dog_used"))
 	stats.connect("mech_used",    Callable(self, "_on_mech_used"))
 	stats.connect("panther_used", Callable(self, "_on_panther_used"))
+	stats.connect("mine_used",    Callable(self, "_on_mine_used"))
+	stats.connect("bullet_used", Callable(self, "_on_bullet_used"))
 	
 	# initialize
 	kills_label.text      = "Kills: %d"  % stats.kills
@@ -121,8 +128,13 @@ func _on_mech_used() -> void:
 func _on_panther_used() -> void:
 	_start_cooldown(panther_portrait, panther_cooldown_time)
 
+func _on_mine_used() -> void:
+	_start_cooldown(mine_portrait, mine_cooldown_time)
+
+func _on_bullet_used() -> void:
+	_start_cooldown(bullet_portrait, bullet_cooldown_time)
+
 # Helper to tween a panel’s alpha from fully opaque→transparent over `duration`.
-# Helper to tween a panel’s alpha from fully transparent → opaque over `duration`.
 func _start_cooldown(panel: Panel, duration: float) -> void:
 	# 1) Cancel any existing tween on this panel
 	if _cooldown_tweens.has(panel):
@@ -131,6 +143,8 @@ func _start_cooldown(panel: Panel, duration: float) -> void:
 
 	# 2) Reset it to fully transparent & visible
 	panel.visible = true
+	panel.modulate = Color(0.25, 0.25, 0.25, 1.0)  # halfway grey
+	
 	var m = panel.modulate
 	m.a = 0.0
 	panel.modulate = m
@@ -146,9 +160,24 @@ func _start_cooldown(panel: Panel, duration: float) -> void:
 	_cooldown_tweens[panel] = tw
 
 func _on_cooldown_finished(panel: Panel) -> void:
-	# ensure fully visible
+	# 1) Ensure fully visible
 	var m = panel.modulate
 	m.a = 1.0
 	panel.modulate = m
 
+	# 2) Remove from our active-tweens map
 	_cooldown_tweens.erase(panel)
+
+	# 2.5) Tween from grey → full colour
+	var tw = panel.create_tween()
+	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.2) \
+	  .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# 3) Bounce effect: move up then spring back
+	var start_pos = panel.position
+	var up_pos    = start_pos + Vector2(0, -8)
+
+	tw.tween_property(panel, "position", up_pos, 0.1) \
+	  .set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.chain().tween_property(panel, "position", start_pos, 0.3) \
+	  .set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)

@@ -34,12 +34,16 @@ signal merc_used
 signal dog_used
 signal mech_used
 signal panther_used
+signal mine_used
+signal bullet_used
 
 func _ready() -> void:
 	self.connect("dog_used",     Callable(self, "_on_dog_used"))
 	self.connect("mech_used",    Callable(self, "_on_mech_used"))
 	self.connect("merc_used",    Callable(self, "_on_merc_used"))
 	self.connect("panther_used", Callable(self, "_on_panther_used"))	
+	self.connect("mine_used",    Callable(self, "_on_mine_used"))
+	self.connect("bullet_used",  Callable(self, "_on_bullet_used"))	
 	
 	# Initialize default values
 	health   = max_health

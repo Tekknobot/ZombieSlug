@@ -418,6 +418,7 @@ func _physics_process(delta: float) -> void:
 	# ——— Ground attack ———
 	if is_on_floor() and Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
+		Playerstats.emit_signal("bullet_used")
 
 	# ——— Kick off an air dash via button ———
 	if Input.is_action_just_pressed("dash") and can_dash and not is_on_floor():
@@ -447,6 +448,7 @@ func _physics_process(delta: float) -> void:
 		if Playerstats.use_mine():
 			_drop_mine()
 			mine_cooldown_timer.start()
+			Playerstats.emit_signal("mine_used")
 		else:
 			empty_sfx.play()
 
