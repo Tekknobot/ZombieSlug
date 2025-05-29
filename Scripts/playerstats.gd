@@ -38,6 +38,18 @@ signal mine_used
 signal bullet_used
 signal grenade_used
 
+@export var initial_speed:    float = 50.0
+@export var initial_firerate: float = 1
+
+# Runtime stats (add here):
+var stats_initialized: bool = false
+var speed: float
+var firerate: float
+
+# Signals:
+signal speed_changed(new_speed: float)
+signal firerate_changed(new_firerate: float)
+
 func _ready() -> void:
 	self.connect("dog_used",     Callable(self, "_on_dog_used"))
 	self.connect("mech_used",    Callable(self, "_on_mech_used"))
@@ -70,6 +82,14 @@ func _ready() -> void:
 	emit_signal("mines_changed", mines)
 	emit_signal("shocks_changed", shocks)
 
+	# initialize speed & firerate:
+	speed    = initial_speed
+	firerate = initial_firerate
+
+	# emit for UI/others:
+	emit_signal("speed_changed", speed)
+	emit_signal("firerate_changed", firerate)
+	
 func xp_to_next_level() -> int:
 	return xp_base * level
 

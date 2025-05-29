@@ -161,7 +161,6 @@ position = Vector2(178, 0)
 [node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
 position = Vector2(98, 35)
 base_speed = 60.0
-initial_firerate = 1.0
 jump_velocity = -280.0
 gravity = 780.0
 dash_speed = 500.0

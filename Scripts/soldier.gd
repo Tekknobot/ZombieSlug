@@ -16,7 +16,7 @@ var _knockback_time_left: float = 0.0
 # remember what your speed was before the star power
 var _orig_speed: float = 0.0
 
-@export var initial_firerate  := 0.6    # seconds between shots at level 1
+@export var initial_firerate  := 1    # seconds between shots at level 1
 var firerate: float
 var attack_ready: bool = true
 var attack_cooldown_timer: Timer
@@ -174,48 +174,47 @@ var typing_speed:            float = 0.05
 
 func _ready() -> void:	
 	z_index = LAYER_Z_FLOOR
-	
 	set_process(true)
 	dialogue_label.clear()
 	dialogue_label.hide()
-	
-	#Place elswhere when needed
-	Playerstats.reset_stats()	
-	speed = base_speed
 
-	# remember whether it was enabled
+	# remember whether CollisionShape2D was disabled
 	_shape_was_disabled = body_shape.disabled
-	
-	# remember your default anim material
-	_default_material = anim.material
-	_star_material   = preload("res://Shaders/StarEffect.tres") as ShaderMaterial
 
-	# setup hitbox (disabled until star power)
+	# cache your materials
+	_default_material = anim.material
+	_star_material    = preload("res://Shaders/StarEffect.tres") as ShaderMaterial
+
+	# hitbox for star‐power
 	hitbox.monitoring = false
 	hitbox.connect("body_entered", Callable(self, "_on_hitbox_body_entered"))
 
-	# initialize firing rate
-	firerate = initial_firerate
-	
-	# wire up level-change so we can speed up
+	# ─── pull or initialize ───
+	if Playerstats.stats_initialized:
+		# someone else already set them → just use those
+		speed    = Playerstats.speed
+		firerate = Playerstats.firerate
+	else:
+		# first time ever → use base, then push into singleton
+		speed    = base_speed
+		firerate = initial_firerate
+		Playerstats.speed             = speed
+		Playerstats.firerate          = firerate
+		Playerstats.stats_initialized = true
+
+		# let HUD / anyone know
+		Playerstats.emit_signal("speed_changed",    speed)
+		Playerstats.emit_signal("firerate_changed", firerate)
+		
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
-			
-	# initialize global stats to match this soldier
-	Playerstats.max_health = max_health
-	Playerstats.health     = max_health
-	Playerstats.xp         = 0
-	Playerstats.kills      = 0
-	Playerstats.level      = 1
 
-	health = max_health
-	print("Soldier health set to", health)
-
-	# set up a dedicated one-shot Timer for your fire‐rate
+	# set up your fire‐rate timer
 	attack_cooldown_timer = Timer.new()
 	attack_cooldown_timer.one_shot = true
 	add_child(attack_cooldown_timer)
 	attack_cooldown_timer.timeout.connect(Callable(self, "_on_attack_cooldown_finished"))
 
+	# dog/merc cooldown timers
 	dog_cooldown_timer = Timer.new()
 	dog_cooldown_timer.wait_time = 20.0
 	dog_cooldown_timer.one_shot  = true
@@ -226,6 +225,7 @@ func _ready() -> void:
 	merc_cooldown_timer.one_shot  = true
 	add_child(merc_cooldown_timer)
 
+	# grenade & mine timers
 	grenade_cooldown_timer = Timer.new()
 	grenade_cooldown_timer.wait_time = grenade_cooldown
 	grenade_cooldown_timer.one_shot  = true
@@ -235,12 +235,14 @@ func _ready() -> void:
 	mine_cooldown_timer.wait_time = mine_cooldown
 	mine_cooldown_timer.one_shot  = true
 	add_child(mine_cooldown_timer)
-	
+
+	# shock timer
 	shock_timer = Timer.new()
 	shock_timer.wait_time = shock_cooldown
 	shock_timer.one_shot  = true
-	add_child(shock_timer)	
+	add_child(shock_timer)
 
+	# mech cooldowns
 	mech_cooldown_timer = Timer.new()
 	mech_cooldown_timer.wait_time = mech_cooldown
 	mech_cooldown_timer.one_shot  = true
@@ -251,26 +253,29 @@ func _ready() -> void:
 	mech_panther_cooldown_timer.one_shot  = true
 	add_child(mech_panther_cooldown_timer)
 
+	# hook your own “on leveled” (for visuals, speed bumps, etc.)
 	Playerstats.connect("level_changed", Callable(self, "_on_player_leveled"))
-	
+
+	# local copies of damage/rates
 	grenade_damage = initial_grenade_damage
 	mine_damage    = initial_mine_damage
 
-	# Configure a reusable star-power timer
+	# star‐power timer
 	_star_timer.one_shot = true
 	add_child(_star_timer)
 	_star_timer.connect("timeout", Callable(self, "_on_star_timeout"))
 
+	# add your shock effect node now, but invisible
 	shocks = initial_shocks
 	add_child(shock_effect)
 	shock_effect.visible = false
-	
-	# start on floor by default:
+
+	# start on floor by default
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
-	
+
 	await get_tree().create_timer(1).timeout
-	Playerstats.set_level(1)
-	
+	Playerstats.set_level(5)
+		
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
@@ -897,11 +902,21 @@ func enable_homing_grenades(duration: float) -> void:
 	homing_mode = false
 
 func _on_level_changed(new_level: int) -> void:
-	# reduce cooldown by 15% per level, but never below 0.1s
-	var min_factor = 0.1 / initial_firerate
-	var factor = clamp(1.0 - (new_level - 1) * 0.15, min_factor, 1.0)
-	firerate = initial_firerate * factor
+	# bump speed but never over max_speed
+	speed = base_speed + speed_increase_per_lvl * (new_level - 1)
+	speed = clamp(speed, base_speed, max_speed)
 
+	# recalc firerate
+	var min_factor = 0.1 / initial_firerate
+	var factor     = clamp(1.0 - (new_level - 1) * 0.15, min_factor, 1.0)
+	firerate       = initial_firerate * factor
+
+	# **push into Playerstats**
+	Playerstats.speed    = speed
+	Playerstats.firerate = firerate
+	Playerstats.emit_signal("speed_changed", speed)
+	Playerstats.emit_signal("firerate_changed", firerate)
+	
 	# --- grenade cooldown reduction (20% per level, floor 20%) ---
 	var gren_factor = clamp(1.0 - (new_level - 1) * 0.50, 0.2, 1.0)
 	grenade_cooldown = initial_grenade_cooldown * gren_factor
@@ -924,11 +939,6 @@ func _on_level_changed(new_level: int) -> void:
 	mine_damage = initial_mine_damage + (new_level - 1)
 	mine_cooldown = initial_mine_cooldown * clamp(1.0 - (new_level -1)*0.1, 0.2, 1.0)
 	mine_cooldown_timer.wait_time = mine_cooldown
-
-	# bump speed but never over max_speed
-	speed = base_speed + speed_increase_per_lvl * (new_level - 1)
-	speed = clamp(speed, base_speed, max_speed)
-	print("Level ", new_level, " → player speed: ", speed)
 
 	# buff all live dogs:
 	for d in get_tree().get_nodes_in_group("Dog"):
