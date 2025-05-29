@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://5r7h532lidgw"]
+[gd_scene load_steps=35 format=3 uid="uid://5r7h532lidgw"]
 
 [ext_resource type="Script" path="res://Scripts/clouds.gd" id="4_mwikq"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="5_6w86t"]
@@ -19,6 +19,44 @@
 [ext_resource type="Texture2D" uid="uid://btx55ga8tabje" path="res://Assets/Backgrounds/open_sign/open_sign6.png" id="19_xrwko"]
 [ext_resource type="Texture2D" uid="uid://ccycdmmuumvs" path="res://Assets/Backgrounds/open_sign/open_sign7.png" id="20_8vq8q"]
 [ext_resource type="Texture2D" uid="uid://b0i0weiro5tlo" path="res://Assets/Backgrounds/open_sign/open_sign8.png" id="21_3vbep"]
+
+[sub_resource type="GDScript" id="GDScript_mkymp"]
+script/source = "extends Area2D
+
+func _ready() -> void:
+	add_to_group(\"Ladders\")
+	connect(\"body_entered\", Callable(self, \"_on_body_entered\"))
+	connect(\"body_exited\",  Callable(self, \"_on_body_exited\"))
+
+func _on_body_entered(body: Node) -> void:
+	if body.is_in_group(\"Player\"):
+		# flag the player as being *in* a ladder
+		body.on_ladder = true
+
+func _on_body_exited(body: Node) -> void:
+	if body.is_in_group(\"Player\"):
+		body.on_ladder = false
+		body.is_climbing = false    # stop climbing the moment you leave
+"
+
+[sub_resource type="GDScript" id="GDScript_akdyp"]
+script/source = "extends Area2D
+
+func _ready() -> void:
+	add_to_group(\"Ladders\")
+	connect(\"body_entered\", Callable(self, \"_on_body_entered\"))
+	connect(\"body_exited\",  Callable(self, \"_on_body_exited\"))
+
+func _on_body_entered(body: Node) -> void:
+	if body.is_in_group(\"Player\"):
+		# flag the player as being *in* a ladder
+		body.on_ladder = true
+
+func _on_body_exited(body: Node) -> void:
+	if body.is_in_group(\"Player\"):
+		body.on_ladder = false
+		body.is_climbing = false    # stop climbing the moment you leave
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b2ff3"]
 size = Vector2(55.5, 2.4375)
@@ -143,9 +181,11 @@ position = Vector2(-21, -17)
 
 [node name="Ladder" parent="Roofs" instance=ExtResource("8_knsow")]
 position = Vector2(-178, 40)
+script = SubResource("GDScript_mkymp")
 
 [node name="Ladder2" parent="Roofs" instance=ExtResource("8_knsow")]
 position = Vector2(392, 40)
+script = SubResource("GDScript_akdyp")
 
 [node name="Roof3" type="StaticBody2D" parent="Roofs" groups=["Roof"]]
 position = Vector2(-88, 33)

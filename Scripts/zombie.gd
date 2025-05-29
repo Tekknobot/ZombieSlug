@@ -605,7 +605,7 @@ func _explode() -> void:
 	# area-damage to player(s) and other zombies…
 	for p in get_tree().get_nodes_in_group("Player"):
 		if p.global_position.distance_to(global_position) <= 32:
-			p.take_damage(p.max_health/2)
+			p.take_damage(attack_damage)
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if z != self and z is CharacterBody2D:
 			if global_position.distance_to(z.global_position) <= explosion_radius:
