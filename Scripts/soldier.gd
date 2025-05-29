@@ -272,10 +272,14 @@ func _ready() -> void:
 
 	# start on floor by default
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
-
+	
+	global_position = GameState.last_main_position
+	# clear it so you don’t snap next time you reload
+	GameState.last_main_position = Vector2.ZERO
+	
 	await get_tree().create_timer(1).timeout
 	Playerstats.set_level(1)
-		
+				
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return

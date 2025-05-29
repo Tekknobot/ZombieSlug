@@ -24,6 +24,7 @@ boot_splash/minimum_display_time=1000
 
 Playerstats="*res://Scripts/playerstats.gd"
 GameOverManager="*res://Scenes/game_over_manager.tscn"
+GameState="*res://Scripts/GameState.gd"
 
 [display]
 

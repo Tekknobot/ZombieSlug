@@ -44,7 +44,7 @@ func _on_body_exited(body: Node) -> void:
 	if body.is_in_group("Player"):
 		_player_in_zone = false
 
-func _open_scene(scene: PackedScene) -> void:
+func _open_scene(scene: PackedScene) -> void:	
 	var tree = get_tree()
 	var path = scene.resource_path
 	# Godot 4: change_scene_to_file(path)

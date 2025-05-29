@@ -24,3 +24,6 @@ res://Scripts/playerstats.gd
 res://Scripts/hud.gd
 res://Scripts/LightningStrike.gd
 res://Scripts/soldier.gd
+res://Scripts/GameState.gd
+res://Scripts/SceneLoader.gd
+res://UI/shop_trigger.gd
