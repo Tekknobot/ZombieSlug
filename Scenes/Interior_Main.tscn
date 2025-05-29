@@ -165,7 +165,6 @@ gravity = 780.0
 dash_speed = 500.0
 
 [node name="StarryNight" parent="Soldier" instance=ExtResource("8_tex70")]
-visible = false
 z_index = -1000
 position = Vector2(-20, -138)
 amount = 10000

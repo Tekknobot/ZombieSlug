@@ -1,9 +1,25 @@
-[gd_scene load_steps=9 format=3 uid="uid://djlhb1vomqlcq"]
+[gd_scene load_steps=15 format=3 uid="uid://djlhb1vomqlcq"]
 
+[ext_resource type="Script" path="res://Scripts/clouds.gd" id="1_rfswf"]
+[ext_resource type="Texture2D" uid="uid://cmykmchd5g8ly" path="res://Assets/Backgrounds/wall.png" id="2_53bfk"]
 [ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="3_iaplk"]
+[ext_resource type="Texture2D" uid="uid://sh0qp53v5skq" path="res://Assets/Clouds/Re_ Indie Developer from Toronto, Canada looking for pixel mech artist./layer2.png" id="3_ylt1g"]
 [ext_resource type="Script" path="res://Scripts/SceneLoader.gd" id="4_br2y0"]
+[ext_resource type="Texture2D" uid="uid://bkumpbg4gebvj" path="res://Assets/Clouds/Re_ Indie Developer from Toronto, Canada looking for pixel mech artist./layer1.png" id="4_om7d6"]
 [ext_resource type="Texture2D" uid="uid://k4wcwdkj2giw" path="res://Tiles/wood-default.png" id="4_uso5g"]
 [ext_resource type="Texture2D" uid="uid://5kfrtww64txe" path="res://Tiles/wood-2-default.png" id="5_2u3uq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qtwgf"]
+shader = ExtResource("3_iaplk")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tcspe"]
+shader = ExtResource("3_iaplk")
+shader_parameter/active = false
+shader_parameter/pulse_speed = 6.0
+shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v713k"]
 shader = ExtResource("3_iaplk")
@@ -21,6 +37,47 @@ size = Vector2(32, 16)
 size = Vector2(2, 24)
 
 [node name="Interior" type="Node2D"]
+
+[node name="CloudsMover1" type="Node2D" parent="."]
+position = Vector2(-31, -90)
+script = ExtResource("1_rfswf")
+range_x = 6.0
+freq_x = 0.1
+
+[node name="Sprite2D" type="Sprite2D" parent="CloudsMover1"]
+modulate = Color(0.336608, 0.336608, 0.336608, 1)
+z_index = -1000
+material = SubResource("ShaderMaterial_qtwgf")
+position = Vector2(72, 40)
+texture = ExtResource("3_ylt1g")
+
+[node name="CloudsMover2" type="Node2D" parent="."]
+position = Vector2(121, -114)
+script = ExtResource("1_rfswf")
+range_x = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="CloudsMover2"]
+modulate = Color(0.336608, 0.336608, 0.336608, 1)
+z_index = -1000
+material = SubResource("ShaderMaterial_qtwgf")
+position = Vector2(-79, 20)
+texture = ExtResource("4_om7d6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1000
+offset_left = -301.0
+offset_top = -62.0
+offset_right = 385.0
+offset_bottom = 21.0
+color = Color(0.0541422, 0.0541422, 0.0541422, 1)
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect"]
+modulate = Color(0.259294, 0.259294, 0.259294, 1)
+material = SubResource("ShaderMaterial_tcspe")
+layout_mode = 0
+offset_right = 865.0
+offset_bottom = 83.0
+texture = ExtResource("2_53bfk")
 
 [node name="Floor" type="Node2D" parent="."]
 position = Vector2(0, -17)
@@ -613,17 +670,26 @@ texture = ExtResource("5_2u3uq")
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_nfyna")
 
-[node name="Exterior" type="Area2D" parent="." groups=["Exterior_Door"]]
+[node name="ExteriorDoor" type="Area2D" parent="." groups=["Exterior_Door"]]
 position = Vector2(112, 11)
 script = ExtResource("4_br2y0")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exterior"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExteriorDoor"]
 position = Vector2(0, -11)
 shape = SubResource("RectangleShape2D_1pg6i")
 
-[node name="ColorRect" type="ColorRect" parent="Exterior"]
+[node name="Frame" type="ColorRect" parent="ExteriorDoor"]
+z_index = -1000
+offset_left = -11.0
+offset_top = -25.0
+offset_right = 12.0
+offset_bottom = 10.0
+color = Color(0.0687983, 0.0687983, 0.0687983, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ExteriorDoor"]
+z_index = -1000
 offset_left = -10.0
-offset_top = -30.0
+offset_top = -24.0
 offset_right = 11.0
 offset_bottom = 10.0
-color = Color(1, 1, 1, 0.0627451)
+color = Color(0, 0, 0, 1)
