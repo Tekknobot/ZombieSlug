@@ -70,6 +70,12 @@ var _layer_map = {
 	"Street":   LAYER_Z_STREET
 }
 
+@export var fire_interval: float     = 3.0                        # how often to consider firing
+@export var fire_chance: float       = 0.2                        # 20% chance each interval
+@export var bullet_scene: PackedScene = preload("res://Scenes/Sprites/zombie_bullet.tscn")
+
+var _fire_timer: Timer
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -109,7 +115,14 @@ func _ready() -> void:
 		anim.material.shader = preload("res://Shaders/ShieldEffect.tres")
 			
 	spawn_layer = z_index
-	
+
+	_fire_timer = Timer.new()
+	_fire_timer.wait_time = fire_interval
+	_fire_timer.one_shot  = false
+	add_child(_fire_timer)
+	_fire_timer.connect("timeout", Callable(self, "_on_fire_timeout"))
+	_fire_timer.start()
+		
 	update_health_label()
 						
 func _physics_process(delta: float) -> void:
@@ -598,3 +611,32 @@ func _explode() -> void:
 			if global_position.distance_to(z.global_position) <= explosion_radius:
 				z.take_damage(explosion_damage)
 	_die()
+
+func _on_fire_timeout() -> void:
+	# grab the player
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var p = players[0] as CharacterBody2D
+	var p_sprite = p.get_node("AnimatedSprite2D") as AnimatedSprite2D
+
+	# detect “on the roof” by z_index (assuming your roof surfaces
+	# use a higher z_index than Street=4)
+	var on_roof = p.on_roof
+	if not on_roof:
+		return
+
+	# chance roll
+	if randf() > fire_chance:
+		return
+
+	# spawn & shoot!
+	var bullet = bullet_scene.instantiate()
+	bullet.global_position = global_position
+	# point it at the player:
+	var dir = (p.global_position - global_position).normalized()
+	if bullet.has_method("set_velocity"):
+		bullet.set_velocity(dir * bullet.speed)
+	elif bullet.has_variable("velocity"):
+		bullet.velocity = dir * bullet.speed
+	get_tree().get_current_scene().add_child(bullet)

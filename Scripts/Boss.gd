@@ -383,7 +383,7 @@ func _spawn_lightning(from_pos: Vector2, to_pos: Vector2) -> void:
 		
 	var bolt = lightning_fx.instantiate()
 	bolt.global_position = from_pos
-	bolt.global_position.y -= 64
+	bolt.global_position.y -= 48
 	get_tree().get_current_scene().add_child(bolt)
 	if bolt.has_method("play"):
 		bolt.play(to_pos)
