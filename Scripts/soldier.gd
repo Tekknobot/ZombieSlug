@@ -1079,7 +1079,7 @@ func _throw_grenade() -> void:
 
 func play_level_up_effect():
 	# ——— bullet-time kick in ———
-	Engine.time_scale = 0.2
+	#Engine.time_scale = 0.2
 	
 	# turn on your shader’s “active” uniform
 	glow_mat.set_shader_parameter("active", true)
@@ -1090,7 +1090,7 @@ func play_level_up_effect():
 	glow_mat.set_shader_parameter("active", false)
 
 	# ——— restore normal time ———
-	Engine.time_scale = 1.0
+	#Engine.time_scale = 1.0
 
 func _drop_mine() -> void:
 	# 1) Choose left/right without a ternary
