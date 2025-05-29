@@ -25,3 +25,4 @@ res://Scenes/Titlescreen.tscn
 res://Scripts/hud.gd
 res://Scripts/playerstats.gd
 res://Scripts/soldier.gd
+res://Scripts/tnt_yellow.gd
