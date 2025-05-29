@@ -20,6 +20,7 @@ extends CanvasLayer
 @onready var panther_portrait = $TopLeft/Panther as Panel
 @onready var mine_portrait    = $TopLeft/Mine    as Panel
 @onready var bullet_portrait  = $TopLeft/Bullet   as Panel
+@onready var grenade_portrait  = $TopLeft/Grenade   as Panel
 
 @export var merc_cooldown_time:     float = 20.0
 @export var dog_cooldown_time:      float = 20.0
@@ -28,6 +29,7 @@ extends CanvasLayer
 
 @export var mine_cooldown_time:     float = 2.0
 @export var bullet_cooldown_time:  float = 1.0
+@export var grenade_cooldown_time:  float = 1.0
 
 var _cooldown_tweens := {}
 
@@ -51,7 +53,8 @@ func _ready() -> void:
 	stats.connect("panther_used", Callable(self, "_on_panther_used"))
 	stats.connect("mine_used",    Callable(self, "_on_mine_used"))
 	stats.connect("bullet_used", Callable(self, "_on_bullet_used"))
-	
+	stats.connect("grenade_used", Callable(self, "_on_grenade_used"))
+		
 	# initialize
 	kills_label.text      = "Kills: %d"  % stats.kills
 	health_bar.max_value  = stats.max_health
@@ -133,6 +136,9 @@ func _on_mine_used() -> void:
 
 func _on_bullet_used() -> void:
 	_start_cooldown(bullet_portrait, bullet_cooldown_time)
+
+func _on_grenade_used() -> void:
+	_start_cooldown(grenade_portrait, grenade_cooldown_time)
 
 # Helper to tween a panel’s alpha from fully opaque→transparent over `duration`.
 func _start_cooldown(panel: Panel, duration: float) -> void:

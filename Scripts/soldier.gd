@@ -418,7 +418,6 @@ func _physics_process(delta: float) -> void:
 	# ——— Ground attack ———
 	if is_on_floor() and Input.is_action_just_pressed("attack") and attack_ready:
 		_on_attack()
-		Playerstats.emit_signal("bullet_used")
 
 	# ——— Kick off an air dash via button ———
 	if Input.is_action_just_pressed("dash") and can_dash and not is_on_floor():
@@ -985,6 +984,8 @@ func fire_bullet() -> void:
 	var bullet = BulletScene.instantiate()
 	bullet.global_position = muzzle_point.global_position
 
+	Playerstats.emit_signal("bullet_used")
+
 	# set the bullet’s direction without ternary
 	if facing_right:
 		bullet.direction = Vector2.RIGHT
@@ -1056,6 +1057,7 @@ func flash() -> void:
 	anim.modulate = Color(1, 1, 1, 1)
 
 func _throw_grenade() -> void:
+	Playerstats.emit_signal("grenade_used")
 	var g
 	if homing_mode:
 		# your yellow, homing grenade

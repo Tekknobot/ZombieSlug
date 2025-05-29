@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=46 format=3 uid="uid://duxlsmdg5d6qv"]
 
 [ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
 [ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
@@ -26,7 +26,9 @@
 [ext_resource type="Texture2D" uid="uid://g5wnhg2m5u4s" path="res://Assets/Bullet/bullet_thumb.png" id="22_4ki2p"]
 [ext_resource type="Texture2D" uid="uid://uj6g582icxx2" path="res://Assets/Mines/mine1.png" id="23_iwq28"]
 [ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
+[ext_resource type="Texture2D" uid="uid://cn6gewl7drect" path="res://Projectiles/tnt/tnt2.png" id="24_6fbc6"]
 [ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
+[ext_resource type="Texture2D" uid="uid://402pi0xvstd6" path="res://Projectiles/tnt_yellow/tnt_yellow2.png" id="25_umrbl"]
 [ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="26_rksku"]
 [ext_resource type="AudioStream" uid="uid://b74e0uncchnts" path="res://Audio/Tracks/80s Zombie.wav" id="34_f7ybr"]
 
@@ -232,9 +234,9 @@ texture = ExtResource("6_vq0dw")
 [node name="Merc" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_6t3ug")
 layout_mode = 0
-offset_left = 386.5
+offset_left = 405.5
 offset_top = 7.0
-offset_right = 422.5
+offset_right = 441.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
@@ -251,9 +253,9 @@ texture = ExtResource("17_7laas")
 [node name="Dog" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_x0cnh")
 layout_mode = 0
-offset_left = 368.0
+offset_left = 387.0
 offset_top = 7.0
-offset_right = 404.0
+offset_right = 423.0
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
@@ -270,9 +272,9 @@ texture = ExtResource("18_p40qc")
 [node name="Mech" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_q8v7c")
 layout_mode = 0
-offset_left = 405.5
+offset_left = 424.5
 offset_top = 7.0
-offset_right = 441.5
+offset_right = 460.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_b7tma")
@@ -290,9 +292,9 @@ stretch_mode = 4
 [node name="Panther" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_notjr")
 layout_mode = 0
-offset_left = 424.5
+offset_left = 443.5
 offset_top = 7.0
-offset_right = 460.5
+offset_right = 479.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_x6xn7")
@@ -310,9 +312,9 @@ stretch_mode = 4
 [node name="Mine" type="Panel" parent="HUD/TopLeft"]
 material = SubResource("ShaderMaterial_6t3ug")
 layout_mode = 0
-offset_left = 348.5
+offset_left = 367.5
 offset_top = 7.0
-offset_right = 384.5
+offset_right = 403.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
@@ -389,6 +391,47 @@ offset_top = 18.0
 offset_right = 31.0
 offset_bottom = 50.0
 texture = ExtResource("22_4ki2p")
+
+[node name="Grenade" type="Panel" parent="HUD/TopLeft"]
+material = SubResource("ShaderMaterial_x0cnh")
+layout_mode = 0
+offset_left = 348.5
+offset_top = 7.0
+offset_right = 384.5
+offset_bottom = 43.0
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
+
+[node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Grenade"]
+material = SubResource("ShaderMaterial_od7e4")
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 6.0
+offset_right = 16.0
+offset_bottom = 17.0
+texture = ExtResource("24_6fbc6")
+
+[node name="Portrait3" type="TextureRect" parent="HUD/TopLeft/Grenade"]
+material = SubResource("ShaderMaterial_od7e4")
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 31.0
+offset_bottom = 31.0
+texture = ExtResource("24_6fbc6")
+
+[node name="Portrait2" type="TextureRect" parent="HUD/TopLeft/Grenade"]
+material = SubResource("ShaderMaterial_od7e4")
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 23.0
+offset_bottom = 23.0
+rotation = -0.00411786
+texture = ExtResource("25_umrbl")
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
