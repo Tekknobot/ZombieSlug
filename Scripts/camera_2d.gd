@@ -30,6 +30,11 @@ func _on_node_added(node: Node) -> void:
 		_shake_timer = shake_duration
 
 func _process(delta: float) -> void:
+	# if this Camera2D is parented under a node named "Interior", do nothing
+	var parent = get_parent()
+	if parent and parent.name == "Interior":
+		return
+
 	var base_pos = global_position
 
 	# only follow if _target is still alive

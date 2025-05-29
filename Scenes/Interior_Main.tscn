@@ -1,44 +1,43 @@
-[gd_scene load_steps=46 format=3 uid="uid://duxlsmdg5d6qv"]
+[gd_scene load_steps=45 format=3 uid="uid://8i41xycnlf6k"]
 
-[ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="1_ac7of"]
-[ext_resource type="Script" path="res://Scripts/fade.gd" id="1_awqtf"]
-[ext_resource type="Script" path="res://Scripts/fade_in.gd" id="2_5s4qg"]
-[ext_resource type="PackedScene" uid="uid://c07bukksnlkf8" path="res://Scenes/pause_panel.tscn" id="2_vwi17"]
-[ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="3_rbltb"]
-[ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="3_xltqf"]
-[ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_js2x2"]
-[ext_resource type="Script" path="res://Scripts/hud.gd" id="5_id8m6"]
-[ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="5_rbj0p"]
-[ext_resource type="PackedScene" uid="uid://8iwtfpagau7h" path="res://Scenes/Sprites/zombie_xl.tscn" id="6_l3jnr"]
-[ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="6_vq0dw"]
-[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="7_juo3a"]
-[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="7_vaiej"]
-[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="8_4q5fy"]
-[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="9_djqjv"]
-[ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="10_eeh2b"]
-[ext_resource type="Script" path="res://Scripts/healthbar.gd" id="10_j2nv3"]
-[ext_resource type="Texture2D" uid="uid://d2mtq3d5joemr" path="res://Portraits/Zombies/Rambo_portrait.png" id="17_7laas"]
-[ext_resource type="Texture2D" uid="uid://cle37oiwj581m" path="res://Portraits/Zombies/Dog_portrait.png" id="18_p40qc"]
-[ext_resource type="Texture2D" uid="uid://cjn84xnix5xvv" path="res://Assets/Bots/Orange/robo1-export1.png" id="19_7ehei"]
-[ext_resource type="PackedScene" uid="uid://5r7h532lidgw" path="res://Scenes/Sprites/block.tscn" id="20_5cnqw"]
-[ext_resource type="Texture2D" uid="uid://bdm515rcm1kf3" path="res://Assets/Bots/Blue/robo2-export1.png" id="20_o5iqp"]
-[ext_resource type="Script" path="res://Scripts/block_manager.gd" id="20_omn77"]
-[ext_resource type="Texture2D" uid="uid://g5wnhg2m5u4s" path="res://Assets/Bullet/bullet_thumb.png" id="22_4ki2p"]
-[ext_resource type="Texture2D" uid="uid://uj6g582icxx2" path="res://Assets/Mines/mine1.png" id="23_iwq28"]
-[ext_resource type="Script" path="res://Scenes/helicopter_spawner.gd" id="23_vhlg4"]
-[ext_resource type="Texture2D" uid="uid://cn6gewl7drect" path="res://Projectiles/tnt/tnt2.png" id="24_6fbc6"]
-[ext_resource type="Script" path="res://Scripts/music_random.gd" id="25_te7ld"]
-[ext_resource type="Texture2D" uid="uid://402pi0xvstd6" path="res://Projectiles/tnt_yellow/tnt_yellow2.png" id="25_umrbl"]
-[ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="26_rksku"]
-[ext_resource type="AudioStream" uid="uid://b74e0uncchnts" path="res://Audio/Tracks/80s Zombie.wav" id="34_f7ybr"]
+[ext_resource type="Script" path="res://Scripts/fade_in.gd" id="1_vi2b4"]
+[ext_resource type="PackedScene" uid="uid://c07bukksnlkf8" path="res://Scenes/pause_panel.tscn" id="2_22xv4"]
+[ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="3_ocgc1"]
+[ext_resource type="Script" path="res://Scripts/zombie_spawner.gd" id="4_gdldk"]
+[ext_resource type="PackedScene" uid="uid://8iwtfpagau7h" path="res://Scenes/Sprites/zombie_xl.tscn" id="5_b1noj"]
+[ext_resource type="PackedScene" uid="uid://bphbsyugii4oy" path="res://Scenes/Sprites/zombie.tscn" id="6_vkswa"]
+[ext_resource type="PackedScene" uid="uid://cq1bf8ydk1lde" path="res://Scenes/Sprites/soldier.tscn" id="7_i1uds"]
+[ext_resource type="PackedScene" path="res://Scenes/Effects/StarNight.tscn" id="8_tex70"]
+[ext_resource type="PackedScene" uid="uid://b6ws8bsbmvreg" path="res://Scenes/Effects/Rain_system.scn" id="9_v414v"]
+[ext_resource type="Script" path="res://Scripts/music_random.gd" id="10_ks2em"]
+[ext_resource type="AudioStream" uid="uid://b74e0uncchnts" path="res://Audio/Tracks/80s Zombie.wav" id="11_06vq0"]
+[ext_resource type="Script" path="res://Scripts/hud.gd" id="12_36tnj"]
+[ext_resource type="Script" path="res://Scripts/fade.gd" id="13_1ch33"]
+[ext_resource type="Texture2D" uid="uid://d6tx3n2lbkp3" path="res://Scenes/Titlescreen/Logotype.png" id="14_sa0b8"]
+[ext_resource type="Shader" path="res://Shaders/level_up_pulse.gdshader" id="15_wii2k"]
+[ext_resource type="Texture2D" uid="uid://bkcwqu2daxeth" path="res://Portraits/soldier_port.png" id="16_kccow"]
+[ext_resource type="Texture2D" uid="uid://d2mtq3d5joemr" path="res://Portraits/Zombies/Rambo_portrait.png" id="17_qkoox"]
+[ext_resource type="Texture2D" uid="uid://cle37oiwj581m" path="res://Portraits/Zombies/Dog_portrait.png" id="18_aa5b4"]
+[ext_resource type="Texture2D" uid="uid://bdm515rcm1kf3" path="res://Assets/Bots/Blue/robo2-export1.png" id="19_i7480"]
+[ext_resource type="Texture2D" uid="uid://cjn84xnix5xvv" path="res://Assets/Bots/Orange/robo1-export1.png" id="20_wpwo1"]
+[ext_resource type="Texture2D" uid="uid://uj6g582icxx2" path="res://Assets/Mines/mine1.png" id="21_c7si3"]
+[ext_resource type="Texture2D" uid="uid://g5wnhg2m5u4s" path="res://Assets/Bullet/bullet_thumb.png" id="22_wxlq2"]
+[ext_resource type="Texture2D" uid="uid://cn6gewl7drect" path="res://Projectiles/tnt/tnt2.png" id="23_kby1g"]
+[ext_resource type="Texture2D" uid="uid://402pi0xvstd6" path="res://Projectiles/tnt_yellow/tnt_yellow2.png" id="24_hik7g"]
+[ext_resource type="FontFile" uid="uid://csnhk3q4gx0" path="res://Fonts/magofonts/mago1.ttf" id="25_fvrh1"]
+[ext_resource type="FontFile" uid="uid://buw362wjb8o8d" path="res://Fonts/magofonts/mago2.ttf" id="26_0vr54"]
+[ext_resource type="Script" path="res://Scripts/healthbar.gd" id="27_1ww21"]
+[ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="28_2tpxh"]
+[ext_resource type="Script" path="res://Scripts/block_manager.gd" id="29_co2qs"]
+[ext_resource type="PackedScene" uid="uid://djlhb1vomqlcq" path="res://Scenes/Sprites/interior.tscn" id="30_fdy7k"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_orb4f"]
-shader = ExtResource("8_4q5fy")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_od7e4"]
+shader = ExtResource("15_wii2k")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7sjf"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25318"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -46,13 +45,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_51vdk"]
-shader = ExtResource("8_4q5fy")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6t3ug"]
+shader = ExtResource("15_wii2k")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1cq08"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k30t"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -60,13 +59,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wkptl"]
-shader = ExtResource("8_4q5fy")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0cnh"]
+shader = ExtResource("15_wii2k")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7n8pi"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkd0k"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -74,13 +73,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2jyf7"]
-shader = ExtResource("8_4q5fy")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8v7c"]
+shader = ExtResource("15_wii2k")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5t6vx"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7tma"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -88,13 +87,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqt4r"]
-shader = ExtResource("8_4q5fy")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_notjr"]
+shader = ExtResource("15_wii2k")
 shader_parameter/active = false
 shader_parameter/pulse_speed = 6.0
 shader_parameter/glow_color = Vector3(1, 0.8, 0.2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pa7q3"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6xn7"]
 bg_color = Color(0.0745098, 0.184314, 0.105882, 1)
 border_width_left = 1
 border_width_top = 1
@@ -102,24 +101,24 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kxsen"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yobxv"]
 bg_color = Color(0.196078, 0.196078, 0.196078, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6ymr"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjtfb"]
 bg_color = Color(0, 1, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pmjge"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of0bc"]
 bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vnvo6"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fma5"]
 bg_color = Color(1, 1, 0, 1)
 
-[node name="Main" type="Node2D"]
+[node name="Interior" type="Node2D"]
 
 [node name="Fader" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
-script = ExtResource("2_5s4qg")
+script = ExtResource("1_vi2b4")
 fade_duration = 2.0
 
 [node name="Fade" type="ColorRect" parent="Fader"]
@@ -131,22 +130,22 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="PausePanel" parent="." instance=ExtResource("2_vwi17")]
+[node name="PausePanel" parent="." instance=ExtResource("2_22xv4")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -79)
 zoom = Vector2(2, 2)
-script = ExtResource("3_xltqf")
+script = ExtResource("3_ocgc1")
 shake_magnitude = 4.0
 
 [node name="ZombieSpawner" type="Node2D" parent="Camera2D"]
 position = Vector2(98, 94)
-script = ExtResource("4_js2x2")
+script = ExtResource("4_gdldk")
 base_spawn_interval = 1.0
 min_spawn_factor = 0.1
 spawn_distance = 500.0
-boss_scene = ExtResource("6_l3jnr")
-zombie_scene = ExtResource("3_rbltb")
+boss_scene = ExtResource("5_b1noj")
+zombie_scene = ExtResource("6_vkswa")
 sidewalk_chance = 0.25
 max_zombies = 500
 
@@ -158,7 +157,7 @@ position = Vector2(-89, 0)
 [node name="Point3" type="Node2D" parent="Camera2D/ZombieSpawner"]
 position = Vector2(178, 0)
 
-[node name="Soldier" parent="." instance=ExtResource("1_ac7of")]
+[node name="Soldier" parent="." instance=ExtResource("7_i1uds")]
 position = Vector2(98, 35)
 base_speed = 60.0
 initial_firerate = 1.0
@@ -166,27 +165,25 @@ jump_velocity = -280.0
 gravity = 780.0
 dash_speed = 500.0
 
-[node name="StarryNight" parent="Soldier" instance=ExtResource("10_eeh2b")]
+[node name="StarryNight" parent="Soldier" instance=ExtResource("8_tex70")]
+visible = false
 z_index = -1000
 position = Vector2(-20, -138)
 amount = 10000
 
-[node name="Rain" parent="Soldier" instance=ExtResource("26_rksku")]
+[node name="Rain" parent="Soldier" instance=ExtResource("9_v414v")]
+visible = false
 position = Vector2(0, -381)
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Soldier"]
 position = Vector2(-98, -35)
-script = ExtResource("25_te7ld")
-tracks = Array[AudioStream]([ExtResource("34_f7ybr")])
-
-[node name="HelicopterSpawner" type="Node2D" parent="Soldier"]
-position = Vector2(-98, -164)
-script = ExtResource("23_vhlg4")
+script = ExtResource("10_ks2em")
+tracks = Array[AudioStream]([ExtResource("11_06vq0")])
 
 [node name="HUD" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
 transform = Transform2D(2, 0, 0, 2, 0, 0)
-script = ExtResource("5_id8m6")
+script = ExtResource("12_36tnj")
 
 [node name="Fade" type="ColorRect" parent="HUD"]
 visible = false
@@ -197,7 +194,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
-script = ExtResource("1_awqtf")
+script = ExtResource("13_1ch33")
 
 [node name="TopLeft" type="Control" parent="HUD"]
 layout_mode = 3
@@ -211,219 +208,219 @@ offset_left = 7.5
 offset_top = 4.5
 offset_right = 107.5
 offset_bottom = 54.5
-texture = ExtResource("9_djqjv")
+texture = ExtResource("14_sa0b8")
 
 [node name="Portrait" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = 114.0
 offset_top = 4.0
 offset_right = 180.0
 offset_bottom = 70.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_x7sjf")
+theme_override_styles/panel = SubResource("StyleBoxFlat_25318")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Portrait"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 65.0
 offset_bottom = 65.0
-texture = ExtResource("6_vq0dw")
+texture = ExtResource("16_kccow")
 
 [node name="Merc" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_51vdk")
+material = SubResource("ShaderMaterial_6t3ug")
 layout_mode = 0
 offset_left = 405.5
 offset_top = 7.0
 offset_right = 441.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_1cq08")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Merc"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = -14.0
 offset_top = -15.0
 offset_right = 50.0
 offset_bottom = 49.0
-texture = ExtResource("17_7laas")
+texture = ExtResource("17_qkoox")
 
 [node name="Dog" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_wkptl")
+material = SubResource("ShaderMaterial_x0cnh")
 layout_mode = 0
 offset_left = 387.0
 offset_top = 7.0
 offset_right = 423.0
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_7n8pi")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Dog"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = -14.0
 offset_top = -15.0
 offset_right = 50.0
 offset_bottom = 49.0
-texture = ExtResource("18_p40qc")
+texture = ExtResource("18_aa5b4")
 
 [node name="Mech" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_2jyf7")
+material = SubResource("ShaderMaterial_q8v7c")
 layout_mode = 0
 offset_left = 424.5
 offset_top = 7.0
 offset_right = 460.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_5t6vx")
+theme_override_styles/panel = SubResource("StyleBoxFlat_b7tma")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Mech"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = 1.0
 offset_top = -1.0
 offset_right = 65.0
 offset_bottom = 79.0
-texture = ExtResource("20_o5iqp")
+texture = ExtResource("19_i7480")
 stretch_mode = 4
 
 [node name="Panther" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_sqt4r")
+material = SubResource("ShaderMaterial_notjr")
 layout_mode = 0
 offset_left = 443.5
 offset_top = 7.0
 offset_right = 479.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_pa7q3")
+theme_override_styles/panel = SubResource("StyleBoxFlat_x6xn7")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Panther"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 layout_mode = 0
 offset_left = 2.0
 offset_top = -1.0
 offset_right = 66.0
 offset_bottom = 89.0
-texture = ExtResource("19_7ehei")
+texture = ExtResource("20_wpwo1")
 stretch_mode = 4
 
 [node name="Mine" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_51vdk")
+material = SubResource("ShaderMaterial_6t3ug")
 layout_mode = 0
 offset_left = 367.5
 offset_top = 7.0
 offset_right = 403.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_1cq08")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1k30t")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Mine"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = 2.0
 offset_top = 17.0
 offset_right = 34.0
 offset_bottom = 49.0
-texture = ExtResource("23_iwq28")
+texture = ExtResource("21_c7si3")
 expand_mode = 2
 
 [node name="Portrait2" type="TextureRect" parent="HUD/TopLeft/Mine"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = -6.0
 offset_top = 7.0
 offset_right = 26.0
 offset_bottom = 39.0
-texture = ExtResource("23_iwq28")
+texture = ExtResource("21_c7si3")
 expand_mode = 2
 
 [node name="Portrait3" type="TextureRect" parent="HUD/TopLeft/Mine"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = 10.0
 offset_top = 7.0
 offset_right = 42.0
 offset_bottom = 39.0
-texture = ExtResource("23_iwq28")
+texture = ExtResource("21_c7si3")
 expand_mode = 2
 
 [node name="Bullet" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_wkptl")
+material = SubResource("ShaderMaterial_x0cnh")
 layout_mode = 0
 offset_left = 330.0
 offset_top = 7.0
 offset_right = 366.0
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_7n8pi")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Bullet"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = -4.0
 offset_top = 4.0
 offset_right = 28.0
 offset_bottom = 36.0
-texture = ExtResource("22_4ki2p")
+texture = ExtResource("22_wxlq2")
 
 [node name="Portrait3" type="TextureRect" parent="HUD/TopLeft/Bullet"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = 9.0
 offset_top = 7.0
 offset_right = 41.0
 offset_bottom = 39.0
-texture = ExtResource("22_4ki2p")
+texture = ExtResource("22_wxlq2")
 
 [node name="Portrait2" type="TextureRect" parent="HUD/TopLeft/Bullet"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 0
 offset_left = -1.0
 offset_top = 18.0
 offset_right = 31.0
 offset_bottom = 50.0
-texture = ExtResource("22_4ki2p")
+texture = ExtResource("22_wxlq2")
 
 [node name="Grenade" type="Panel" parent="HUD/TopLeft"]
-material = SubResource("ShaderMaterial_wkptl")
+material = SubResource("ShaderMaterial_x0cnh")
 layout_mode = 0
 offset_left = 348.5
 offset_top = 7.0
 offset_right = 384.5
 offset_bottom = 43.0
 scale = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_7n8pi")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkd0k")
 
 [node name="Portrait" type="TextureRect" parent="HUD/TopLeft/Grenade"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 0
 offset_left = 5.0
 offset_top = 6.0
 offset_right = 16.0
 offset_bottom = 17.0
-texture = ExtResource("24_6fbc6")
+texture = ExtResource("23_kby1g")
 
 [node name="Portrait3" type="TextureRect" parent="HUD/TopLeft/Grenade"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 31.0
 offset_bottom = 31.0
-texture = ExtResource("24_6fbc6")
+texture = ExtResource("23_kby1g")
 
 [node name="Portrait2" type="TextureRect" parent="HUD/TopLeft/Grenade"]
-material = SubResource("ShaderMaterial_orb4f")
+material = SubResource("ShaderMaterial_od7e4")
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 0
 offset_left = 12.0
@@ -431,7 +428,7 @@ offset_top = 12.0
 offset_right = 23.0
 offset_bottom = 23.0
 rotation = -0.00411786
-texture = ExtResource("25_umrbl")
+texture = ExtResource("24_hik7g")
 
 [node name="Name" type="RichTextLabel" parent="HUD/TopLeft"]
 layout_mode = 0
@@ -439,7 +436,7 @@ offset_left = 183.25
 offset_top = 5.5
 offset_right = 340.25
 offset_bottom = 18.5
-theme_override_fonts/normal_font = ExtResource("7_juo3a")
+theme_override_fonts/normal_font = ExtResource("25_fvrh1")
 text = "Ghoul Gunner"
 
 [node name="Kills" type="RichTextLabel" parent="HUD/TopLeft"]
@@ -449,7 +446,7 @@ offset_left = 182.5
 offset_top = 59.0
 offset_right = 339.5
 offset_bottom = 72.0
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "KILLS: 0"
 
 [node name="HP" type="RichTextLabel" parent="HUD/TopLeft"]
@@ -459,7 +456,7 @@ offset_left = 182.5
 offset_top = 53.0
 offset_right = 339.5
 offset_bottom = 66.0
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "HP: 0 of 0"
 
 [node name="Level" type="RichTextLabel" parent="HUD/TopLeft"]
@@ -468,7 +465,7 @@ offset_left = 183.0
 offset_top = 19.5
 offset_right = 340.0
 offset_bottom = 45.5
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 theme_override_font_sizes/normal_font_size = 32
 text = "LEVEL: 0"
 
@@ -479,7 +476,7 @@ offset_left = 183.0
 offset_top = 46.5
 offset_right = 340.0
 offset_bottom = 59.5
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 theme_override_font_sizes/normal_font_size = 0
 text = "XP: 0 of 0"
 
@@ -489,13 +486,13 @@ offset_left = 183.25
 offset_top = 19.25
 offset_right = 292.25
 offset_bottom = 24.25
-theme_override_styles/background = SubResource("StyleBoxFlat_kxsen")
-theme_override_styles/fill = SubResource("StyleBoxFlat_o6ymr")
+theme_override_styles/background = SubResource("StyleBoxFlat_yobxv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cjtfb")
 max_value = 10.0
 step = 1.0
 value = 10.0
 show_percentage = false
-script = ExtResource("10_j2nv3")
+script = ExtResource("27_1ww21")
 
 [node name="XP" type="ProgressBar" parent="HUD/TopLeft"]
 layout_mode = 0
@@ -503,8 +500,8 @@ offset_left = 183.25
 offset_top = 25.25
 offset_right = 292.25
 offset_bottom = 30.25
-theme_override_styles/background = SubResource("StyleBoxFlat_pmjge")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vnvo6")
+theme_override_styles/background = SubResource("StyleBoxFlat_of0bc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5fma5")
 max_value = 10.0
 step = 1.0
 value = 10.0
@@ -516,7 +513,7 @@ offset_left = 469.0
 offset_top = 5.0
 offset_right = 565.0
 offset_bottom = 69.0
-texture = ExtResource("5_rbj0p")
+texture = ExtResource("28_2tpxh")
 
 [node name="Bumpers" type="VBoxContainer" parent="HUD/TopLeft"]
 layout_mode = 0
@@ -529,28 +526,28 @@ theme_override_constants/separation = -10
 [node name="CURRENCY" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "CURRENCY: 5"
 
 [node name="TNT" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "TNT: 5"
 
 [node name="MINES" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "MINES: 5"
 
 [node name="SHOCK" type="RichTextLabel" parent="HUD/TopLeft/Bumpers"]
 custom_minimum_size = Vector2(50, 16)
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("7_vaiej")
+theme_override_fonts/normal_font = ExtResource("26_0vr54")
 text = "GLITCH: 5"
 
 [node name="BlockManager" type="Node2D" parent="."]
-script = ExtResource("20_omn77")
-block_scene = ExtResource("20_5cnqw")
-block_width = 910.0
+script = ExtResource("29_co2qs")
+block_scene = ExtResource("30_fdy7k")
+block_width = 512.0

@@ -1322,6 +1322,51 @@ shop_ui = NodePath("../ShopUI")
 position = Vector2(0, -11)
 shape = SubResource("RectangleShape2D_d2peu")
 
+[node name="Interior" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui") groups=["Interior_Door"]]
+position = Vector2(-158, 11)
+script = ExtResource("12_7wpgl")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_d2peu")
+
+[node name="Interior2" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui") groups=["Interior_Door"]]
+position = Vector2(-252, 11)
+script = ExtResource("12_7wpgl")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior2"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_d2peu")
+
+[node name="Interior3" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui") groups=["Interior_Door"]]
+position = Vector2(319, 11)
+script = ExtResource("12_7wpgl")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior3"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_d2peu")
+
+[node name="Interior4" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui") groups=["Interior_Door"]]
+position = Vector2(413, 11)
+script = ExtResource("12_7wpgl")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior4"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_d2peu")
+
+[node name="Interior5" type="Area2D" parent="." node_paths=PackedStringArray("shop_ui") groups=["Interior_Door"]]
+position = Vector2(506, 11)
+script = ExtResource("12_7wpgl")
+shop_ui = NodePath("../ShopUI")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior5"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_d2peu")
+
 [node name="Cityblock" type="TextureRect" parent="."]
 modulate = Color(0.252028, 0.252028, 0.252028, 1)
 z_index = -1000

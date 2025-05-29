@@ -12,4 +12,3 @@ RichTextLabel
 Node2D
 StaticBody2D
 Area2D
-CollisionShape2D
