@@ -51,6 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			focussed.emit_signal("pressed")
 
 func _on_restart_pressed() -> void:
+	Playerstats.health = 5
 	menu.visible     = false
 	fade.modulate.a  = 0.0
 	get_tree().paused = false
