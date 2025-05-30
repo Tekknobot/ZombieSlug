@@ -67,7 +67,7 @@ position = Vector2(-79, 20)
 texture = ExtResource("4_om7d6")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-z_index = -1000
+z_index = -50
 offset_left = -301.0
 offset_top = -62.0
 offset_right = 385.0
@@ -78,8 +78,9 @@ color = Color(0.0541422, 0.0541422, 0.0541422, 1)
 modulate = Color(0.259294, 0.259294, 0.259294, 1)
 material = SubResource("ShaderMaterial_tcspe")
 layout_mode = 0
+offset_top = -84.0
 offset_right = 865.0
-offset_bottom = 83.0
+offset_bottom = 145.0
 texture = ExtResource("2_53bfk")
 
 [node name="Floor" type="Node2D" parent="."]
@@ -1273,7 +1274,7 @@ position = Vector2(0, -11)
 shape = SubResource("RectangleShape2D_1pg6i")
 
 [node name="Frame" type="ColorRect" parent="ExteriorDoor"]
-z_index = -1000
+z_index = -40
 offset_left = -11.0
 offset_top = -25.0
 offset_right = 12.0
@@ -1281,7 +1282,7 @@ offset_bottom = 10.0
 color = Color(0.0687983, 0.0687983, 0.0687983, 1)
 
 [node name="ColorRect" type="ColorRect" parent="ExteriorDoor"]
-z_index = -1000
+z_index = -40
 offset_left = -10.0
 offset_top = -24.0
 offset_right = 11.0

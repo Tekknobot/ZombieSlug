@@ -557,9 +557,6 @@ func _die() -> void:
 	_die_cleanup()           # your existing timer-stop & collision teardown
 	$Blood.emitting = true   # blood particle burst
 
-	# (you were adding XP twice—if that was intentional leave it, otherwise drop one)
-	Playerstats.add_kill(xp_award)
-
 	# 6) single died signal for your spawner
 	emit_signal("died", global_position)
 

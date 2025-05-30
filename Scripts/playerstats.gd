@@ -126,7 +126,7 @@ func add_kill(xp_award: int = 1) -> void:
 # Reset all stats to initial values
 func reset_stats() -> void:
 	Engine.time_scale = 1
-	health   = max_health
+	health   = 5
 	xp       = 0
 	kills    = 0
 	level    = 1
