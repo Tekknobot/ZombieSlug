@@ -42,7 +42,7 @@ size = Vector2(20, 144)
 [node name="Interior" type="Node2D"]
 
 [node name="CloudsMover1" type="Node2D" parent="."]
-position = Vector2(-31, -64)
+position = Vector2(-31, -111)
 script = ExtResource("1_rfswf")
 range_x = 6.0
 freq_x = 0.1
@@ -55,7 +55,7 @@ position = Vector2(72, 40)
 texture = ExtResource("3_ylt1g")
 
 [node name="CloudsMover2" type="Node2D" parent="."]
-position = Vector2(121, -85)
+position = Vector2(121, -132)
 script = ExtResource("1_rfswf")
 range_x = 2.0
 
