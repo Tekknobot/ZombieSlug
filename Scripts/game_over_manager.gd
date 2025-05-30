@@ -13,6 +13,8 @@ extends CanvasLayer
 var _is_fading := false
 var _fade_time := 0.0
 
+const MAIN_SCENE_PATH := "res://Scenes/Main.tscn"
+
 func _ready() -> void:
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
@@ -49,14 +51,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		var focussed = get_viewport().gui_get_focus_owner()
 		if focussed and focussed is Button:
 			focussed.emit_signal("pressed")
-
+			
 func _on_restart_pressed() -> void:
-	Playerstats.health = 5
-	menu.visible     = false
-	fade.modulate.a  = 0.0
-	get_tree().paused = false
+	# reset player
+	Playerstats.health = Playerstats.max_health
+	menu.visible       = false
+	fade.modulate.a    = 0.0
+	get_tree().paused  = false
 	GameOverSfx.stop()
-	get_tree().reload_current_scene()
+
+	# switch back to main scene
+	var tree = get_tree()
+	if tree.has_method("change_scene_to_file"):
+		# Godot 4
+		tree.change_scene_to_file(MAIN_SCENE_PATH)
+	elif tree.has_method("change_scene"):
+		# Godot 3
+		tree.change_scene(MAIN_SCENE_PATH)
+	else:
+		push_error("Can't change to main scene: no scene‐change API found")
+
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
