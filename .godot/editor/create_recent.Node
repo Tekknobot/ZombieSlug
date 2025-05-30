@@ -1,3 +1,5 @@
+CollisionShape2D
+Area2D
 TextureRect
 ColorRect
 HBoxContainer
@@ -11,4 +13,3 @@ AudioStreamPlayer2D
 RichTextLabel
 Node2D
 StaticBody2D
-Area2D

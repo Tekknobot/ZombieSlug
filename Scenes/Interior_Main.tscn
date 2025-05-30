@@ -170,7 +170,7 @@ position = Vector2(-20, -138)
 amount = 10000
 
 [node name="Rain" parent="Soldier" instance=ExtResource("9_v414v")]
-visible = false
+z_index = -4096
 position = Vector2(0, -381)
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Soldier"]
