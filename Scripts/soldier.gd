@@ -178,6 +178,14 @@ func _ready() -> void:
 	dialogue_label.clear()
 	dialogue_label.hide()
 
+	if !get_parent().name == "Interior":
+		# ─── randomize X within viewport ───
+		randomize()  # only needs to be called once per session; safe to leave here
+		var vr = get_viewport().get_visible_rect()
+		global_position.x = randf_range(vr.position.x, vr.position.x + vr.size.x)
+		# (optional) keep your existing Y, or set to a fixed value:
+		# global_position.y = some_start_y
+		
 	# remember whether CollisionShape2D was disabled
 	_shape_was_disabled = body_shape.disabled
 

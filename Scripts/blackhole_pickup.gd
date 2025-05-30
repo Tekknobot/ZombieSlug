@@ -56,7 +56,6 @@ func _on_body_entered(body: Node) -> void:
 		# 0) snap the black hole to the player's feet (so it's on the same layer)
 		var player = body as CharacterBody2D
 		global_position = player.global_position
-		global_position.y -= 16
 		
 		# 1) spawn a warp-zone effect at pickup
 		var wz = warpzone_scene.instantiate()

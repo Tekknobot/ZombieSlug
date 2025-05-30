@@ -69,9 +69,9 @@ texture = ExtResource("4_om7d6")
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -50
 offset_left = -301.0
-offset_top = -62.0
+offset_top = -66.0
 offset_right = 385.0
-offset_bottom = 21.0
+offset_bottom = 17.0
 color = Color(0.0541422, 0.0541422, 0.0541422, 1)
 
 [node name="Interior_BG" type="TextureRect" parent="ColorRect"]
@@ -1266,11 +1266,11 @@ position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_nfyna")
 
 [node name="ExteriorDoor" type="Area2D" parent="." groups=["Exterior_Door"]]
-position = Vector2(112, 11)
+position = Vector2(112, 7)
 script = ExtResource("4_br2y0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExteriorDoor"]
-position = Vector2(0, -11)
+position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_1pg6i")
 
 [node name="Frame" type="ColorRect" parent="ExteriorDoor"]
@@ -1290,13 +1290,14 @@ offset_bottom = 14.0
 color = Color(0, 0, 0, 1)
 
 [node name="Wall" type="Area2D" parent="."]
+position = Vector2(0, -4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall"]
 position = Vector2(-312, 12)
 shape = SubResource("RectangleShape2D_tn4rj")
 
 [node name="Wall2" type="Area2D" parent="."]
-position = Vector2(835, 0)
+position = Vector2(835, -4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2"]
 position = Vector2(-312, 12)

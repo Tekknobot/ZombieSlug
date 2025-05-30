@@ -31,3 +31,4 @@ res://Scenes/game_over_manager.tscn
 res://Scripts/game_over_manager.gd
 res://Scripts/camera_2d.gd
 res://Scripts/zombie.gd
+res://Scripts/blackhole_pickup.gd

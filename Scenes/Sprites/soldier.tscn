@@ -204,7 +204,6 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_ndhyd"]
 
 [node name="Soldier" type="CharacterBody2D" groups=["Player"]]
-position = Vector2(0, 2.83758e+07)
 velocity = Vector2(0, 225990)
 script = ExtResource("1_bbe55")
 max_speed = 80.0
@@ -230,8 +229,9 @@ scroll_following = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_jd2l6")
 sprite_frames = SubResource("SpriteFrames_yp3ch")
+animation = &"move"
 autoplay = "default"
-frame_progress = 0.808259
+frame_progress = 0.371453
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
