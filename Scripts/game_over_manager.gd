@@ -54,7 +54,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 func _on_restart_pressed() -> void:
 	# reset player
-	Playerstats.health = Playerstats.max_health
+	Playerstats.reset_stats()
 	menu.visible       = false
 	fade.modulate.a    = 0.0
 	get_tree().paused  = false
