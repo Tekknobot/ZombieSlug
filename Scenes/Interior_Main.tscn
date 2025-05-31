@@ -1,5 +1,6 @@
-[gd_scene load_steps=45 format=3 uid="uid://8i41xycnlf6k"]
+[gd_scene load_steps=47 format=3 uid="uid://8i41xycnlf6k"]
 
+[ext_resource type="Script" path="res://Scripts/interior_main.gd" id="1_bsvme"]
 [ext_resource type="Script" path="res://Scripts/fade_in.gd" id="1_vi2b4"]
 [ext_resource type="PackedScene" uid="uid://c07bukksnlkf8" path="res://Scenes/pause_panel.tscn" id="2_22xv4"]
 [ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="3_ocgc1"]
@@ -30,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://8rdc17mv80x6" path="res://UI/buttons.png" id="28_2tpxh"]
 [ext_resource type="Script" path="res://Scripts/block_manager.gd" id="29_co2qs"]
 [ext_resource type="PackedScene" uid="uid://djlhb1vomqlcq" path="res://Scenes/Sprites/interior.tscn" id="30_fdy7k"]
+[ext_resource type="AudioStream" uid="uid://bt2pqphpc6h2o" path="res://Audio/SFX/Reward_drop.wav" id="32_1r4te"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_od7e4"]
 shader = ExtResource("15_wii2k")
@@ -114,6 +116,7 @@ bg_color = Color(0.196143, 0.196143, 0.196143, 1)
 bg_color = Color(1, 1, 0, 1)
 
 [node name="Interior" type="Node2D"]
+script = ExtResource("1_bsvme")
 
 [node name="Fader" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
@@ -549,3 +552,6 @@ text = "GLITCH: 5"
 script = ExtResource("29_co2qs")
 block_scene = ExtResource("30_fdy7k")
 block_width = 512.0
+
+[node name="RewardSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("32_1r4te")

@@ -32,3 +32,8 @@ res://Scripts/game_over_manager.gd
 res://Scripts/camera_2d.gd
 res://Scripts/zombie.gd
 res://Scripts/blackhole_pickup.gd
+res://Scripts/interior_main.gd
+res://Scenes/Sprites/HealthPickup.tscn
+res://Scripts/zombie_spawner.gd
+res://Scenes/Sprites/MoneyPickup.tscn
+res://Scripts/money_pickup.gd

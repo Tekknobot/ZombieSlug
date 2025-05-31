@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://diwnm0phdmj5x"]
+
+[ext_resource type="Script" path="res://Scripts/money_pickup.gd" id="1_sgb65"]
+[ext_resource type="Texture2D" uid="uid://dlgy4vxdq0css" path="res://Assets/Items/money_drop.png" id="2_bf7g2"]
+[ext_resource type="AudioStream" uid="uid://bcjbc1m7ri1vm" path="res://Audio/SFX/Retro PowerUP StereoUP 05.wav" id="3_gy6sh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0eij"]
+size = Vector2(14, 14)
+
+[node name="Aread2D" type="Area2D" groups=["Pickup"]]
+script = ExtResource("1_sgb65")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_bf7g2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p0eij")
+
+[node name="CollectSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_gy6sh")

@@ -8,18 +8,28 @@ extends Node2D
 @export var boss_scene:   PackedScene
 @export var zombie_scene: PackedScene
 
+# ---------------------------------------------------
+# ← NEW: keep track of how many zombies we've spawned
+#       in the current "Interior" (if any).
+var _interior_spawn_count: int = 0
+# ---------------------------------------------------
+
 var spawn_interval: float
 var _spawn_timer:    Timer
 
 @export var sidewalk_chance := 0.5  # 50/50 with the main floor
-
+@export var street_chance: float = 0.4   # e.g. 40% of the time
 @export var max_zombies: int = 750
 
 var _zombie_pool: Array[CharacterBody2D] = []
-@export var street_chance: float = 0.4   # e.g. 40% of the time
 
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
+
+	# ---------------------------------------------------
+	# ← Reset the “interior” counter whenever this spawner is (re)started.
+	_interior_spawn_count = 0
+	# ---------------------------------------------------
 
 	_spawn_timer = Timer.new()
 	_spawn_timer.wait_time  = spawn_interval
@@ -31,12 +41,30 @@ func _ready() -> void:
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
 	await get_tree().create_timer(1).timeout
 	_spawn_boss()
-	
+
+
 func spawn_zombie() -> void:
 	# ——— Don’t spawn if we already have ≥ max_zombies ———
 	var current = get_tree().get_nodes_in_group("Zombie").size()
 	if current >= max_zombies:
 		return
+
+	# ——— If this spawner is under an “Interior” root, limit spawns. ———
+	# (We use get_parent().get_parent().name == "Interior" as requested.)
+	var maybe_grandparent = get_parent().get_parent()
+	if maybe_grandparent and maybe_grandparent.name == "Interior":
+		# read kills_per_level from the Interior script
+		# (we assume “Interior.gd” attaches a kills_per_level variable to its root)
+		var interior_node = maybe_grandparent
+		var allowed_spawns = interior_node.kills_per_level
+		if _interior_spawn_count >= allowed_spawns:
+			# already spawned as many zombies as kills_per_level
+			return
+		# Otherwise, we'll spawn one now – but only _after_ we pass all other checks,
+		# so increment _interior_spawn_count just before actually instancing:
+		# (we do NOT increment here yet, but after all bail conditions pass)
+		# → see below, after picking a surface, just before `add_child(z)`
+	# ————————————————————————————————————————————————————————————
 
 	# ——— Ensure there’s a player to target ———
 	var players = get_tree().get_nodes_in_group("Player")
@@ -88,14 +116,13 @@ func spawn_zombie() -> void:
 
 	# ——— Instantiate zombie and position it on the chosen surface ———
 	var z = zombie_scene.instantiate() as CharacterBody2D
-	
+
 	# Y = surface height
 	z.global_position.y = surf.global_position.y
-	
-	# ——— put this right after you pick surf ———
+
 	# align the zombie’s z_index to the surface’s, +1 so it draws on top
 	z.z_index = layer_map[spawn_type]
-	
+
 	# X = player.x ± spawn_distance (choose side without ternary)
 	var side_val: int
 	if randf() < 0.5:
@@ -103,9 +130,6 @@ func spawn_zombie() -> void:
 	else:
 		side_val = 1
 	z.global_position.x = player.global_position.x + side_val * spawn_distance
-
-	# ——— Add to scene ———
-	get_tree().get_current_scene().add_child(z)
 
 	# ——— Collision exceptions so zombie falls onto the correct layer ———
 	if spawn_type == "sidewalk":
@@ -189,6 +213,14 @@ func spawn_zombie() -> void:
 	# ——— Debug log ———
 	print("Spawned [", z.behavior, "] zombie at ", z.global_position, " (health=", z.max_health, ")")
 
+	# ——— NOW that we have actually created & configured the zombie, add it: ———
+	get_tree().get_current_scene().add_child(z)
+
+	# ——— Only after we truly add a zombie do we increment the interior counter. ———
+	if maybe_grandparent and maybe_grandparent.name == "Interior":
+		_interior_spawn_count += 1
+
+
 func _on_level_changed(new_level: int) -> void:
 	# 10% faster per level, but never below min_spawn_factor
 	var raw_factor = 1.0 - (new_level - 1) * 0.10
@@ -206,6 +238,7 @@ func _on_level_changed(new_level: int) -> void:
 			z.max_health += 1
 			z.health = min(z.health + 1, z.max_health)
 	print("All zombies gained +1 max health (level ", new_level, ")")
+
 
 func _spawn_boss() -> void:
 	var players = get_tree().get_nodes_in_group("Player")
