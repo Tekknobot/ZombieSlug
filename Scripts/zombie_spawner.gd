@@ -298,7 +298,7 @@ func _spawn_boss() -> void:
 		side_val = -1
 	else:
 		side_val = 1
-	boss.global_position.x = player.global_position.x + side_val * 100 * 1.5
+	boss.global_position.x = player.global_position.x + side_val * spawn_distance * 1.5
 
 	# ——— Collision exceptions so boss “falls onto” the correct layer ———
 	if spawn_type == "sidewalk":

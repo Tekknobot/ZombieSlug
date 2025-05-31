@@ -25,3 +25,5 @@ res://Scripts/soldier.gd
 res://Scenes/Sprites/zombie_xl.tscn
 res://Scripts/zombie.gd
 res://Scripts/zombie_spawner.gd
+res://Scenes/Effects/Explosion.tscn
+res://Scenes/Sprites/zombie_bullet.tscn

@@ -52,6 +52,7 @@ knockback_force = 0.0
 rotation_speed = 360.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 4096
 sprite_frames = SubResource("SpriteFrames_113ie")
 autoplay = "default"
 frame = 6
