@@ -21,3 +21,6 @@ res://Scenes/Sprites/MoneyPickup.tscn
 res://Scenes/Titlescreen.tscn
 res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
+res://Scenes/Sprites/zombie.tscn
+res://Scripts/soldier.gd
+res://Scripts/zombie.gd

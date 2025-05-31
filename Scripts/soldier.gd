@@ -279,7 +279,8 @@ func _ready() -> void:
 	$AnimatedSprite2D.z_index = LAYER_Z_FLOOR
 
 	# ─── IMPORTANT: do NOT call Playerstats.set_level(1) here ─────────────────
-	# If you call Playerstats.set_level(1) on each _ready(), you will wipe out
+	#await get_tree().create_timer(1).timeout
+	#Playerstats.set_level(5)
 	# whatever level/XP the player had. We rely on the singleton having been
 	# initialized only once (in Playerstats._ready()) and then persist across scenes.
 				

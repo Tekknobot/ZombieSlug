@@ -87,32 +87,6 @@ func _ready() -> void:
 	attack_timer.one_shot  = false
 	add_child(attack_timer)
 	attack_timer.connect("timeout", Callable(self, "_on_attack_timeout"))
-
-	if behavior == "leaper":
-		# set up a dedicated timer for leaps
-		leap_timer = Timer.new()
-		leap_timer.wait_time = leap_cooldown
-		leap_timer.one_shot  = true
-		add_child(leap_timer)
-		leap_timer.connect("timeout", Callable(self, "_on_leap_timeout"))
-
-	if behavior == "charger":
-		anim.play("move")  # ensure it’s in move state
-
-	if behavior == "spore":
-		# set up the repeating spore‐drop timer
-		_spore_timer = Timer.new()
-		_spore_timer.wait_time = spore_interval
-		_spore_timer.one_shot  = false
-		add_child(_spore_timer)
-		#_spore_timer.start()
-		_spore_timer.connect("timeout", Callable(self, "_drop_spore"))
-
-	if behavior == "shield":
-		health = max_health
-		# apply the outline shader to AnimatedSprite2D
-		anim.material = ShaderMaterial.new()
-		anim.material.shader = preload("res://Shaders/ShieldEffect.tres")
 			
 	spawn_layer = z_index
 
