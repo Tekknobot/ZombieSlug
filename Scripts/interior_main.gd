@@ -53,7 +53,7 @@ func _on_kills_changed(new_total_kills: int) -> void:
 	
 	if kills_inside >= _kill_goal:
 		_drop_multiple_rewards()
-		_reward_dropped = true
+		#_reward_dropped = true
 		# If you want to allow multiple drops across repeated entries,
 		# reset _reward_dropped = false when the player leaves or re-enters.
 

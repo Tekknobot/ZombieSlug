@@ -56,7 +56,7 @@ func spawn_zombie() -> void:
 		# read kills_per_level from the Interior script
 		# (we assume “Interior.gd” attaches a kills_per_level variable to its root)
 		var interior_node = maybe_grandparent
-		var allowed_spawns = interior_node.kills_per_level
+		var allowed_spawns = Playerstats.level * interior_node.kills_per_level
 		if _interior_spawn_count >= allowed_spawns:
 			# already spawned as many zombies as kills_per_level
 			return

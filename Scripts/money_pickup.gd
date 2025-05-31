@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var heal_percent: float = 0.15   # restores 15% of max health
+@export var heal_percent: float = 0.0   # restores 15% of max health
 @export var lifetime:    float = 20.0    # optional auto-despawn
 @export var wiggle_angle: float = 10.0   # max degrees each way
 @export var wiggle_time:  float = 1.0    # seconds per full cycle
@@ -44,7 +44,7 @@ func _on_body_entered(body: Node) -> void:
 		amount = 1
 
 	# heal via negative damage
-	Playerstats.damage(-amount)
+	#Playerstats.damage(-amount)
 
 	# ――――――――――――――――――――――――――――――
 	#  ADD CURRENCY BASED ON CURRENT LEVEL:
