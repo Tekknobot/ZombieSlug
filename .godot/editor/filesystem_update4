@@ -20,3 +20,7 @@ res://Scenes/Sprites/interior.tscn
 res://Scenes/Interior_Main.tscn
 res://Scenes/Sprites/MoneyPickup.tscn
 res://Scenes/Titlescreen.tscn
+res://Scripts/Boss.gd
+res://Scripts/soldier.gd
+res://Scenes/Sprites/zombie_xl.tscn
+res://Scripts/zombie.gd

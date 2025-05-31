@@ -646,20 +646,6 @@ func _spawn_afterimage() -> void:
 func _on_attack_cooldown_finished() -> void:
 	# timer has elapsed → we can fire again
 	attack_ready = true
-	
-func _on_hitbox_body_entered(body: Node) -> void:
-	if not is_invincible:
-		return
-
-	# 1) if it’s a zombie, deal star_damage
-	if body.is_in_group("Zombie") and body.has_method("take_damage"):
-		body.take_damage(star_damage)
-
-	# 2) if it’s a mine, trigger its explosion immediately
-	elif body.is_in_group("Mine"):
-		# your mine script defines `_explode()`
-		if body.has_method("_explode"):
-			body._explode()
 
 func apply_star(duration: float, damage: int) -> void:
 	if is_invincible:

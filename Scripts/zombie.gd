@@ -285,10 +285,6 @@ func _die_cleanup() -> void:
 		if shape is CollisionShape2D:
 			shape.disabled = true
 
-	# 6) if you also have an Area2D hitbox, disable its monitoring
-	if has_node("Hitbox"):
-		$Hitbox.monitoring = false
-
 func _do_chain_reaction() -> void:
 	# Track which zombies we’ve already struck
 	var visited: Array[CharacterBody2D] = [ self ]
@@ -316,7 +312,7 @@ func _do_chain_reaction() -> void:
 				# Spawn the bolt
 				_spawn_chain_bolt(src_pos, other.global_position)
 				# Deal chain damage
-				other.take_damage(max_health/4)
+				other.take_damage(attack_damage)
 
 				# Remember we’ve hit this one
 				visited.append(other)

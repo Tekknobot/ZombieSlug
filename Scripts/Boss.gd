@@ -53,6 +53,11 @@ var pattern_index: int = 0  # cycles through patterns
 
 @onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
 
+@export var proximity_radius: float       = 32.0    # how close the Player must be to get hurt
+@export var proximity_cooldown: float     = 0.1     # in seconds, between consecutive hits
+
+var proximity_timer: Timer
+
 func _ready():
 	randomize()
 	# initialize and scale health for current player level
@@ -82,6 +87,16 @@ func _ready():
 	pattern_timer.one_shot = false
 	add_child(pattern_timer)
 	pattern_timer.timeout.connect(Callable(self, "_next_pattern"))
+
+	# ─── create the proximity‐damage timer ───────────────────
+	proximity_timer = Timer.new()
+	proximity_timer.wait_time = proximity_cooldown
+	proximity_timer.one_shot = false
+	add_child(proximity_timer)
+	proximity_timer.timeout.connect(Callable(self, "_on_proximity_timeout"))
+	# Don’t start it yet; we’ll start it once the Boss “wakes up” in _physics_process
+	# or you can start it right now if you want the check immediately:
+	proximity_timer.start()
 
 	set_process(true)
 	update_health_label()
@@ -401,3 +416,38 @@ func flash() -> void:
 	anim.modulate = Color(1, 0, 0, 1)
 	await get_tree().create_timer(0.1).timeout
 	anim.modulate = orig
+
+func _on_proximity_timeout() -> void:
+	if is_dead:
+		return    # don’t damage after the boss is dead
+
+	# 1) Grab the Player (we assume there’s only one and it’s in group “Player”)
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var p = players[0] as CharacterBody2D
+	if p == null:
+		return
+
+	# 2) Check “same lane” (compare AnimatedSprite2D.z_index) so we don’t
+	#    damage a Player who’s on a different z_index (e.g. sidewalk vs. floor).
+	var p_sprite = p.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if p_sprite == null:
+		return
+	if p_sprite.z_index != z_index:
+		return
+
+	# 3) Check “within proximity_radius”
+	var dist = global_position.distance_to(p.global_position)
+	if dist > proximity_radius:
+		return
+
+	# 4) Optionally require the Player to be “on_floor()” (so they only take
+	#    ground damage if they’re actually standing). Remove this check if you
+	#    want them to be hurt even in mid‐air.
+	if not p.is_on_floor():
+		return
+
+	# 5) Finally, deal damage
+	if p.has_method("take_damage"):
+		p.take_damage(attack_damage)
