@@ -17,8 +17,7 @@ res://Scenes/pause_panel.tscn
 res://Scenes/Sprites/block.tscn
 res://Scenes/Sprites/interior.tscn
 res://Scenes/Interior_Main.tscn
-res://Scripts/interior_main.gd
-res://Scripts/money_pickup.gd
-res://Scenes/Sprites/MinePickup.tscn
 res://Scenes/Sprites/MoneyPickup.tscn
-res://Scripts/zombie_spawner.gd
+res://Scenes/Titlescreen.tscn
+res://Scenes/Meks_Scenes/PLAYER/M1.scn
+res://Scenes/Meks_Scenes/PLAYER/M2.scn

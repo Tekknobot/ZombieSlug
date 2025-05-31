@@ -103,6 +103,7 @@ theme_override_font_sizes/font_size = 32
 text = "QUIT"
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = 240.0
 offset_top = 603.0
 offset_right = 866.0

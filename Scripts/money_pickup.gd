@@ -50,7 +50,7 @@ func _on_body_entered(body: Node) -> void:
 	#  ADD CURRENCY BASED ON CURRENT LEVEL:
 	#  For example, give 10 coins per player level.
 	#  You can adjust the multiplier (10) as desired.
-	var coins_awarded = Playerstats.level * 10
+	var coins_awarded = Playerstats.level * 1
 	Playerstats.add_currency(coins_awarded)
 	# ――――――――――――――――――――――――――――――
 
