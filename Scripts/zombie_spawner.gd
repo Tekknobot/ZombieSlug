@@ -241,6 +241,7 @@ func _on_level_changed(new_level: int) -> void:
 
 
 func _spawn_boss() -> void:
+	# ——— Make sure there’s a Player to target ———
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		return
@@ -256,9 +257,14 @@ func _spawn_boss() -> void:
 	else:
 		spawn_type = "floor"
 
-	var layer_map = { "floor":0, "sidewalk":2, "street":4 }
+	# ——— Map each spawn_type to its z_index ———
+	var layer_map = {
+		"floor":    0,
+		"sidewalk": 2,
+		"street":   4
+	}
 
-	# ——— Gather surfaces ———
+	# ——— Gather surfaces based on spawn_type ———
 	var surfaces: Array = []
 	if spawn_type == "sidewalk":
 		surfaces = get_tree().get_nodes_in_group("Sidewalk")
@@ -269,53 +275,78 @@ func _spawn_boss() -> void:
 			if not f.is_in_group("Sidewalk"):
 				surfaces.append(f)
 
+	# ——— Bail if no surfaces found ———
 	if surfaces.is_empty():
-		push_warning("No %s surfaces for boss spawn!" % spawn_type)
+		push_warning("No %s surfaces available for Boss spawn!" % spawn_type.capitalize())
 		return
 
-	# ——— Pick a random surface & instantiate ———
+	# ——— Pick one surface at random ———
 	var surf = surfaces[randi() % surfaces.size()] as Node2D
+
+	# ——— Instantiate Boss (scene already has scale = (2,2)) ———
 	var boss = boss_scene.instantiate() as CharacterBody2D
 
-	# ——— Prevent landing on any Roof surfaces ———
-	for roof in get_tree().get_nodes_in_group("Roof"):
-		if roof is PhysicsBody2D:
-			boss.add_collision_exception_with(roof)
+	# ——— Y = surface height ———
+	boss.global_position.y = surf.global_position.y
 
-	# choose side without ternary
-	var side: int
-	if randf() < 0.5:
-		side = -1
-	else:
-		side = 1
-
+	# ——— Align the boss’s z_index to the chosen layer ———
 	boss.z_index = layer_map[spawn_type]
-	boss.global_position = Vector2(
-		player.global_position.x + side * spawn_distance * 1.5,
-		surf.global_position.y
-	)
 
-	# ——— Add to scene before ray-casting! ———
+	# ——— X = player.x ± spawn_distance * 1.5 (choose side without ternary) ———
+	var side_val: int
+	if randf() < 0.5:
+		side_val = -1
+	else:
+		side_val = 1
+	boss.global_position.x = player.global_position.x + side_val * 100 * 1.5
+
+	# ——— Collision exceptions so boss “falls onto” the correct layer ———
+	if spawn_type == "sidewalk":
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+				boss.add_collision_exception_with(f)
+	elif spawn_type == "street":
+		# fall through sidewalks
+		for sw in get_tree().get_nodes_in_group("Sidewalk"):
+			if sw is PhysicsBody2D:
+				boss.add_collision_exception_with(sw)
+		# fall through floors that aren’t sidewalks
+		for f in get_tree().get_nodes_in_group("Floor"):
+			if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+				boss.add_collision_exception_with(f)
+
+	# ——— Put the Boss into the scene ———
 	get_tree().get_current_scene().add_child(boss)
 
-	# ——— Now snap to ground using Godot 4 API ———
+	# ——— Raycast downward to snap exactly to the ground Y ———
 	var space = boss.get_world_2d().direct_space_state
 	var ray = PhysicsRayQueryParameters2D.new()
+
+	# Cast from far above → far below
 	ray.from = boss.global_position + Vector2(0, -1000)
-	ray.to = boss.global_position + Vector2(0, +1000)
-	ray.exclude = [boss]
+	ray.to   = boss.global_position + Vector2(0, +1000)
+
+	# Exclude the boss itself… and also every Roof so the ray won't hit any Roof objects
+	var exclude_list = [boss]
+	for roof in get_tree().get_nodes_in_group("Roof"):
+		if roof is PhysicsBody2D:
+			exclude_list.append(roof)
+	ray.exclude = exclude_list
+
+	# Keep the normal collision_mask so you still detect floors/sidewalks/streets
 	ray.collision_mask = boss.collision_mask
+
 	var hit = space.intersect_ray(ray)
 	if hit and hit.has("position"):
 		boss.global_position.y = hit["position"].y
 
-	# ——— Add to groups ———
+	# ——— Put the Boss into the correct groups ———
 	if not boss.is_in_group("Boss"):
 		boss.add_to_group("Boss")
 	if not boss.is_in_group("Zombie"):
 		boss.add_to_group("Zombie")
 
-	# ——— Scale health by level ———
+	# ——— Scale health by Player level (same as zombies) ———
 	var lvl = Playerstats.level
 	if lvl > 1 and boss.has_method("take_damage"):
 		var base = boss.max_health
@@ -323,5 +354,5 @@ func _spawn_boss() -> void:
 		boss.max_health = int(base * scale)
 		boss.health     = boss.max_health
 
-	print("Boss spawned on %s at %s with max_health=%d" %
-		  [spawn_type, boss.global_position, boss.max_health])
+	print("Boss spawned on %s at %s with max_health=%d"
+		  % [spawn_type.capitalize(), boss.global_position, boss.max_health])

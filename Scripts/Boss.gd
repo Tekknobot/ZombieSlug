@@ -14,9 +14,6 @@ var health: int                             # current boss health
 @export var attack_range: float = 24.0       # for melee checks
 @export var attack_damage: int = 1           # melee damage
 
-# rendering layer (spawn on floor)
-const LAYER_Z_FLOOR := 0
-
 # state
 var is_dead: bool = false
 var pattern_timer: Timer
@@ -54,9 +51,22 @@ var pattern_index: int = 0  # cycles through patterns
 @onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
 
 @export var proximity_radius: float       = 32.0    # how close the Player must be to get hurt
-@export var proximity_cooldown: float     = 0.1     # in seconds, between consecutive hits
+@export var proximity_cooldown: float     = 0.1     # seconds between consecutive hits
 
 var proximity_timer: Timer
+
+const LAYER_Z_FLOOR    := 0
+const LAYER_Z_SIDEWALK := 2
+const LAYER_Z_STREET   := 4
+
+# helper map for dynamic ground‐layer updates
+var _layer_map = {
+	"Floor":    LAYER_Z_FLOOR,
+	"Sidewalk": LAYER_Z_SIDEWALK,
+	"Street":   LAYER_Z_STREET
+}
+
+var _ignored_surfaces: Array[PhysicsBody2D] = []
 
 func _ready():
 	randomize()
@@ -70,16 +80,12 @@ func _ready():
 	if not is_in_group("Zombie"):
 		add_to_group("Zombie")
 
-	# always draw on the floor layer
+	# always draw on the floor layer at start
 	z_index = LAYER_Z_FLOOR
 
-	# ignore any sidewalks & streets so we never leave the floor
-	for sw in get_tree().get_nodes_in_group("Sidewalk"):
-		if sw is PhysicsBody2D:
-			add_collision_exception_with(sw)
-	for st in get_tree().get_nodes_in_group("Street"):
-		if st is PhysicsBody2D:
-			add_collision_exception_with(st)
+	# (REMOVED: unconditional ignores of Sidewalk & Street here, 
+	#  because that forced the Boss to fall through those surfaces.
+	#  We rely instead on the dynamic‐ground‐layer update logic below.)
 
 	# prepare (but don’t start) attack pattern timer
 	pattern_timer = Timer.new()
@@ -88,14 +94,12 @@ func _ready():
 	add_child(pattern_timer)
 	pattern_timer.timeout.connect(Callable(self, "_next_pattern"))
 
-	# ─── create the proximity‐damage timer ───────────────────
+	# create the proximity‐damage timer
 	proximity_timer = Timer.new()
 	proximity_timer.wait_time = proximity_cooldown
 	proximity_timer.one_shot = false
 	add_child(proximity_timer)
 	proximity_timer.timeout.connect(Callable(self, "_on_proximity_timeout"))
-	# Don’t start it yet; we’ll start it once the Boss “wakes up” in _physics_process
-	# or you can start it right now if you want the check immediately:
 	proximity_timer.start()
 
 	set_process(true)
@@ -159,6 +163,25 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y += gravity * delta
 
+	# --- DYNAMIC GROUND LAYER UPDATE ---
+	# look at your floor collisions this frame and pick the highest-priority surface
+	for i in range(get_slide_collision_count()):
+		var col = get_slide_collision(i).get_collider()
+		if col is PhysicsBody2D:
+			var new_layer: int = z_index
+			if col.is_in_group("Street"):
+				new_layer = _layer_map["Street"]
+			elif col.is_in_group("Sidewalk"):
+				new_layer = _layer_map["Sidewalk"]
+			elif col.is_in_group("Floor") and not col.is_in_group("Sidewalk"):
+				new_layer = _layer_map["Floor"]
+			# if it actually changed, update z_index & re-ignore non-current grounds
+			if new_layer != z_index:
+				z_index = new_layer
+				_restore_ground_collisions()
+				_ignore_non_target_ground(col.global_position.y)
+			break  # stop after first valid ground collision
+
 	move_and_slide()
 
 func _on_level_changed(new_level: int) -> void:
@@ -169,7 +192,7 @@ func _on_level_changed(new_level: int) -> void:
 # make _next_pattern async by introducing an await inside
 func _next_pattern() -> void:
 	if is_dead:
-		return		
+		return      
 	pattern_timer.stop()
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty(): return
@@ -188,7 +211,7 @@ func _next_pattern() -> void:
 
 func _start_attack():
 	if is_dead:
-		return		
+		return      
 	if anim.animation != "attack":
 		anim.play("attack")
 		attack_sfx.play()
@@ -252,7 +275,7 @@ func _ground_slam() -> void:
 
 func _projectile_volley() -> void:
 	if is_dead:
-		return		
+		return      
 	_start_attack()
 	for i in range(volley_count):
 		var angle = (TAU / volley_count) * i
@@ -340,7 +363,7 @@ func _spawn_hands_at_player() -> void:
 		return
 	var player = players[0] as Node2D
 
-	if player.is_on_floor():		
+	if player.is_on_floor():      
 		# Try 3 times
 		for i in range(1):
 			# instantiate and position
@@ -354,7 +377,7 @@ func _spawn_hands_at_player() -> void:
 
 func _zombie_grab() -> void:
 	if is_dead:
-		return	
+		return    
 	_start_attack()
 	# Wait for your "wind-up" anim (adjust name/duration as needed)
 	await get_tree().create_timer(0.1).timeout
@@ -364,7 +387,7 @@ func _zombie_grab() -> void:
 # ——— damaging chain-lightning nova ———
 func _lightning_nova() -> void:
 	if is_dead:
-		return	
+		return    
 	_start_attack() 
 	await get_tree().create_timer(0.3).timeout
 
@@ -382,7 +405,7 @@ func _lightning_nova() -> void:
 	for i in range(min(lightning_targets, candidates.size())):
 		var tgt = candidates[i]
 		if not is_instance_valid(tgt):
-			return		
+			return        
 		_spawn_lightning(global_position, tgt.global_position)
 
 		# deal damage
@@ -451,3 +474,29 @@ func _on_proximity_timeout() -> void:
 	# 5) Finally, deal damage
 	if p.has_method("take_damage"):
 		p.take_damage(attack_damage)
+
+# helper: restore all previously ignored surfaces
+func _restore_ground_collisions() -> void:
+	for s in _ignored_surfaces:
+		if is_instance_valid(s):
+			remove_collision_exception_with(s)
+	_ignored_surfaces.clear()
+
+# helper: ignore any ground whose Y ≠ target_y
+func _ignore_non_target_ground(target_y: float) -> void:
+	# floor (excluding sidewalks)
+	for f in get_tree().get_nodes_in_group("Floor"):
+		if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+			if abs(f.global_position.y - target_y) > 1.0:
+				add_collision_exception_with(f)
+				_ignored_surfaces.append(f)
+	# sidewalks
+	for sw in get_tree().get_nodes_in_group("Sidewalk"):
+		if sw is PhysicsBody2D and abs(sw.global_position.y - target_y) > 1.0:
+			add_collision_exception_with(sw)
+			_ignored_surfaces.append(sw)
+	# streets
+	for st in get_tree().get_nodes_in_group("Street"):
+		if st is PhysicsBody2D and abs(st.global_position.y - target_y) > 1.0:
+			add_collision_exception_with(st)
+			_ignored_surfaces.append(st)
