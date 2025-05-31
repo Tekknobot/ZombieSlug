@@ -19,35 +19,35 @@ var upgrades = [
 		"cost":    125,
 		"stat":   "initial_mine_damage",
 		"amount":   1,
-		"icon":    preload("res://Assets/Mines/mine_drop.png")		
+		"icon":    preload("res://Assets/Mines/mine_drop.png")        
 	},
 	{
 		"name":   "Dog Damage +1",
 		"cost":    150,
 		"stat":   "dog_base_damage",
 		"amount":   1,
-		"icon":    preload("res://Assets/Items/dog_drop.png")		
+		"icon":    preload("res://Assets/Items/dog_drop.png")        
 	},
 	{
 		"name":   "Merc Damage +1",
 		"cost":    175,
 		"stat":   "merc_base_damage",
 		"amount":   1,
-		"icon":    preload("res://Assets/Items/merc_drop.png")		
+		"icon":    preload("res://Assets/Items/merc_drop.png")        
 	},
 	{
 		"name":   "Crawler Damage +5",
 		"cost":    200,
 		"stat":   "mech_base_damage",
 		"amount":   5,
-		"icon":    preload("res://Assets/Items/crawler_drop.png")		
+		"icon":    preload("res://Assets/Items/crawler_drop.png")        
 	},
 	{
 		"name":   "Roller Damage +5",
 		"cost":    200,
 		"stat":   "mech_panther_base_damage",
 		"amount":   5,
-		"icon":    preload("res://Assets/Items/roller_drop.png")		
+		"icon":    preload("res://Assets/Items/roller_drop.png")        
 	},
 ]
 
@@ -60,7 +60,6 @@ func _ready():
 	hide()
 	# Ensure this UI still receives input when the game is paused
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
-	# Enable unhandled input even when paused
 	set_process_unhandled_input(true)
 
 	update_currency_label()
@@ -105,13 +104,12 @@ func populate_upgrades():
 	for child in upgrades_container.get_children():
 		child.free()
 
-	# one HBox entry per upgrade with icon, label and buy button
 	for data in upgrades:
-		# duplicate and scale amount by current player level
+		# scale each “amount” by the player’s current level
 		var payload = data.duplicate()
 		payload.amount = data.amount * Playerstats.level
 
-		# create row
+		# create one HBox per upgrade
 		var row = HBoxContainer.new()
 		if font:
 			row.add_theme_font_override("font", font)
@@ -119,7 +117,7 @@ func populate_upgrades():
 
 		# 1) icon / TextureRect in front
 		var icon = TextureRect.new()
-		icon.texture = data.icon      # ← uses each-entry texture
+		icon.texture = data.icon
 		icon.size = Vector2(24,24)
 		icon.stretch_mode  = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -142,12 +140,13 @@ func populate_upgrades():
 		if font:
 			btn.add_theme_font_override("font", font)
 			btn.add_theme_constant_override("font_size", font_size)
+		# Bind “payload” onto the pressed‐signal
 		btn.connect("pressed", Callable(self, "_on_buy_pressed").bind(payload))
 		row.add_child(btn)
 
 		upgrades_container.add_child(row)
 
-	# separator and leave button (unchanged)…
+	# separator and leave button
 	upgrades_container.add_child(HSeparator.new())
 	var leave_btn = Button.new()
 	leave_btn.text = "Leave"
@@ -161,24 +160,29 @@ func populate_upgrades():
 	_fit_panel_to_content()
 	_grab_first_button_focus()
 
+
 func _on_buy_pressed(data: Dictionary) -> void:
 	var btn = get_viewport().gui_get_focus_owner() as Button
 	var desc = btn.get_parent().get_child(0) as Label
 
-	# Try to spend currency via use_currency()
+	# 1) Try to spend currency via PlayerStats
 	if Playerstats.use_currency(data.cost):
+		# 2) Apply the upgrade locally in shop AND push into PlayerStats
 		apply_upgrade(data)
-		update_currency_label()  # or rely on currency_changed signal to update UI
-		# flash description green
+		update_currency_label()
+
+		# flash the description text green to confirm purchase
 		if is_instance_valid(desc):
 			desc.modulate = Color(0,1,0)
 		await get_tree().create_timer(0.2).timeout
 		if is_instance_valid(desc):
 			desc.modulate = Color(1,1,1)
+
+		# re‐populate the list so that any “Buy” buttons disable/enable accordingly
 		populate_upgrades()
 		$AudioStreamPlayer2D.play()
 	else:
-		# flash description red
+		# flash description red if not enough money
 		if is_instance_valid(desc):
 			desc.modulate = Color(1,0,0)
 		await get_tree().create_timer(0.2).timeout
@@ -186,43 +190,68 @@ func _on_buy_pressed(data: Dictionary) -> void:
 			desc.modulate = Color(1,1,1)
 		push_error("Not enough currency for %s" % data.name)
 
+
 func apply_upgrade(data: Dictionary) -> void:
-	# Find the player instance
+	# We assume exactly one Player in the “Player” group
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.is_empty():
 		push_error("No Player instance found to apply upgrade")
 		return
-	var soldier = players[0]
 
+	# In this setup, we want to *persist* every base‐damage change into PlayerStats,
+	# not only into the local soldier node. This way, when we switch scenes, the
+	# singleton still “remembers” our new damage values.
 	match data.stat:
-		"max_health":
-			soldier.max_health += data.amount
-			soldier.health = soldier.max_health
-			# if you want to notify the UI via PlayerStats:
-			Playerstats.health = soldier.health
-			Playerstats.emit_signal("health_changed", soldier.health)
-
 		"initial_grenade_damage":
-			soldier.grenade_damage += data.amount
+			# Increase PlayerStats.initial_grenade_damage
+			Playerstats.initial_grenade_damage += data.amount
+			# Recompute “grenade_damage” at the current level:
+			Playerstats.grenade_damage = Playerstats.initial_grenade_damage + (Playerstats.level - 1)
+			Playerstats.emit_signal("grenade_damage_changed", Playerstats.grenade_damage)
 
 		"initial_mine_damage":
-			soldier.mine_damage += data.amount
+			Playerstats.initial_mine_damage += data.amount
+			Playerstats.mine_damage = Playerstats.initial_mine_damage + (Playerstats.level - 1)
+			Playerstats.emit_signal("mine_damage_changed", Playerstats.mine_damage)
 
 		"dog_base_damage":
-			soldier.dog_base_damage += data.amount
+			Playerstats.dog_base_damage += data.amount
+			Playerstats.dog_damage = Playerstats.dog_base_damage + (Playerstats.level - 1) * Playerstats.dog_damage_per_level
+			Playerstats.emit_signal("dog_damage_changed", Playerstats.dog_damage)
 
 		"merc_base_damage":
-			soldier.merc_base_damage += data.amount
+			Playerstats.merc_base_damage += data.amount
+			Playerstats.merc_damage = Playerstats.merc_base_damage + (Playerstats.level - 1) * Playerstats.merc_damage_per_level
+			Playerstats.emit_signal("merc_damage_changed", Playerstats.merc_damage)
 
 		"mech_base_damage":
-			soldier.mech_base_damage += data.amount
+			Playerstats.mech_base_damage += data.amount
+			Playerstats.mech_damage = Playerstats.mech_base_damage + (Playerstats.level - 1) * Playerstats.mech_damage_per_level
+			Playerstats.emit_signal("mech_damage_changed", Playerstats.mech_damage)
 
 		"mech_panther_base_damage":
-			soldier.mech_panther_base_damage += data.amount
+			Playerstats.panther_base_damage += data.amount
+			Playerstats.panther_damage = Playerstats.panther_base_damage + (Playerstats.level - 1) * Playerstats.panther_damage_per_level
+			Playerstats.emit_signal("panther_damage_changed", Playerstats.panther_damage)
 
 		_:
 			push_warning("Unknown upgrade stat: %s" % data.stat)
 			return
+
+	# (Optional) If you also want to push any soldier‐side variables in case the
+	# soldier script caches them locally, you can do something like:
+	#
+	# var soldier = players[0]
+	# soldier.grenade_damage = Playerstats.grenade_damage
+	# soldier.mine_damage    = Playerstats.mine_damage
+	# soldier.dog_base_damage = Playerstats.dog_damage
+	# ...etc…
+
+	# But as long as your Soldier.gd’s _ready() pulls everything from Playerstats,
+	# simply updating the singleton is sufficient. The next time you re‐enter the
+	# scene—or if the soldier listens to those “*_damage_changed” signals—the new
+	# values will be applied automatically.
+
 
 func _on_leave_pressed() -> void:
 	hide_shop()

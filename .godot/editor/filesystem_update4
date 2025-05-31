@@ -37,3 +37,5 @@ res://Scenes/Sprites/HealthPickup.tscn
 res://Scripts/zombie_spawner.gd
 res://Scenes/Sprites/MoneyPickup.tscn
 res://Scripts/money_pickup.gd
+res://Scripts/pause_manager.gd
+res://UI/shop_ui.gd
