@@ -737,9 +737,8 @@ func _spawn_dog() -> void:
 	var dog = DogScene.instantiate() as PhysicsBody2D
 	dog.add_to_group("Dog")
 
-	# Calculate upgraded damage
-	var lvl = Playerstats.level
-	var total_damage = dog_base_damage + (lvl - 1) * dog_damage_per_level
+	# Pull the dog’s current damage directly from PlayerStats
+	var total_damage = Playerstats.dog_damage
 	if dog.has_meta("attack_damage"):
 		dog.attack_damage = total_damage
 	else:
@@ -762,9 +761,11 @@ func _spawn_dog() -> void:
 		_add_roof_exceptions(dog)
 	_add_ally_exceptions(dog)
 
-	# Lifetime
+	# Lifetime scales with level as before
+	var lvl = Playerstats.level
 	var life_delay = 5.0 + (lvl - 1) * 1.0
 	_fade_and_free(dog, life_delay, 1.0)
+
 
 # Spawn Mech (always left)
 func _spawn_mech() -> void:
@@ -772,8 +773,8 @@ func _spawn_mech() -> void:
 	var mech = MechScene.instantiate() as PhysicsBody2D
 	mech.add_to_group("Mech")
 
-	var lvl = Playerstats.level
-	var total_damage = mech_base_damage + (lvl - 1) * mech_damage_per_level
+	# Pull the mech’s current damage directly from PlayerStats
+	var total_damage = Playerstats.mech_damage
 	if mech.has_meta("attack_damage"):
 		mech.attack_damage = total_damage
 	else:
@@ -796,6 +797,8 @@ func _spawn_mech() -> void:
 		_add_roof_exceptions(mech)
 	_add_ally_exceptions(mech)
 
+	# Lifetime scales with level
+	var lvl = Playerstats.level
 	var life_delay = 8.0 + (lvl - 1) * 2.0
 	_fade_and_free(mech, life_delay, 1.0)
 
@@ -806,8 +809,8 @@ func _spawn_merc() -> void:
 	var merc = MercScene.instantiate() as PhysicsBody2D
 	merc.add_to_group("Merc")
 
-	var lvl = Playerstats.level
-	var total_damage = merc_base_damage + (lvl - 1) * merc_damage_per_level
+	# Pull the merc’s current damage directly from PlayerStats
+	var total_damage = Playerstats.merc_damage
 	if merc.has_meta("attack_damage"):
 		merc.attack_damage = total_damage
 	else:
@@ -828,6 +831,8 @@ func _spawn_merc() -> void:
 		_add_roof_exceptions(merc)
 	_add_ally_exceptions(merc)
 
+	# Lifetime scales with level
+	var lvl = Playerstats.level
 	var life_delay = 5.0 + (lvl - 1) * 1.0
 	_fade_and_free(merc, life_delay, 1.0)
 
@@ -838,8 +843,8 @@ func _spawn_mech_panther() -> void:
 	var pan = MechScene_Panther.instantiate() as PhysicsBody2D
 	pan.add_to_group("MechPanther")
 
-	var lvl = Playerstats.level
-	var total_damage = mech_panther_base_damage + (lvl - 1) * mech_panther_damage_per_level
+	# Pull the panther’s current damage directly from PlayerStats
+	var total_damage = Playerstats.panther_damage
 	if pan.has_meta("attack_damage"):
 		pan.attack_damage = total_damage
 	else:
@@ -862,6 +867,8 @@ func _spawn_mech_panther() -> void:
 		_add_roof_exceptions(pan)
 	_add_ally_exceptions(pan)
 
+	# Lifetime scales with level
+	var lvl = Playerstats.level
 	var life_delay = 8.0 + (lvl - 1) * 2.0
 	_fade_and_free(pan, life_delay, 1.0)
 
@@ -1114,7 +1121,7 @@ func _throw_grenade() -> void:
 	# spawn at the muzzle or player hand
 	g.global_position = global_position
 	g.global_position.y -= 16
-	g.damage = grenade_damage
+	g.damage = Playerstats.grenade_damage
 	# set initial velocity based on facing direction
 	if facing_right:
 		g.velocity.x = g.initial_speed
@@ -1149,7 +1156,7 @@ func _drop_mine() -> void:
 	# 2) Instantiate & position
 	var m = MineScene.instantiate() as Area2D
 	m.global_position = global_position + Vector2(dir * mine_offset, -8)
-	m.damage = mine_damage
+	m.damage = Playerstats.mine_damage
 
 	# 3) Match the mine’s z_index to your current ground
 	var surf_group := _get_current_surface_group()  # "Floor", "Sidewalk" or "Street"

@@ -47,7 +47,7 @@ var mines:     int
 var shocks:    int
 var xp_needed: int                                          # XP required for next level
 
-var currency:  int = 500
+var currency:  int = 0
 
 # ─────────────────────────────────────
 # Runtime damage fields (current values, updated on level‐up):
