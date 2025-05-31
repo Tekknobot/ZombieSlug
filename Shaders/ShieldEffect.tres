@@ -4,7 +4,8 @@
 
 [resource]
 shader = ExtResource("1_vq4dm")
-shader_parameter/indicator_color = Color(0.2, 1, 1, 0.701961)
+shader_parameter/glow_color = Color(0, 0.6, 1, 0.8)
+shader_parameter/glow_radius = 0.3
+shader_parameter/falloff_exponent = 4.0
 shader_parameter/pulse_speed = 10.0
-shader_parameter/max_radius = 0.5
-shader_parameter/indicator_thickness = 0.05
+shader_parameter/pulse_strength = 0.1
