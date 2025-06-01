@@ -53,14 +53,14 @@ func _on_kills_changed(new_total_kills: int) -> void:
 	
 	if kills_inside >= _kill_goal:
 		_drop_multiple_rewards()
-		#_reward_dropped = true
+		_reward_dropped = true
 		# If you want to allow multiple drops across repeated entries,
 		# reset _reward_dropped = false when the player leaves or re-enters.
 
 		
 func _drop_multiple_rewards() -> void:
 	# 1) Decide how many to spawn. For example, 10 per player level:
-	var total_to_drop = Playerstats.level * 10
+	var total_to_drop = Playerstats.level * 5
 
 	# 2) For each pickup, we’ll scatter it within ±20 pixels of the last zombie position.
 	#    You can adjust that radius (±20) to taste so it looks natural.

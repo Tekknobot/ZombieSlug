@@ -30,3 +30,4 @@ res://Scenes/Sprites/zombie_bullet.tscn
 res://Scripts/meks/m_2.gd
 res://Scripts/dog.gd
 res://Scripts/merc.gd
+res://Scripts/interior_main.gd
