@@ -9,7 +9,7 @@ extends CharacterBody2D
 # how close to “underneath” before we stop flipping
 const FLIP_DEADZONE: float = 4.0
 
-@onready var anim: AnimatedSprite2D       = $AnimatedSprite2D
+@onready var anim: AnimatedSprite2D         = $AnimatedSprite2D
 @onready var attack_sfx: AudioStreamPlayer2D = $AttackSfx
 
 var attack_timer: Timer
@@ -27,7 +27,7 @@ func _ready() -> void:
 	if not players.is_empty():
 		var player_sprite := (players[0] as Node2D).get_node("AnimatedSprite2D") as AnimatedSprite2D
 		z_index = player_sprite.z_index
-		
+
 func _physics_process(delta: float) -> void:
 	# 1) Get the player
 	var players = get_tree().get_nodes_in_group("Player")
@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	for z in get_tree().get_nodes_in_group("Zombie"):
 		if not is_instance_valid(z) or not (z is CharacterBody2D):
 			continue
-		# only target & collide with zombies on *this* node’s layer
+		# only target & collide with zombies on this node’s layer
 		if z.z_index == self.z_index:
 			same_layer_zombies.append(z)
 			remove_collision_exception_with(z)
@@ -48,16 +48,19 @@ func _physics_process(delta: float) -> void:
 			# ignore collisions with off‐layer zombies
 			add_collision_exception_with(z)
 
-	# 3) if no same-ground zombies, idle/reset attack
+	# 3) If no same‐ground zombies, keep moving in the last direction
 	if same_layer_zombies.is_empty():
 		current_target = null
 		if not attack_timer.is_stopped():
 			attack_timer.stop()
-		velocity.x = 0
-		anim.play("default")
-		return
+
+		# Don’t zero out velocity.x—leave whatever direction we had.
+		# Just make sure the “move” animation is playing:
+		if anim.animation != "default":
+			anim.play("default")
+		# (No 'return' here—gravity + move_and_slide() still run below.)
 	else:
-		# pick nearest
+		# pick nearest zombie
 		current_target = same_layer_zombies[0]
 		var best_dist = current_target.global_position.distance_to(global_position)
 		for z in same_layer_zombies:
@@ -76,26 +79,20 @@ func _physics_process(delta: float) -> void:
 				attack_timer.stop()
 			if anim.animation != "move":
 				anim.play("move")
-			# only flip if target is off-center
+			# flip if far enough off‐center
 			if abs(dx) > FLIP_DEADZONE:
-				if velocity.x > 0:
-					anim.flip_h = true
-				else:
-					anim.flip_h = false
+				anim.flip_h = (velocity.x > 0)
 		else:
 			velocity.x = 0
 			if attack_timer.is_stopped():
 				attack_timer.start()
 			if anim.animation != "attack":
 				anim.play("attack")
-			# only flip if target is off-center
+			# flip if far enough off‐center
 			if abs(dx) > FLIP_DEADZONE:
-				if dx > 0:
-					anim.flip_h = true
-				else:
-					anim.flip_h = false
+				anim.flip_h = (dx > 0)
 
-	# gravity + movement
+	# 4) Gravity + movement (always run, even when no zombies)
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:

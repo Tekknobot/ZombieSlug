@@ -117,6 +117,7 @@ bg_color = Color(1, 1, 0, 1)
 
 [node name="Interior" type="Node2D"]
 script = ExtResource("1_bsvme")
+kills_per_level = 20
 
 [node name="Fader" type="CanvasLayer" parent="."]
 scale = Vector2(2, 2)
@@ -145,12 +146,9 @@ shake_magnitude = 4.0
 position = Vector2(98, 94)
 script = ExtResource("4_gdldk")
 base_spawn_interval = 1.0
-min_spawn_factor = 0.1
-spawn_distance = 500.0
+spawn_distance = 400.0
 boss_scene = ExtResource("5_b1noj")
 zombie_scene = ExtResource("6_vkswa")
-sidewalk_chance = 0.25
-max_zombies = 500
 
 [node name="Point" type="Node2D" parent="Camera2D/ZombieSpawner"]
 position = Vector2(-89, 0)

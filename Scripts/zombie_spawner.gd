@@ -22,6 +22,7 @@ var _spawn_timer:    Timer
 @export var max_zombies: int = 750
 
 var _zombie_pool: Array[CharacterBody2D] = []
+var is_interior: bool = false
 
 func _ready() -> void:
 	spawn_interval = base_spawn_interval
@@ -39,7 +40,11 @@ func _ready() -> void:
 	_spawn_timer.timeout.connect(spawn_zombie)
 
 	Playerstats.connect("level_changed", Callable(self, "_on_level_changed"))
-	await get_tree().create_timer(1).timeout
+		
+	await get_tree().create_timer(0).timeout
+	# We want to “pre‐fill” 10 zombies right away:
+	pre_spawn_interior(15)
+		
 	_spawn_boss()
 
 
@@ -356,3 +361,164 @@ func _spawn_boss() -> void:
 
 	print("Boss spawned on %s at %s with max_health=%d"
 		  % [spawn_type.capitalize(), boss.global_position, boss.max_health])
+		
+func pre_spawn_interior(count: int) -> void:
+	# Only run if this spawner is inside an "Interior"
+	var maybe_grandparent = get_parent().get_parent()
+	if not maybe_grandparent or maybe_grandparent.name != "Interior":
+		return
+
+	# Grab the player (we need their Y to match the surface; X is random now)
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.is_empty():
+		return
+	var player = players[0] as Node2D
+
+	# Layers for each spawn_type
+	var layer_map = {
+		"floor":    0,
+		"sidewalk": 2,
+		"street":   4
+	}
+
+	# Loop 'count' times, but bail out early if we hit max_zombies
+	for i in range(count):
+		var current_zombies = get_tree().get_nodes_in_group("Zombie").size()
+		if current_zombies >= max_zombies:
+			break
+
+		# ——— Decide spawn_type: sidewalk, street, or floor ———
+		var r = randf()
+		var spawn_type: String
+		if r < sidewalk_chance:
+			spawn_type = "sidewalk"
+		elif r < sidewalk_chance + street_chance:
+			spawn_type = "street"
+		else:
+			spawn_type = "floor"
+
+		# ——— Gather surfaces based on spawn_type ———
+		var surfaces: Array = []
+		if spawn_type == "sidewalk":
+			surfaces = get_tree().get_nodes_in_group("Sidewalk")
+		elif spawn_type == "street":
+			surfaces = get_tree().get_nodes_in_group("Street")
+		else:
+			# “floor” means any Floor that is not in group “Sidewalk”
+			for f in get_tree().get_nodes_in_group("Floor"):
+				if not f.is_in_group("Sidewalk"):
+					surfaces.append(f)
+
+		# If no surfaces of this type exist, skip this iteration
+		if surfaces.is_empty():
+			continue
+
+		# ——— Pick a random surface ———
+		var pick_index = randi() % surfaces.size()
+		var surf = surfaces[pick_index] as Node2D
+
+		# ——— Instantiate a new zombie and position it ———
+		var z = zombie_scene.instantiate() as CharacterBody2D
+
+		# Snap Y to the surface's Y
+		z.global_position.y = surf.global_position.y
+
+		# Put the zombie on the proper draw layer
+		z.z_index = layer_map[spawn_type]
+
+		# —— NEW: Random X within the current viewport —— 
+		var view_rect: Rect2 = get_viewport().get_visible_rect()
+		z.global_position.x = randi_range(
+			view_rect.position.x,
+			view_rect.position.x + view_rect.size.x
+		)
+
+		# ——— Collision exceptions so the zombie "falls onto" the correct layer ———
+		if spawn_type == "sidewalk":
+			for f in get_tree().get_nodes_in_group("Floor"):
+				if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+					z.add_collision_exception_with(f)
+		elif spawn_type == "street":
+			# fall through all sidewalks
+			for sw in get_tree().get_nodes_in_group("Sidewalk"):
+				if sw is PhysicsBody2D:
+					z.add_collision_exception_with(sw)
+			# fall through non‐sidewalk floors
+			for f in get_tree().get_nodes_in_group("Floor"):
+				if not f.is_in_group("Sidewalk") and f is PhysicsBody2D:
+					z.add_collision_exception_with(f)
+		# (floor spawns land directly, so no exceptions needed)
+
+		# ——— Decide archetype (behavior) exactly as in spawn_zombie() ———
+		var lvl = Playerstats.level
+		var roll = randf()
+		if lvl >= 5:
+			if roll < 0.30:
+				z.behavior = "chain"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChainEffect.tres")
+			elif roll < 0.55:
+				z.behavior = "spore"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/SporeEffect.tres")
+			elif roll < 0.75:
+				z.behavior = "charger"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+			elif roll < 0.95:
+				z.behavior = ""
+			else:
+				z.behavior = "shield"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+				z.add_to_group("Shield")
+		elif lvl >= 4:
+			if roll < 0.25:
+				z.behavior = "spore"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/SporeEffect.tres")
+			elif roll < 0.45:
+				z.behavior = "charger"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+			elif roll < 0.65:
+				z.behavior = ""
+			else:
+				z.behavior = "shield"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+				z.add_to_group("Shield")
+		elif lvl >= 3:
+			if roll < 0.20:
+				z.behavior = "charger"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ChargerEffect.tres")
+			elif roll < 0.40:
+				z.behavior = ""
+			else:
+				z.behavior = "shield"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+				z.add_to_group("Shield")
+		elif lvl >= 2:
+			if roll < 0.20:
+				z.behavior = "shield"
+				z.get_node("AnimatedSprite2D").material = preload("res://Shaders/ShieldEffect.tres")
+				z.add_to_group("Shield")
+			else:
+				z.behavior = ""
+		else:
+			z.behavior = ""
+
+		# ——— Scale health for level (exactly as in spawn_zombie) ———
+		if lvl > 1 and z.has_method("take_damage"):
+			var base_health = z.max_health
+			var scale_factor = pow(1.40, lvl - 1)
+			z.max_health = int(base_health * scale_factor)
+			z.health = z.max_health
+			z.update_health_label()
+
+		# Put into the "Zombie" group if not already
+		if not z.is_in_group("Zombie"):
+			z.add_to_group("Zombie")
+
+		# Debug print (optional)
+		print("Pre‐spawned [", z.behavior, "] at ", z.global_position, 
+			  " (health=", z.max_health, ")")
+
+		# Add the zombie node to the current scene
+		get_tree().get_current_scene().add_child(z)
+
+		# Increment the interior‐spawn counter now that we've successfully added one
+		_interior_spawn_count += 1
