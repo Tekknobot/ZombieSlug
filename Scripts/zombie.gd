@@ -207,6 +207,7 @@ func _physics_process(delta: float) -> void:
 		# similarly, only flip during attack if target isn’t directly underneath
 		if abs(dx) > DEADZONE:
 			anim.flip_h = dx > 0
+			
 
 	# 3) gravity + slide
 	if not is_on_floor():

@@ -146,7 +146,7 @@ shake_magnitude = 4.0
 position = Vector2(98, 94)
 script = ExtResource("4_gdldk")
 base_spawn_interval = 1.0
-spawn_distance = 400.0
+spawn_distance = 600.0
 boss_scene = ExtResource("5_b1noj")
 zombie_scene = ExtResource("6_vkswa")
 
