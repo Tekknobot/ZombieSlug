@@ -21,3 +21,5 @@ res://Scenes/Sprites/block.tscn
 res://Scenes/Sprites/interior.tscn
 res://Scenes/Titlescreen.tscn
 res://Scenes/Sprites/MoneyPickup.tscn
+res://Scripts/soldier.gd
+res://Scenes/game_over_manager.tscn
