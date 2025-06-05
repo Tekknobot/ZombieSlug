@@ -28,13 +28,13 @@ var attack_cooldown_timer: Timer
 @onready var anim         := $AnimatedSprite2D
 @onready var muzzle_point := $Point                    # Position2D for spawn-offset
 
-@export var initial_grenade_cooldown := 1  # base seconds between throws
-@export var grenade_cooldown: float = 1   # seconds between throws
+@export var initial_grenade_cooldown := 0.7  # base seconds between throws
+@export var grenade_cooldown: float = 0.7   # seconds between throws
 var grenade_cooldown_timer: Timer
 
 @export var initial_mine_cooldown := 2.0   # base seconds between mines
 @export var mine_offset: float     = 16.0   # how far in front of player to drop
-@export var mine_cooldown: float   = 2.0    # seconds between mine drops
+@export var mine_cooldown: float   = 0.7    # seconds between mine drops
 var mine_cooldown_timer: Timer
 
 @export var initial_grenade_damage := 3
@@ -908,9 +908,9 @@ func _on_level_changed(new_level: int) -> void:
 	speed = clamp(speed, base_speed, max_speed)
 
 	# ——— Recalculate fire rate ———
-	var min_factor = 0.1 / initial_firerate
+	var min_factor = 0.1 / Playerstats.initial_firerate
 	var factor     = clamp(1.0 - (new_level - 1) * 0.15, min_factor, 1.0)
-	firerate       = initial_firerate * factor
+	firerate       = Playerstats.initial_firerate * factor
 
 	# ——— Push updated speed & fire rate into Playerstats ———
 	Playerstats.speed    = speed

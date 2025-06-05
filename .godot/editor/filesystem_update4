@@ -23,3 +23,9 @@ res://Scenes/Titlescreen.tscn
 res://Scenes/Sprites/MoneyPickup.tscn
 res://Scripts/soldier.gd
 res://Scenes/game_over_manager.tscn
+res://Scripts/playerstats.gd
+res://Scenes/Sprites/merc.tscn
+res://Scenes/Meks_Scenes/PLAYER/M1.scn
+res://Scenes/Meks_Scenes/PLAYER/M2.scn
+res://Scenes/Sprites/dog.tscn
+res://Scripts/zombie.gd

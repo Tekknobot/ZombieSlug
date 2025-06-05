@@ -34,7 +34,7 @@ class_name PlayerStats
 
 # ─────────────────────────────────────
 @export var initial_speed: float         = 50.0    # Player’s starting speed
-@export var initial_firerate: float      = 1.0     # Seconds between shots at level 1
+@export var initial_firerate: float      = 0.5     # Seconds between shots at level 1
 
 # ───────────────────────────────────────────────────────────────────────────────
 # Runtime stats (initialized in _ready()):

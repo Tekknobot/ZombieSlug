@@ -76,6 +76,9 @@ var _layer_map = {
 
 var _fire_timer: Timer
 
+@export var homing_speed_multiplier: float    = 4
+@export var homing_anim_multiplier:  float    = 3
+
 func _ready() -> void:
 	randomize()
 	speed  = randi_range(int(min_speed), int(max_speed))
@@ -146,8 +149,14 @@ func _physics_process(delta: float) -> void:
 	# 1) If any homing grenades exist, chase the nearest one instead of the player:
 	var grenades = get_tree().get_nodes_in_group("TNT_yellow")
 	var target: Node2D = null
+	# We’ll choose “current_speed” based on whether grenades exist
+	var current_speed: float = speed
+
 	if not grenades.is_empty():
-		# find closest grenade
+		# → AT LEAST ONE homing grenade: boost speed & anim playback
+		current_speed = speed * homing_speed_multiplier
+		anim.speed_scale = homing_anim_multiplier
+
 		var best_dist = INF
 		for g in grenades:
 			if not (g is Node2D):
@@ -157,7 +166,10 @@ func _physics_process(delta: float) -> void:
 				best_dist = d
 				target    = g
 	else:
-		# fall back to the player
+		# → NO homing grenades: restore to normal
+		current_speed = speed
+		anim.speed_scale = 1.0
+
 		if players.is_empty():
 			if not attack_timer.is_stopped():
 				attack_timer.stop()

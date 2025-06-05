@@ -160,6 +160,7 @@ position = Vector2(127, 0)
 base_speed = 60.0
 jump_velocity = -280.0
 gravity = 780.0
+initial_mine_cooldown = 0.7
 dash_speed = 500.0
 
 [node name="StarryNight" parent="Soldier" instance=ExtResource("10_eeh2b")]
