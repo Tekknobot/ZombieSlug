@@ -29,3 +29,5 @@ res://Scenes/Meks_Scenes/PLAYER/M1.scn
 res://Scenes/Meks_Scenes/PLAYER/M2.scn
 res://Scenes/Sprites/dog.tscn
 res://Scripts/zombie.gd
+res://Scripts/tnt_yellow.gd
+res://Scenes/Sprites/tnt_yellow.tscn
